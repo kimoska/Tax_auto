@@ -16,6 +16,8 @@ AutoTax — 홈택스 로그인 (F12 검증 완료 셀렉터)
 """
 import logging
 
+from rpa.cert_popup_handler import CertPopupHandler, PYWINAUTO_AVAILABLE
+
 logger = logging.getLogger(__name__)
 
 # 인증 방법별 셀렉터 매핑
@@ -66,9 +68,14 @@ class HometaxLogin:
     LOGIN_URL = ('https://hometax.go.kr/websquare/websquare.html'
                  '?w2xPath=/ui/pp/index_pp.xml&menuCd=index3')
 
-    def __init__(self, page, auth_method: str = 'certificate'):
+    def __init__(self, page, auth_method: str = 'certificate',
+                 cert_password: str = '', cert_location: str = 'harddisk',
+                 cert_keyword: str = ''):
         self.page = page
         self.auth_method = auth_method
+        self.cert_password = cert_password
+        self.cert_location = cert_location
+        self.cert_keyword = cert_keyword
         self.is_logged_in = False
 
     async def login(self, progress_callback=None) -> bool:
@@ -92,9 +99,24 @@ class HometaxLogin:
             await self._click_auth_tab(method_info['tab_id'])
             await self.page.wait_for_timeout(1500)
 
-            # ── 4: 실행 버튼(파란 버튼) 클릭 ──
+            # ── 4: 팝업 감시 시작 + 실행 버튼 클릭 ──
             self._emit(progress_callback, 4, total,
                        f'[{method_info["label"]}] 실행 버튼 클릭...')
+
+            # 인증서 팝업 감시를 버튼 클릭 전에 시작
+            popup_handler = None
+            if (self.auth_method == 'certificate'
+                    and self.cert_password
+                    and PYWINAUTO_AVAILABLE):
+                popup_handler = CertPopupHandler(
+                    cert_password=self.cert_password,
+                    cert_location=self.cert_location,
+                    cert_keyword=self.cert_keyword,
+                    progress_callback=lambda msg: self._emit(
+                        progress_callback, 5, total, f'[인증서] {msg}'),
+                )
+                popup_handler.start_watching()
+
             await self._click_action_button()
             await self.page.wait_for_timeout(2000)
 
@@ -104,10 +126,25 @@ class HometaxLogin:
             await self._handle_popups()
             await self.page.wait_for_timeout(2000)
 
-            # ── 6: 사용자 인증 대기 ──
-            self._emit(progress_callback, 6, total,
-                       '⏳ 인증서 선택/비밀번호 입력을 완료해주세요... (3분 대기)')
-            logged_in = await self._wait_for_login(timeout_sec=180)
+            # ── 6: 인증서 팝업 자동 처리 또는 수동 대기 ──
+            if popup_handler is not None:
+                self._emit(progress_callback, 6, total,
+                           '⏳ 인증서 팝업 자동 처리 중...')
+                popup_success = popup_handler.wait_for_completion(timeout=120)
+                if popup_success:
+                    self._emit(progress_callback, 6, total,
+                               '✅ 인증서 자동 인증 완료! 로그인 확인 중...')
+                    logged_in = await self._wait_for_login(timeout_sec=30)
+                else:
+                    self._emit(progress_callback, 6, total,
+                               f'⚠️ 자동 인증 실패: {popup_handler.error_message}')
+                    self._emit(progress_callback, 6, total,
+                               '⏳ 수동으로 인증서/비밀번호를 완료해주세요... (3분 대기)')
+                    logged_in = await self._wait_for_login(timeout_sec=180)
+            else:
+                self._emit(progress_callback, 6, total,
+                           '⏳ 인증서 선택/비밀번호 입력을 완료해주세요... (3분 대기)')
+                logged_in = await self._wait_for_login(timeout_sec=180)
 
             # ── 7: 결과 ──
             if logged_in:
@@ -115,7 +152,7 @@ class HometaxLogin:
                 self._emit(progress_callback, 7, total, '✅ 로그인 성공!')
                 return True
             else:
-                self._emit(progress_callback, 7, total, '❌ 로그인 시간 초과 (3분)')
+                self._emit(progress_callback, 7, total, '❌ 로그인 시간 초과')
                 return False
 
         except Exception as e:

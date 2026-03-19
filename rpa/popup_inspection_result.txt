@@ -1,0 +1,1640 @@
+
+--- backend: uia ---
+
+[0] 제목: 작업 표시줄 | 클래스: Shell_TrayWnd | 위치: (L0, T1392, R2560, B1440)
+
+[1] 제목: Tax_auto - Antigravity - popup_inspection_result.txt | 클래스: Chrome_WidgetWin_1 | 위치: (L61, T270, R1562, B1248)
+
+[2] 제목: kimoska/Tax_auto 외 페이지 2개 - 회사 - Microsoft​ Edge | 클래스: Chrome_WidgetWin_1 | 위치: (L674, T75, R2443, B1282)
+
+[3] 제목: rpa - 파일 탐색기 | 클래스: CabinetWClass | 위치: (L0, T0, R0, B0)
+
+[4] 제목: 이미지 업스케일링하는 사이트는 많은데, mp3 음원파일을 업스케일링하는 방법은 없어? - Chrome | 클래스: Chrome_WidgetWin_1 | 위치: (L681, T62, R2379, B1198)
+
+[5] 제목: 카카오톡 | 클래스: EVA_Window_Dblclk | 위치: (L0, T0, R0, B0)
+
+[6] 제목: Windows PowerShell | 클래스: CASCADIA_HOSTING_WINDOW_CLASS | 위치: (L0, T0, R0, B0)
+
+[7] 제목:  | 클래스: InputSiteWindowClass | 위치: (L0, T0, R136, B39)
+
+[8] 제목: Program Manager | 클래스: Progman | 위치: (L0, T0, R2560, B1440)
+
+--- backend: win32 ---
+
+[0] 제목: 작업 전환 | 클래스: XamlExplorerHostIslandWindow | 위치: (L0, T0, R2560, B1392)
+
+[1] 제목:  | 클래스: ForegroundStaging | 위치: (L0, T0, R0, B0)
+
+[2] 제목:  | 클래스: ForegroundStaging | 위치: (L0, T0, R0, B0)
+
+[3] 제목:  | 클래스: ThumbnailDeviceHelperWnd | 위치: (L0, T0, R1, B1)
+
+[4] 제목:  | 클래스: ThumbnailDeviceHelperWnd | 위치: (L0, T0, R1, B1)
+
+[5] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[6] 제목:  | 클래스: Shell_TrayWnd | 위치: (L0, T1392, R2560, B1440)
+
+[7] 제목: 배터리 수준 | 클래스: SystemTray_Main | 위치: (L0, T0, R14, B14)
+
+[8] 제목:  | 클래스: ATL:00007FFD6D7AC050 | 위치: (L0, T0, R0, B0)
+
+[9] 제목:  | 클래스: tooltips_class32 | 위치: (L1669, T397, R1879, B905)
+
+[10] 제목: 시스템 트레이 오버플로 창입니다. | 클래스: TopLevelWindowForOverflowXamlIsland | 위치: (L2217, T1238, R2451, B1392)
+
+[11] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[12] 제목:  | 클래스: EVA_Window | 위치: (L838, T847, R918, B880)
+
+[13] 제목:  | 클래스: tooltips_class32 | 위치: (L385, T162, R427, B182)
+
+[14] 제목:  | 클래스: NppShadowWindow | 위치: (L0, T0, R0, B0)
+
+[15] 제목: nProtect Online Security | 클래스: npendlg | 위치: (L2258, T1288, R2560, B1392)
+
+[16] 제목: PURPLE | 클래스: HwndWrapper[Purple.exe;;7cd7ec04-2603-4d0f-b581-a16e7d44a44f] | 위치: (L-32000, T-32000, R-31840, B-31972)
+
+[17] 제목:  | 클래스: AfxWnd110 | 위치: (L273, T753, R665, B1075)
+
+[18] 제목:  | 클래스: tooltips_class32 | 위치: (L2143, T1142, R2349, B1207)
+
+[19] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[20] 제목: Tax_auto - Antigravity - popup_inspection_result.txt | 클래스: Chrome_WidgetWin_1 | 위치: (L61, T270, R1562, B1248)
+
+[21] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L0, T0, R0, B0)
+
+[22] 제목:  | 클래스: Chrome_WidgetWin_1 | 위치: (L685, T1245, R698, B1271)
+
+[23] 제목: kimoska/Tax_auto 외 페이지 2개 - 회사 - Microsoft​ Edge | 클래스: Chrome_WidgetWin_1 | 위치: (L674, T75, R2443, B1282)
+
+[24] 제목:  | 클래스: ApplicationManager_DesktopShellWindow | 위치: (L0, T0, R0, B0)
+
+[25] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[26] 제목: rpa - 파일 탐색기 | 클래스: CabinetWClass | 위치: (L-32000, T-32000, R-31840, B-31972)
+
+[27] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[28] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[29] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[30] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[31] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[32] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[33] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[34] 제목:  | 클래스: tooltips_class32 | 위치: (L2494, T38, R2536, B57)
+
+[35] 제목:  | 클래스: tooltips_class32 | 위치: (L908, T1355, R1016, B1373)
+
+[36] 제목:  | 클래스: #32770 | 위치: (L3, T87, R239, B187)
+
+[37] 제목:  | 클래스: #32770 | 위치: (L187, T253, R306, B285)
+
+[38] 제목:  | 클래스: tooltips_class32 | 위치: (L2515, T1065, R2545, B1084)
+
+[39] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[40] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[41] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[42] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[43] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[44] 제목:  | 클래스: #32770 | 위치: (L1985, T1030, R2524, B1330)
+
+[45] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[46] 제목:  | 클래스: #32770 | 위치: (L358, T231, R652, B374)
+
+[47] 제목: 공지사항 | 클래스: #32770 | 위치: (L2093, T1061, R2527, B1334)
+
+[48] 제목:  | 클래스: #32770 | 위치: (L-29672, T-31938, R-29477, B-31938)
+
+[49] 제목:  | 클래스: #32770 | 위치: (L187, T253, R527, B327)
+
+[50] 제목:  | 클래스: #32770 | 위치: (L187, T253, R527, B327)
+
+[51] 제목:  | 클래스: #32770 | 위치: (L187, T253, R527, B327)
+
+[52] 제목:  | 클래스: #32770 | 위치: (L187, T253, R527, B327)
+
+[53] 제목:  | 클래스: #32770 | 위치: (L187, T253, R527, B327)
+
+[54] 제목:  | 클래스: #32770 | 위치: (L187, T253, R527, B327)
+
+[55] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[56] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[57] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[58] 제목:  | 클래스: #32770 | 위치: (L187, T253, R527, B327)
+
+[59] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[60] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[61] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[62] 제목:  | 클래스: #32770 | 위치: (L187, T253, R527, B327)
+
+[63] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[64] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[65] 제목:  | 클래스: #32770 | 위치: (L1002, T496, R1558, B896)
+
+[66] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[67] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[68] 제목:  | 클래스: tooltips_class32 | 위치: (L368, T81, R422, B99)
+
+[69] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[70] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[71] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[72] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[73] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[74] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[75] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[76] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[77] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[78] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[79] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[80] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[81] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[82] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[83] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[84] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[85] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[86] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[87] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[88] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[89] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[90] 제목:  | 클래스: tooltips_class32 | 위치: (L129, T95, R183, B113)
+
+[91] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[92] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[93] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[94] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[95] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[96] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[97] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[98] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[99] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[100] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[101] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[102] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[103] 제목:  | 클래스: tooltips_class32 | 위치: (L975, T1364, R1071, B1382)
+
+[104] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[105] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[106] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[107] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[108] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[109] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[110] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[111] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[112] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[113] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[114] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[115] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[116] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[117] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[118] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[119] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[120] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[121] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[122] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[123] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[124] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[125] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[126] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[127] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[128] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[129] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[130] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[131] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[132] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[133] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[134] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[135] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[136] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[137] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[138] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[139] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[140] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[141] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[142] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[143] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[144] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[145] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[146] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[147] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[148] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[149] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[150] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[151] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[152] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[153] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[154] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[155] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[156] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[157] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[158] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[159] 제목:  | 클래스: #32770 | 위치: (L4, T25, R480, B234)
+
+[160] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[161] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[162] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[163] 제목:  | 클래스: #32770 | 위치: (L4, T25, R480, B234)
+
+[164] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[165] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[166] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[167] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[168] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[169] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[170] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[171] 제목: 신호관리자 | 클래스: #32770 | 위치: (L2266, T971, R2500, B1271)
+
+[172] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[173] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[174] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[175] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[176] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[177] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[178] 제목: Dialog | 클래스: #32770 | 위치: (L3, T25, R333, B239)
+
+[179] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[180] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[181] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[182] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[183] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[184] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[185] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[186] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[187] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[188] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[189] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[190] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[191] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[192] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[193] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[194] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[195] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[196] 제목:  | 클래스: #32770 | 위치: (L139, T245, R495, B276)
+
+[197] 제목:  | 클래스: #32770 | 위치: (L139, T245, R495, B276)
+
+[198] 제목:  | 클래스: #32770 | 위치: (L139, T245, R495, B276)
+
+[199] 제목:  | 클래스: #32770 | 위치: (L139, T245, R495, B276)
+
+[200] 제목:  | 클래스: #32770 | 위치: (L139, T245, R495, B276)
+
+[201] 제목:  | 클래스: #32770 | 위치: (L139, T245, R495, B276)
+
+[202] 제목:  | 클래스: #32770 | 위치: (L139, T245, R495, B276)
+
+[203] 제목:  | 클래스: #32770 | 위치: (L139, T245, R495, B276)
+
+[204] 제목:  | 클래스: #32770 | 위치: (L139, T245, R495, B276)
+
+[205] 제목:  | 클래스: #32770 | 위치: (L139, T245, R495, B276)
+
+[206] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[207] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[208] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[209] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[210] 제목: 영웅문4 | 클래스: _NKHeroMainClass | 위치: (L-32000, T-32000, R-31840, B-31972)
+
+[211] 제목: 이미지 업스케일링하는 사이트는 많은데, mp3 음원파일을 업스케일링하는 방법은 없어? - Chrome | 클래스: Chrome_WidgetWin_1 | 위치: (L681, T62, R2379, B1198)
+
+[212] 제목:  | 클래스: tooltips_class32 | 위치: (L377, T596, R426, B616)
+
+[213] 제목:  | 클래스: tooltips_class32 | 위치: (L380, T622, R445, B642)
+
+[214] 제목:  | 클래스: tooltips_class32 | 위치: (L4, T682, R41, B702)
+
+[215] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[216] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[217] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[218] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[219] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[220] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[221] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[222] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[223] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[224] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[225] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[226] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[227] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[228] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[229] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[230] 제목:  | 클래스: EVA_Window_Dblclk | 위치: (L6, T1295, R441, B1386)
+
+[231] 제목: 카카오톡 | 클래스: EVA_Window_Dblclk | 위치: (L-32000, T-32000, R-31840, B-31972)
+
+[232] 제목:  | 클래스: PseudoConsoleWindow | 위치: (L0, T0, R0, B0)
+
+[233] 제목: Windows PowerShell | 클래스: CASCADIA_HOSTING_WINDOW_CLASS | 위치: (L-32000, T-32000, R-31840, B-31972)
+
+[234] 제목: DesktopWindowXamlSource | 클래스: Windows.UI.Core.CoreWindow | 위치: (L0, T0, R1, B1)
+
+[235] 제목:  | 클래스: ATL:00007FFD5AC238E0 | 위치: (L0, T0, R0, B0)
+
+[236] 제목:  | 클래스: WorkerW | 위치: (L0, T0, R136, B39)
+
+[237] 제목:  | 클래스: PersonalizationThemeChangeListener | 위치: (L208, T208, R2128, B1231)
+
+[238] 제목:  | 클래스: WorkerW | 위치: (L0, T0, R136, B39)
+
+[239] 제목:  | 클래스: Windows.UI.Core.CoreWindow | 위치: (L0, T1, R1200, B933)
+
+[240] 제목: 설정 | 클래스: ApplicationFrameWindow | 위치: (L174, T227, R1390, B1168)
+
+[241] 제목: 채팅 | 사무실 단체공유 | Daechi Senior welfare center | oska@dcsenior.or.kr | Microsoft Teams | 클래스: TeamsWebView | 위치: (L291, T139, R2269, B1252)
+
+[242] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L0, T0, R0, B0)
+
+[243] 제목: Microsoft Teams | 클래스: TeamsWebView | 위치: (L156, T156, R2076, B1179)
+
+[244] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L0, T0, R0, B0)
+
+[245] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L0, T0, R0, B0)
+
+[246] 제목: Microsoft OneDrive Sync Service | 클래스: Nucleus Auth Window | 위치: (L26, T26, R226, B226)
+
+[247] 제목:  | 클래스: ATL:00007FFD611BC0C0 | 위치: (L338, T338, R2258, B1361)
+
+[248] 제목: DDE Server Window | 클래스: OleDdeWndClass | 위치: (L0, T0, R0, B0)
+
+[249] 제목:  | 클래스: ContextSwitcherImpl | 위치: (L0, T0, R136, B39)
+
+[250] 제목:  | 클래스: ATL:00007FFD611BC0C0 | 위치: (L312, T312, R2232, B1335)
+
+[251] 제목:  | 클래스: ATL:00007FFD611BC0C0 | 위치: (L286, T286, R2206, B1309)
+
+[252] 제목:  | 클래스: ATL:00007FFD611BC0C0 | 위치: (L260, T260, R2180, B1283)
+
+[253] 제목: OneDrive - Daechi Senior welfare center | 클래스: SkyDrive Class Name {090B42FF-7B26-4416-99B6-CB17896CF07C}-Business1 | 위치: (L0, T0, R136, B39)
+
+[254] 제목:  | 클래스: ATL:00007FFD611BC0C0 | 위치: (L156, T156, R2076, B1179)
+
+[255] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L0, T0, R0, B0)
+
+[256] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L0, T0, R0, B0)
+
+[257] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L104, T104, R2024, B1127)
+
+[258] 제목:  | 클래스: Base_PowerMessageWindow | 위치: (L0, T0, R0, B0)
+
+[259] 제목:  | 클래스: crashpad_SessionEndWatcher | 위치: (L0, T0, R136, B39)
+
+[260] 제목:  | 클래스: WorkerW | 위치: (L0, T0, R136, B39)
+
+[261] 제목:  | 클래스: ApplicationFrameWindow | 위치: (L0, T0, R2560, B1392)
+
+[262] 제목: DDE Server Window | 클래스: OleDdeWndClass | 위치: (L0, T0, R0, B0)
+
+[263] 제목:  | 클래스: WorkerW | 위치: (L0, T0, R136, B39)
+
+[264] 제목: MagicLine4NX | 클래스: #32770 | 위치: (L1161, T619, R1399, B774)
+
+[265] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[266] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[267] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[268] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[269] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[270] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[271] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[272] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[273] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[274] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[275] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[276] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[277] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[278] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[279] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[280] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[281] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[282] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[283] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[284] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[285] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[286] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[287] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[288] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[289] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[290] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[291] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[292] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[293] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[294] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[295] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[296] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[297] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[298] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[299] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[300] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[301] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[302] 제목: nProtect Online Security | 클래스: #32770 | 위치: (L1055, T504, R1505, B888)
+
+[303] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[304] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[305] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[306] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[307] 제목: nProtect Online Security | 클래스: #32770 | 위치: (L1055, T504, R1505, B888)
+
+[308] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[309] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[310] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[311] 제목: nProtect Online Security | 클래스: #32770 | 위치: (L1055, T504, R1505, B888)
+
+[312] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[313] 제목:  | 클래스: Afx:00C20000:0 | 위치: (L0, T0, R136, B39)
+
+[314] 제목: nProtect Online Security    | 클래스: nosstarterdlg | 위치: (L945, T381, R1616, B1011)
+
+[315] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L0, T0, R0, B0)
+
+[316] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L0, T0, R0, B0)
+
+[317] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L0, T0, R0, B0)
+
+[318] 제목:  | 클래스: crashpad_SessionEndWatcher | 위치: (L0, T0, R136, B39)
+
+[319] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L234, T234, R2154, B1257)
+
+[320] 제목:  | 클래스: Base_PowerMessageWindow | 위치: (L0, T0, R0, B0)
+
+[321] 제목:  | 클래스: PseudoConsoleWindow | 위치: (L0, T0, R16, B16)
+
+[322] 제목:  | 클래스: PseudoConsoleWindow | 위치: (L0, T0, R16, B16)
+
+[323] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L0, T0, R0, B0)
+
+[324] 제목: Launchpad | 클래스: Chrome_WidgetWin_1 | 위치: (L980, T396, R1580, B996)
+
+[325] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L0, T0, R0, B0)
+
+[326] 제목:  | 클래스: crashpad_SessionEndWatcher | 위치: (L0, T0, R136, B39)
+
+[327] 제목:  | 클래스: Electron_SystemPreferencesHostWindow | 위치: (L0, T0, R0, B0)
+
+[328] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L104, T104, R2024, B1127)
+
+[329] 제목:  | 클래스: Base_PowerMessageWindow | 위치: (L0, T0, R0, B0)
+
+[330] 제목: HncUpdateTray | 클래스: HwndWrapper[HncUpdateTray.exe;;41d508a8-de2b-42a3-b3f5-58ce643817b8] | 위치: (L-32000, T-32000, R-31840, B-31972)
+
+[331] 제목:  | 클래스: HwndWrapper[HncUpdateTray.exe;;5bcb740f-39de-46c9-ab5e-ecf8ab76212e] | 위치: (L0, T0, R136, B39)
+
+[332] 제목: Rtc Video PnP Listener | 클래스: RtcPalVideoPnPMonitorHWND | 위치: (L0, T0, R136, B100)
+
+[333] 제목:  | 클래스: SkyLibWindowsReactor | 위치: (L0, T0, R136, B39)
+
+[334] 제목:  | 클래스: ContextSwitcherImpl | 위치: (L0, T0, R136, B39)
+
+[335] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L0, T0, R0, B0)
+
+[336] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L312, T312, R2232, B1335)
+
+[337] 제목:  | 클래스: Base_PowerMessageWindow | 위치: (L0, T0, R0, B0)
+
+[338] 제목:  | 클래스: crashpad_SessionEndWatcher | 위치: (L0, T0, R136, B39)
+
+[339] 제목:  | 클래스: MonitorChangeProbeWindow | 위치: (L1, T1, R2, B2)
+
+[340] 제목: DDE Server Window | 클래스: OleDdeWndClass | 위치: (L0, T0, R0, B0)
+
+[341] 제목:  | 클래스: TeamsMessageWindow | 위치: (L260, T260, R2180, B1283)
+
+[342] 제목:  | 클래스: PrintCacheLocalConnectionListenerHiddenWindow | 위치: (L0, T0, R136, B39)
+
+[343] 제목:  | 클래스: PrintCacheListenerWindow_19A79E3F-0006-4175-AACD-6F5C69CC0D23 | 위치: (L0, T0, R136, B39)
+
+[344] 제목:  | 클래스: ASYNCUI_NOTIFYICON_WINDOW_CLASS | 위치: (L0, T0, R0, B0)
+
+[345] 제목:  | 클래스: PrintTray_Notify_WndClass | 위치: (L0, T0, R136, B39)
+
+[346] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[347] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[348] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L0, T0, R0, B0)
+
+[349] 제목: 94% 완료 | 클래스: OperationStatusWindow | 위치: (L320, T422, R783, B594)
+
+[350] 제목:  | 클래스: WorkerW | 위치: (L0, T0, R136, B39)
+
+[351] 제목:  | 클래스: WorkerW | 위치: (L0, T0, R136, B39)
+
+[352] 제목: GDI+ Window (Explorer.EXE) | 클래스: GDI+ Hook Window Class | 위치: (L0, T0, R1, B1)
+
+[353] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[354] 제목: npkfxnaxServerWindow_0 | 클래스: npkfxnaxServerWindow_0 | 위치: (L0, T0, R136, B39)
+
+[355] 제목: GDI+ Window (nosstarter.npe) | 클래스: GDI+ Hook Window Class | 위치: (L0, T0, R1, B1)
+
+[356] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[357] 제목: nProtect Online Security | 클래스: #32770 | 위치: (L986, T526, R1574, B867)
+
+[358] 제목:  | 클래스: ComboLBox | 위치: (L0, T26, R213, B128)
+
+[359] 제목:  | 클래스: ComboLBox | 위치: (L0, T26, R360, B88)
+
+[360] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[361] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[362] 제목: Me Calendar | 클래스: WinUIDesktopWin32WindowClass | 위치: (L208, T208, R2128, B1231)
+
+[363] 제목:  | 클래스: InputSiteWindowClass | 위치: (L0, T0, R136, B39)
+
+[364] 제목: M365 Copilot 빠른 보기 | 클래스: Microsoft 365 Copilot Host | 위치: (L995, T987, R1599, B1169)
+
+[365] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L0, T0, R0, B0)
+
+[366] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L156, T156, R2076, B1179)
+
+[367] 제목:  | 클래스: Base_PowerMessageWindow | 위치: (L0, T0, R0, B0)
+
+[368] 제목:  | 클래스: crashpad_SessionEndWatcher | 위치: (L0, T0, R136, B39)
+
+[369] 제목:  | 클래스: WindowsDashboard | 위치: (L0, T0, R2560, B1392)
+
+[370] 제목: DDE Server Window | 클래스: OleDdeWndClass | 위치: (L0, T0, R0, B0)
+
+[371] 제목:  | 클래스: HwndWrapper[DellOptimizer.Systray;;df1379bf-7ff0-45c4-bfca-6093d0a7ae2d] | 위치: (L0, T0, R136, B39)
+
+[372] 제목:  | 클래스: WindowsForms10.Window.0.app.0.3d893c_r3_ad1 | 위치: (L0, T0, R136, B39)
+
+[373] 제목: Dell Optimizer Systray | 클래스: HwndWrapper[DellOptimizer.Systray;;d0a2a1be-2e25-4b01-8139-f41873774ee2] | 위치: (L0, T1364, R160, B1392)
+
+[374] 제목: Hidden Window | 클래스: HwndWrapper[DellOptimizer.Systray;;7c19881f-ded9-445c-aea8-5014b8ebd77c] | 위치: (L260, T260, R2180, B1283)
+
+[375] 제목: SystemResourceNotifyWindow | 클래스: HwndWrapper[DellOptimizer.Systray;;ea48fba6-bfce-469f-bfdf-ebfa1da12cfd] | 위치: (L0, T0, R0, B0)
+
+[376] 제목: MediaContextNotificationWindow | 클래스: HwndWrapper[DellOptimizer.Systray;;21f811bb-3c5f-4780-8065-e647a8f7ed47] | 위치: (L0, T0, R0, B0)
+
+[377] 제목: GDI+ Window (DellOptimizer.Systray.exe) | 클래스: GDI+ Hook Window Class | 위치: (L0, T0, R1, B1)
+
+[378] 제목: .NET-BroadcastEventWindow.3d893c.0 | 클래스: .NET-BroadcastEventWindow.3d893c.0 | 위치: (L0, T0, R0, B0)
+
+[379] 제목:  | 클래스: HwndWrapper[DellOptimizer.Systray;;f861bb41-6f4e-44fb-8d20-42cb0c0d9e47] | 위치: (L0, T0, R136, B39)
+
+[380] 제목: Microsoft 365 Copilot | 클래스: Microsoft 365 Copilot Host | 위치: (L320, T174, R2240, B1218)
+
+[381] 제목:  | 클래스: Microsoft 365 Copilot Staging Area | 위치: (L0, T0, R136, B39)
+
+[382] 제목: GDI+ Window (M365Copilot.exe) | 클래스: GDI+ Hook Window Class | 위치: (L0, T0, R1, B1)
+
+[383] 제목: MediaContextNotificationWindow | 클래스: HwndWrapper[HncUpdateTray.exe;;baaa9c50-c452-4655-b9be-1768945a68b1] | 위치: (L0, T0, R0, B0)
+
+[384] 제목:  | 클래스: HwndWrapper[HncUpdateTray.exe;;9c328996-0c68-44db-8ab5-5411b23eff02] | 위치: (L0, T0, R136, B39)
+
+[385] 제목: SystemResourceNotifyWindow | 클래스: HwndWrapper[HncUpdateTray.exe;;fe21641f-f8a9-4324-8e3c-bf3552d34a9b] | 위치: (L0, T0, R0, B0)
+
+[386] 제목: H.NotifyIcon_70442676-1b0a-4c55-8b67-7351e8f72f33 | 클래스: H.NotifyIcon_70442676-1b0a-4c55-8b67-7351e8f72f33 | 위치: (L0, T0, R136, B39)
+
+[387] 제목:  | 클래스: MixedRealityLink | 위치: (L0, T0, R16, B16)
+
+[388] 제목:  | 클래스: MessageWindowClass | 위치: (L0, T0, R136, B39)
+
+[389] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L0, T0, R0, B0)
+
+[390] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L0, T0, R0, B0)
+
+[391] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L104, T104, R2024, B1127)
+
+[392] 제목:  | 클래스: Base_PowerMessageWindow | 위치: (L0, T0, R0, B0)
+
+[393] 제목:  | 클래스: crashpad_SessionEndWatcher | 위치: (L0, T0, R136, B39)
+
+[394] 제목:  | 클래스: MessageWindowClass | 위치: (L0, T0, R136, B39)
+
+[395] 제목:  | 클래스: ATL:578E3898 | 위치: (L0, T0, R100, B100)
+
+[396] 제목:  | 클래스: xUIWindow | 위치: (L873, T0, R1112, B279)
+
+[397] 제목:  | 클래스: xUIWindow | 위치: (L873, T0, R1112, B279)
+
+[398] 제목: dkdockexplorer_paintapp_title | 클래스: dkdockexplorer_paintapp_framework | 위치: (L0, T0, R0, B0)
+
+[399] 제목:  | 클래스: ATL:578E3898 | 위치: (L0, T0, R100, B100)
+
+[400] 제목: ntexe_framework-{8FCE6BB7-EA27-4716-8539-E751D8F1B1C5} | 클래스: xUIWindow | 위치: (L0, T0, R100, B100)
+
+[401] 제목:  | 클래스: xUIWindow | 위치: (L0, T0, R1, B1)
+
+[402] 제목:  | 클래스: ATL:578E3898 | 위치: (L0, T0, R100, B100)
+
+[403] 제목: dkcexe_framework-{FD35379D-E9C9-4af5-8666-A3F18F29486D} | 클래스: xUIWindow | 위치: (L0, T0, R100, B100)
+
+[404] 제목: static | 클래스: ATL:60B74158 | 위치: (L0, T0, R0, B0)
+
+[405] 제목: static | 클래스: ATL:60B740C8 | 위치: (L0, T0, R0, B0)
+
+[406] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[407] 제목: dockexplorer_title-{5FE7ACA9-ED11-40de-BE2F-30F5F8E326C0} | 클래스: dockexplorer_framework | 위치: (L0, T0, R0, B0)
+
+[408] 제목: dkdockexplorer_title | 클래스: dkdockexplorer_framework | 위치: (L0, T0, R0, B0)
+
+[409] 제목: static | 클래스: ATL:5CC312C0 | 위치: (L0, T0, R0, B0)
+
+[410] 제목: static | 클래스: ATL:5767C398 | 위치: (L0, T0, R0, B0)
+
+[411] 제목:  | 클래스: ATL:578E3898 | 위치: (L0, T0, R100, B100)
+
+[412] 제목: xUIWindowCaptionLongLiveSINO | 클래스: xUIWindow | 위치: (L0, T0, R100, B100)
+
+[413] 제목: GDI+ Window (desktopcal.exe) | 클래스: GDI+ Hook Window Class | 위치: (L0, T0, R1, B1)
+
+[414] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L0, T0, R0, B0)
+
+[415] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L0, T0, R0, B0)
+
+[416] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L52, T52, R1972, B1075)
+
+[417] 제목:  | 클래스: Base_PowerMessageWindow | 위치: (L0, T0, R0, B0)
+
+[418] 제목:  | 클래스: crashpad_SessionEndWatcher | 위치: (L0, T0, R136, B39)
+
+[419] 제목: _eva_Win32Timer_Window | 클래스: _eva_Win32Timer_WinClass | 위치: (L0, T0, R0, B0)
+
+[420] 제목: _eva_Win32Timer_Window | 클래스: _eva_Win32Timer_WinClass | 위치: (L0, T0, R0, B0)
+
+[421] 제목: _eva_Win32Timer_Window | 클래스: _eva_Win32Timer_WinClass | 위치: (L0, T0, R0, B0)
+
+[422] 제목:  | 클래스: SIMPLE140000000 | 위치: (L0, T0, R0, B0)
+
+[423] 제목: _eva_Win32Timer_Window | 클래스: _eva_Win32Timer_WinClass | 위치: (L0, T0, R0, B0)
+
+[424] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[425] 제목: GDI+ Window (nkrunlite.exe) | 클래스: GDI+ Hook Window Class | 위치: (L0, T0, R1, B1)
+
+[426] 제목:  | 클래스: MyKeyDefense 2.5 Tray Notify Handler Class 16516062 | 위치: (L130, T130, R2050, B1153)
+
+[427] 제목:  | 클래스: EVA_Window_Dblclk | 위치: (L0, T0, R0, B0)
+
+[428] 제목: GDI+ Window (KakaoTalk.exe) | 클래스: GDI+ Hook Window Class | 위치: (L0, T0, R1, B1)
+
+[429] 제목: Socket Notification Sink | 클래스: Afx:00007FF7FE190000:0 | 위치: (L0, T0, R136, B39)
+
+[430] 제목: FTP Server Notification Sink | 클래스: Afx:00007FF7FE190000:0 | 위치: (L0, T0, R0, B0)
+
+[431] 제목: Simple Scanner Utility | 클래스: #32770 | 위치: (L-32000, T-32000, R-31840, B-31972)
+
+[432] 제목: FXKTray Dummy Window | 클래스: Afx:00007FF7FE190000:0 | 위치: (L0, T0, R0, B0)
+
+[433] 제목: GDI+ Window (purpleon.exe) | 클래스: GDI+ Hook Window Class | 위치: (L0, T0, R1, B1)
+
+[434] 제목: Yeti2 | 클래스: Yeti2_MainWnd | 위치: (L0, T0, R0, B0)
+
+[435] 제목: Realtek Jack Windows - 28 | 클래스: WavesGenericWindow_000001AFCE341D38 | 위치: (L0, T0, R136, B39)
+
+[436] 제목: Realtek Jack Windows - 27 | 클래스: WavesGenericWindow_000001AFCE3413D8 | 위치: (L0, T0, R136, B39)
+
+[437] 제목: Realtek Jack Windows - 26 | 클래스: WavesGenericWindow_000001AFCE340A78 | 위치: (L0, T0, R136, B39)
+
+[438] 제목: Realtek Jack Windows - 25 | 클래스: WavesGenericWindow_000001AFCE340118 | 위치: (L0, T0, R136, B39)
+
+[439] 제목: Realtek Jack Windows - 24 | 클래스: WavesGenericWindow_000001AFCE33F7B8 | 위치: (L0, T0, R136, B39)
+
+[440] 제목: Realtek Jack Windows - 23 | 클래스: WavesGenericWindow_000001AFCE33EE58 | 위치: (L0, T0, R136, B39)
+
+[441] 제목: Realtek Jack Windows - 22 | 클래스: WavesGenericWindow_000001AFCE33E4F8 | 위치: (L0, T0, R136, B39)
+
+[442] 제목: Realtek Jack Windows - 21 | 클래스: WavesGenericWindow_000001AFCE33DB98 | 위치: (L0, T0, R136, B39)
+
+[443] 제목: Realtek Jack Windows - 20 | 클래스: WavesGenericWindow_000001AFCE33D238 | 위치: (L0, T0, R136, B39)
+
+[444] 제목: Realtek Jack Windows - 19 | 클래스: WavesGenericWindow_000001AFCE33C8D8 | 위치: (L0, T0, R136, B39)
+
+[445] 제목: Realtek Jack Windows - 18 | 클래스: WavesGenericWindow_000001AFCE33BF78 | 위치: (L0, T0, R136, B39)
+
+[446] 제목: Realtek Jack Windows - 17 | 클래스: WavesGenericWindow_000001AFCE33B618 | 위치: (L0, T0, R136, B39)
+
+[447] 제목: Realtek Jack Windows - 16 | 클래스: WavesGenericWindow_000001AFCE33ACB8 | 위치: (L0, T0, R136, B39)
+
+[448] 제목: Realtek Jack Windows - 15 | 클래스: WavesGenericWindow_000001AFCE33A358 | 위치: (L0, T0, R136, B39)
+
+[449] 제목: Realtek Jack Windows - 14 | 클래스: WavesGenericWindow_000001AFCE3399F8 | 위치: (L0, T0, R136, B39)
+
+[450] 제목: Realtek Jack Windows - 13 | 클래스: WavesGenericWindow_000001AFCE339098 | 위치: (L0, T0, R136, B39)
+
+[451] 제목: Realtek Jack Windows - 12 | 클래스: WavesGenericWindow_000001AFCE338738 | 위치: (L0, T0, R136, B39)
+
+[452] 제목: Realtek Jack Windows - 11 | 클래스: WavesGenericWindow_000001AFCE337DD8 | 위치: (L0, T0, R136, B39)
+
+[453] 제목: Realtek Jack Windows - 10 | 클래스: WavesGenericWindow_000001AFCE337478 | 위치: (L0, T0, R136, B39)
+
+[454] 제목: Realtek Jack Windows - 9 | 클래스: WavesGenericWindow_000001AFCE336B18 | 위치: (L0, T0, R136, B39)
+
+[455] 제목: Realtek Jack Windows - 8 | 클래스: WavesGenericWindow_000001AFCE3361B8 | 위치: (L0, T0, R136, B39)
+
+[456] 제목: Realtek Jack Windows - 7 | 클래스: WavesGenericWindow_000001AFCE335858 | 위치: (L0, T0, R136, B39)
+
+[457] 제목: Realtek Jack Windows - 5 | 클래스: WavesGenericWindow_000001AFCE334598 | 위치: (L0, T0, R136, B39)
+
+[458] 제목: Realtek Jack Windows - 4 | 클래스: WavesGenericWindow_000001AFCE333C38 | 위치: (L0, T0, R136, B39)
+
+[459] 제목: Realtek Jack Windows - 3 | 클래스: WavesGenericWindow_000001AFCE3332D8 | 위치: (L0, T0, R136, B39)
+
+[460] 제목: Realtek Jack Windows - 2 | 클래스: WavesGenericWindow_000001AFCE332978 | 위치: (L0, T0, R136, B39)
+
+[461] 제목: Realtek Jack Windows - 1 | 클래스: WavesGenericWindow_000001AFCE332018 | 위치: (L0, T0, R136, B39)
+
+[462] 제목: Realtek Jack Windows - 0 | 클래스: WavesGenericWindow_000001AFCE3316B8 | 위치: (L0, T0, R136, B39)
+
+[463] 제목: WavesFXConnection_Capture | 클래스: WavesGenericWindow_000000AF6F4FF680 | 위치: (L0, T0, R136, B39)
+
+[464] 제목: WavesFXConnection_Render | 클래스: WavesGenericWindow_000000AF6F4FF378 | 위치: (L0, T0, R136, B39)
+
+[465] 제목: AutoSubtypeOnAudioSession | 클래스: WavesGenericWindow_000000AF6F4FD160 | 위치: (L0, T0, R136, B39)
+
+[466] 제목: ChangeNotify | 클래스: WavesNotifications000001AFCE32BE30 | 위치: (L0, T0, R0, B0)
+
+[467] 제목: ChangeNotify | 클래스: WavesNotifications000001AFCE3B2EF0 | 위치: (L0, T0, R0, B0)
+
+[468] 제목: ChangeNotify | 클래스: WavesNotifications000001AFCE3B4F00 | 위치: (L0, T0, R0, B0)
+
+[469] 제목: CConnectionProvider_Wnd | 클래스: CConnectionProvider_Class | 위치: (L0, T0, R136, B39)
+
+[470] 제목: Realtek Jack Windows - 6 | 클래스: WavesGenericWindow_000001AFCE334EF8 | 위치: (L0, T0, R136, B39)
+
+[471] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L0, T0, R0, B0)
+
+[472] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L0, T0, R0, B0)
+
+[473] 제목: PurpleBox | 클래스: Chrome_WidgetWin_1 | 위치: (L880, T396, R1680, B996)
+
+[474] 제목: PurpleBox | 클래스: Chrome_WidgetWin_1 | 위치: (L880, T396, R1680, B996)
+
+[475] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L0, T0, R0, B0)
+
+[476] 제목: PURPLE Talk | 클래스: Chrome_WidgetWin_1 | 위치: (L874, T318, R1686, B1074)
+
+[477] 제목:  | 클래스: Chrome_SystemMessageWindow | 위치: (L0, T0, R136, B39)
+
+[478] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L234, T234, R2154, B1257)
+
+[479] 제목: RealtekAudioBackgroundProcessClass | 클래스: RealtekAudioBackgroundProcessClass | 위치: (L0, T0, R0, B0)
+
+[480] 제목:  | 클래스: Base_PowerMessageWindow | 위치: (L0, T0, R0, B0)
+
+[481] 제목: purpleonp | 클래스: Yap4p_MainWnd | 위치: (L100, T100, R850, B600)
+
+[482] 제목:  | 클래스: Protect Browser Tower Class 8562093 | 위치: (L208, T208, R2128, B1231)
+
+[483] 제목:  | 클래스: agent | 위치: (L156, T156, R1436, B876)
+
+[484] 제목: .NET-BroadcastEventWindow.4.0.0.0.2ad5d08.0 | 클래스: .NET-BroadcastEventWindow.4.0.0.0.2ad5d08.0 | 위치: (L0, T0, R0, B0)
+
+[485] 제목:  | 클래스: ATL:00007FFD6082E000 | 위치: (L0, T0, R0, B0)
+
+[486] 제목: SecurityHealthSystray | 클래스: SecHealth Window Class | 위치: (L0, T0, R0, B0)
+
+[487] 제목:  | 클래스: Chrome_SystemMessageWindow | 위치: (L0, T0, R136, B39)
+
+[488] 제목:  | 클래스: Chrome_WidgetWin_0 | 위치: (L78, T78, R1998, B1101)
+
+[489] 제목:  | 클래스: Base_PowerMessageWindow | 위치: (L0, T0, R0, B0)
+
+[490] 제목: GDI+ Window (Purple.exe) | 클래스: GDI+ Hook Window Class | 위치: (L0, T0, R1, B1)
+
+[491] 제목:  | 클래스: WindowsForms10.Window.0.app.0.2ad5d08_r7_ad1 | 위치: (L0, T0, R136, B39)
+
+[492] 제목:  | 클래스: HwndWrapper[Purple.exe;;5615f506-3f0e-4a2a-8fde-27831989b45c] | 위치: (L0, T0, R0, B0)
+
+[493] 제목: StSess32 | 클래스: NzSess32MainWndCN | 위치: (L338, T338, R2258, B1361)
+
+[494] 제목:  | 클래스: NzSessTrayWndCN | 위치: (L0, T0, R136, B39)
+
+[495] 제목:  | 클래스: HelperWndClass | 위치: (L312, T312, R2232, B1335)
+
+[496] 제목: Windows 입력 환경 | 클래스: Windows.UI.Core.CoreWindow | 위치: (L0, T0, R2560, B1440)
+
+[497] 제목: wizvera-veraport-x64-handler | 클래스: Afx:00007FF695FC0000:0 | 위치: (L-10000, T-10000, R-9984, B-9984)
+
+[498] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[499] 제목:  | 클래스: HwndWrapper[Purple.exe;;42ee990e-e311-4aa1-82a9-58f478e84662] | 위치: (L0, T0, R136, B39)
+
+[500] 제목: RealtekAudioAdminBackgroundProcessClass | 클래스: RealtekAudioAdminBackgroundProcessClass | 위치: (L0, T0, R0, B0)
+
+[501] 제목: MediaContextNotificationWindow | 클래스: HwndWrapper[Purple.exe;;84261fa2-f632-4bb2-9525-69e7f8fe1e3e] | 위치: (L0, T0, R0, B0)
+
+[502] 제목:  | 클래스: WorkerW | 위치: (L0, T0, R136, B39)
+
+[503] 제목: MiracastConnectionWindow | 클래스: MiracastConnectionWindow | 위치: (L0, T0, R136, B39)
+
+[504] 제목: BluetoothNotificationAreaIconWindowClass | 클래스: BluetoothNotificationAreaIconWindowClass | 위치: (L0, T0, R136, B39)
+
+[505] 제목: MS_WebcheckMonitor | 클래스: MS_WebcheckMonitor | 위치: (L156, T156, R2076, B1179)
+
+[506] 제목:  | 클래스: WorkerW | 위치: (L0, T0, R136, B39)
+
+[507] 제목:  | 클래스: WorkerW | 위치: (L0, T0, R136, B39)
+
+[508] 제목: StSess | 클래스: NzSessMainWndCN | 위치: (L130, T130, R2050, B1153)
+
+[509] 제목: Task Host Window | 클래스: COMTASKSWINDOWCLASS | 위치: (L0, T0, R136, B39)
+
+[510] 제목:  | 클래스: HwndWrapper[Purple.exe;;d44b2232-ec7f-4d8a-bfed-286c254ed551] | 위치: (L0, T0, R136, B39)
+
+[511] 제목: SystemResourceNotifyWindow | 클래스: HwndWrapper[Purple.exe;;e400463a-15e2-469e-83fe-cb89995f92da] | 위치: (L0, T0, R0, B0)
+
+[512] 제목: CrossDeviceResumeWindow | 클래스: CrossDeviceResumeWindowClass | 위치: (L104, T104, R2024, B1127)
+
+[513] 제목:  | 클래스: Postures Broadcast Listener Class | 위치: (L0, T0, R136, B39)
+
+[514] 제목:  | 클래스: TabletModeCoverWindow | 위치: (L0, T0, R2560, B1392)
+
+[515] 제목:  | 클래스: WorkerW | 위치: (L0, T0, R136, B39)
+
+[516] 제목:  | 클래스: WorkerW | 위치: (L0, T0, R136, B39)
+
+[517] 제목:  | 클래스: DummyDWMListenerWindow | 위치: (L0, T0, R0, B0)
+
+[518] 제목:  | 클래스: EdgeUiInputTopWndClass | 위치: (L15, T0, R2560, B4)
+
+[519] 제목:  | 클래스: DummyDWMListenerWindow | 위치: (L0, T0, R0, B0)
+
+[520] 제목:  | 클래스: DummyDWMListenerWindow | 위치: (L0, T0, R0, B0)
+
+[521] 제목:  | 클래스: DummyDWMListenerWindow | 위치: (L0, T0, R0, B0)
+
+[522] 제목:  | 클래스: DummyDWMListenerWindow | 위치: (L0, T0, R0, B0)
+
+[523] 제목: DesktopWindowXamlSource | 클래스: Windows.UI.Core.CoreWindow | 위치: (L0, T0, R1, B1)
+
+[524] 제목: Windows Terminal | 클래스: Windows Terminal 46362e9e66e3b0c3 | 위치: (L0, T0, R136, B39)
+
+[525] 제목: DesktopWindowXamlSource | 클래스: Windows.UI.Core.CoreWindow | 위치: (L0, T0, R1, B1)
+
+[526] 제목:  | 클래스: GamingFallbackWindow | 위치: (L0, T0, R0, B0)
+
+[527] 제목: CrossEXService | 클래스: CrossEXService | 위치: (L78, T78, R1998, B1101)
+
+[528] 제목:  | 클래스: WorkerW | 위치: (L0, T0, R136, B39)
+
+[529] 제목:  | 클래스: WorkerW | 위치: (L0, T0, R0, B0)
+
+[530] 제목:  | 클래스: WorkerW | 위치: (L0, T0, R136, B39)
+
+[531] 제목:  | 클래스: WorkerW | 위치: (L0, T0, R136, B39)
+
+[532] 제목:  | 클래스: WorkerW | 위치: (L0, T0, R136, B39)
+
+[533] 제목:  | 클래스: DDEMLEvent | 위치: (L0, T0, R0, B0)
+
+[534] 제목:  | 클래스: DDEMLMom | 위치: (L0, T0, R0, B0)
+
+[535] 제목: Windows Push Notifications Platform | 클래스: PushNotificationsPowerManagement | 위치: (L0, T0, R0, B0)
+
+[536] 제목: Task Host Window | 클래스: COMTASKSWINDOWCLASS | 위치: (L0, T0, R136, B39)
+
+[537] 제목: DWM Notification Window | 클래스: Dwm | 위치: (L0, T740, R160, B768)
+
+[538] 제목:  | 클래스: CicLoaderWndClass | 위치: (L0, T0, R136, B39)
+
+[539] 제목: 위젯 | 클래스: Chrome_WidgetWin_1 | 위치: (L0, T1392, R0, B1392)
+
+[540] 제목:  | 클래스: StSdkMainWndCN | 위치: (L104, T104, R2024, B1127)
+
+[541] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[542] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[543] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[544] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[545] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[546] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[547] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[548] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[549] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[550] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[551] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[552] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[553] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[554] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[555] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[556] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[557] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[558] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[559] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[560] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[561] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[562] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[563] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[564] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[565] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[566] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[567] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[568] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[569] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[570] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[571] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[572] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[573] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[574] 제목:  | 클래스: Static | 위치: (L0, T0, R0, B0)
+
+[575] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[576] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[577] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[578] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[579] 제목: DesktopWindowXamlSource | 클래스: Windows.UI.Core.CoreWindow | 위치: (L0, T0, R1, B1)
+
+[580] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[581] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[582] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[583] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[584] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[585] 제목:  | 클래스: tooltips_class32 | 위치: (L0, T0, R0, B0)
+
+[586] 제목:  | 클래스: ComboLBox | 위치: (L0, T20, R95, B286)
+
+[587] 제목:  | 클래스: ComboLBox | 위치: (L0, T20, R50, B286)
+
+[588] 제목:  | 클래스: ComboLBox | 위치: (L0, T20, R50, B106)
+
+[589] 제목: NKBALANCECOMMWND | 클래스: AfxWnd110 | 위치: (L0, T0, R10, B10)
+
+[590] 제목: FSBALANCECOMMWND | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[591] 제목: NFOBALANCECOMMWND | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[592] 제목: NKSignalDataWnd | 클래스: AfxWnd110 | 위치: (L0, T0, R10, B10)
+
+[593] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[594] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[595] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[596] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[597] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[598] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[599] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[600] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[601] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[602] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[603] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[604] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[605] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[606] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[607] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[608] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[609] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[610] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[611] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[612] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[613] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[614] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[615] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[616] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[617] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[618] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[619] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[620] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[621] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[622] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[623] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[624] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[625] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[626] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[627] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[628] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[629] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[630] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[631] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[632] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[633] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[634] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[635] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[636] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[637] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[638] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[639] 제목:  | 클래스: SysTreeView32 | 위치: (L0, T0, R110, B300)
+
+[640] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[641] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[642] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[643] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[644] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[645] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[646] 제목:  | 클래스: AfxWnd110 | 위치: (L0, T0, R0, B0)
+
+[647] 제목:  | 클래스: OneDriveReactNativeWin32WindowClass | 위치: (L0, T0, R1, B1)
+
+[648] 제목:  | 클래스: ATL:578E3898 | 위치: (L0, T0, R1691, B1101)
+
+[649] 제목: dkexecute_desktopcal_title-{DF169E84-E4BA-4eb0-A2CA-F39D25F7C3D7} | 클래스: xUIWindow | 위치: (L871, T0, R2562, B1101)
+
+[650] 제목: Program Manager | 클래스: Progman | 위치: (L0, T0, R2560, B1440)
+
+[651] 제목: M | 클래스: MSCTFIME UI | 위치: (L0, T0, R0, B0)
+
+[652] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[653] 제목: M | 클래스: MSCTFIME UI | 위치: (L0, T0, R0, B0)
+
+[654] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[655] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[656] 제목: CiceroUIWndFrame | 클래스: CiceroUIWndFrame | 위치: (L200, T200, R400, B400)
+
+[657] 제목: M | 클래스: MSCTFIME UI | 위치: (L0, T0, R0, B0)
+
+[658] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[659] 제목: M | 클래스: MSCTFIME UI | 위치: (L0, T0, R0, B0)
+
+[660] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[661] 제목: M | 클래스: MSCTFIME UI | 위치: (L0, T0, R0, B0)
+
+[662] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[663] 제목: M | 클래스: MSCTFIME UI | 위치: (L0, T0, R0, B0)
+
+[664] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[665] 제목: M | 클래스: MSCTFIME UI | 위치: (L0, T0, R0, B0)
+
+[666] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[667] 제목: M | 클래스: MSCTFIME UI | 위치: (L0, T0, R0, B0)
+
+[668] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[669] 제목: M | 클래스: MSCTFIME UI | 위치: (L0, T0, R0, B0)
+
+[670] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[671] 제목: M | 클래스: MSCTFIME UI | 위치: (L0, T0, R0, B0)
+
+[672] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[673] 제목: M | 클래스: MSCTFIME UI | 위치: (L0, T0, R0, B0)
+
+[674] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[675] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[676] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[677] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[678] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[679] 제목: M | 클래스: MSCTFIME UI | 위치: (L0, T0, R0, B0)
+
+[680] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[681] 제목: M | 클래스: MSCTFIME UI | 위치: (L0, T0, R0, B0)
+
+[682] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[683] 제목: M | 클래스: MSCTFIME UI | 위치: (L0, T0, R0, B0)
+
+[684] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[685] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[686] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[687] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[688] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[689] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[690] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[691] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[692] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[693] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[694] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[695] 제목: M | 클래스: MSCTFIME UI | 위치: (L0, T0, R0, B0)
+
+[696] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[697] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[698] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[699] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[700] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[701] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[702] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[703] 제목: M | 클래스: MSCTFIME UI | 위치: (L0, T0, R0, B0)
+
+[704] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[705] 제목: CiceroUIWndFrame | 클래스: CiceroUIWndFrame | 위치: (L0, T0, R0, B0)
+
+[706] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[707] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[708] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[709] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[710] 제목: M | 클래스: MSCTFIME UI | 위치: (L0, T0, R0, B0)
+
+[711] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[712] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[713] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[714] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[715] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[716] 제목: M | 클래스: MSCTFIME UI | 위치: (L0, T0, R0, B0)
+
+[717] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[718] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[719] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[720] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[721] 제목: CiceroUIWndFrame | 클래스: CiceroUIWndFrame | 위치: (L200, T200, R400, B400)
+
+[722] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[723] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[724] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[725] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[726] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[727] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[728] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[729] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[730] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[731] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[732] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[733] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[734] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[735] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[736] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[737] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[738] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[739] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[740] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[741] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[742] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[743] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[744] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[745] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[746] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[747] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[748] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[749] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[750] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[751] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[752] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[753] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[754] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[755] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[756] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[757] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[758] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[759] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[760] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[761] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[762] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[763] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[764] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[765] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[766] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[767] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[768] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[769] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[770] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[771] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[772] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[773] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[774] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[775] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[776] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[777] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[778] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[779] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[780] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[781] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[782] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[783] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[784] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[785] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[786] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[787] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[788] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[789] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[790] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[791] 제목: CiceroUIWndFrame | 클래스: CiceroUIWndFrame | 위치: (L0, T0, R0, B0)
+
+[792] 제목: M | 클래스: MSCTFIME UI | 위치: (L0, T0, R0, B0)
+
+[793] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[794] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[795] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[796] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[797] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[798] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[799] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[800] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[801] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[802] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[803] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[804] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[805] 제목: M | 클래스: MSCTFIME UI | 위치: (L0, T0, R0, B0)
+
+[806] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)
+
+[807] 제목: M | 클래스: MSCTFIME UI | 위치: (L0, T0, R0, B0)
+
+[808] 제목: Default IME | 클래스: IME | 위치: (L0, T0, R0, B0)

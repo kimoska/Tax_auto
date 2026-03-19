@@ -31,10 +31,13 @@ class RPARunner:
 
     def __init__(self, auth_method: str = 'certificate',
                  cert_path: str = '', cert_password: str = '',
+                 cert_location: str = 'harddisk', cert_keyword: str = '',
                  excel_path: str = ''):
         self.auth_method = auth_method
         self.cert_path = cert_path
         self.cert_password = cert_password
+        self.cert_location = cert_location
+        self.cert_keyword = cert_keyword
         self.excel_path = excel_path
         self._progress_callback = None
 
@@ -83,6 +86,9 @@ class RPARunner:
                 login_handler = HometaxLogin(
                     page,
                     auth_method=self.auth_method,
+                    cert_password=self.cert_password,
+                    cert_location=self.cert_location,
+                    cert_keyword=self.cert_keyword,
                 )
 
                 def login_progress(step, total, msg):

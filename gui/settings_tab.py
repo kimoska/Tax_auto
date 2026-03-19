@@ -128,6 +128,28 @@ class SettingsTab(QWidget):
         self.auth_method.addItem('비회원 로그인', 'non_member')
         auth_layout.addWidget(self.auth_method)
 
+        # ── 인증서 저장 위치 ──
+        lbl_location = QLabel('인증서 저장 위치')
+        lbl_location.setStyleSheet(label_style)
+        auth_layout.addWidget(lbl_location)
+        self.cert_location = QComboBox()
+        self.cert_location.setStyleSheet(input_style)
+        self.cert_location.addItem('하드디스크 이동식', 'harddisk')
+        self.cert_location.addItem('브라우저', 'browser')
+        self.cert_location.addItem('금융인증서', 'financial')
+        self.cert_location.addItem('휴대전화', 'mobile')
+        self.cert_location.addItem('스마트인증', 'smart')
+        auth_layout.addWidget(self.cert_location)
+
+        # ── 인증서 소유자 키워드 ──
+        lbl_keyword = QLabel('인증서 소유자 키워드 (선택)')
+        lbl_keyword.setStyleSheet(label_style)
+        auth_layout.addWidget(lbl_keyword)
+        self.cert_keyword = QLineEdit()
+        self.cert_keyword.setStyleSheet(input_style)
+        self.cert_keyword.setPlaceholderText('예: 김관영 (비워두면 첫 번째 인증서 사용)')
+        auth_layout.addWidget(self.cert_keyword)
+
         cert_row = QHBoxLayout()
         cert_col = QVBoxLayout()
         lbl_cert = QLabel('인증서 경로')
@@ -199,6 +221,13 @@ class SettingsTab(QWidget):
 
         self.cert_path.setText(_get('cert_path'))
 
+        location = _get('cert_location')
+        loc_idx = self.cert_location.findData(location)
+        if loc_idx >= 0:
+            self.cert_location.setCurrentIndex(loc_idx)
+
+        self.cert_keyword.setText(_get('cert_keyword'))
+
         # 비밀번호 복호화
         pw_setting = self.repo.get_setting('cert_password')
         if pw_setting and pw_setting['value']:
@@ -216,6 +245,8 @@ class SettingsTab(QWidget):
         self.repo.update_setting('org_tax_office', self.org_tax_office.text().strip())
         self.repo.update_setting('org_address', self.org_address.text().strip())
         self.repo.update_setting('auth_method', self.auth_method.currentData())
+        self.repo.update_setting('cert_location', self.cert_location.currentData())
+        self.repo.update_setting('cert_keyword', self.cert_keyword.text().strip())
         self.repo.update_setting('cert_path', self.cert_path.text().strip())
 
         # 비밀번호 암호화 저장
