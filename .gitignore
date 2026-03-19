@@ -1,0 +1,18 @@
+
+# 데이터베이스 및 개인정보 제외
+autotax.db*
+.secret_key
+.hometax_session/
+*.log
+
+# 파이썬 부산물 제외
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.pytest_cache/
+
+# 배포 관련 제외
+dist/
+build/
+*.spec
+

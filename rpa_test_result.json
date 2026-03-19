@@ -1,0 +1,3015 @@
+{
+  "playwright_install": true,
+  "browser_launch": true,
+  "hometax_connect": true,
+  "main_page_elements": [
+    {
+      "tag": "LI",
+      "id": "mf_wfHeader_group1320",
+      "cls": "w2group ",
+      "text": "본문 바로가기",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_wq_uuid_279",
+      "cls": "w2group ",
+      "text": "본문 바로가기",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_280",
+      "cls": "w2textbox ",
+      "text": "본문 바로가기",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "mf_wfHeader_group1330",
+      "cls": "w2group ",
+      "text": "주메뉴 바로가기",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_wq_uuid_282",
+      "cls": "w2group ",
+      "text": "주메뉴 바로가기",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_283",
+      "cls": "w2textbox ",
+      "text": "주메뉴 바로가기",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "mf_wfHeader_grp_sian",
+      "cls": "w2group ",
+      "text": "표준정의서",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_wq_uuid_291",
+      "cls": "w2group ",
+      "text": "표준정의서",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_292",
+      "cls": "w2textbox txt_b",
+      "text": "표준정의서",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "mf_wfHeader_grp_sample",
+      "cls": "w2group ",
+      "text": "가이드샘플",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_wq_uuid_294",
+      "cls": "w2group ",
+      "text": "가이드샘플",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_295",
+      "cls": "w2textbox ",
+      "text": "가이드샘플",
+      "href": ""
+    },
+    {
+      "tag": "INPUT",
+      "id": "mf_wfHeader_group1508",
+      "cls": "w2trigger btn_cm",
+      "text": "사업자전환",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "mf_wfHeader_hdGroup004",
+      "cls": "w2group ",
+      "text": "회원정보조회",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_group1502",
+      "cls": "w2group ",
+      "text": "회원정보조회",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_hdTxtUserInfo",
+      "cls": "w2textbox ",
+      "text": "회원정보조회",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "mf_wfHeader_nonMemUserInfo",
+      "cls": "w2group ",
+      "text": ":비회원으로 로그인 되었습니다.",
+      "href": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_308",
+      "cls": "w2textbox ",
+      "text": ":비회원으로 로그인 되었습니다.",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "mf_wfHeader_wq_uuid_309",
+      "cls": "w2group ",
+      "text": "로그인",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_group1503",
+      "cls": "w2group ",
+      "text": "로그인",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "LI",
+      "id": "mf_wfHeader_selectSmltClc",
+      "cls": "w2group ",
+      "text": "모의계산",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_group840",
+      "cls": "w2group ",
+      "text": "모의계산",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_314",
+      "cls": "w2textbox ",
+      "text": "모의계산",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "mf_wfHeader_group1500",
+      "cls": "w2group ",
+      "text": "인증센터",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_group1501",
+      "cls": "w2group ",
+      "text": "인증센터",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_317",
+      "cls": "w2textbox ",
+      "text": "인증센터",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "mf_wfHeader_group1506",
+      "cls": "w2group ",
+      "text": "부서사용자신청",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_group1507",
+      "cls": "w2group ",
+      "text": "부서사용자신청",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_320",
+      "cls": "w2textbox ",
+      "text": "부서사용자신청",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "mf_wfHeader_group1504",
+      "cls": "w2group ",
+      "text": "화면크기  130% 120% 110% 100% 90% 80%",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_hdGroup001",
+      "cls": "w2group logo_hometax",
+      "text": "국세청 홈택스 HomeTax",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_329",
+      "cls": "w2textbox screen_hide",
+      "text": "국세청 홈택스 HomeTax",
+      "href": ""
+    },
+    {
+      "tag": "INPUT",
+      "id": "mf_wfHeader_wq_uuid_332",
+      "cls": "w2trigger m_sch_btn",
+      "text": "검색",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_sch_pop",
+      "cls": "w2anchor2 sch_pop",
+      "text": "결과내 재검색",
+      "href": "javascript:void(null);"
+    },
+    {
+      "tag": "INPUT",
+      "id": "mf_wfHeader_reSearch_input_0",
+      "cls": "w2checkbox_input",
+      "text": "on",
+      "href": ""
+    },
+    {
+      "tag": "INPUT",
+      "id": "mf_wfHeader_wq_uuid_342",
+      "cls": "w2trigger sch_btn",
+      "text": "검색",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "mf_wfHeader_ptl_search_wq_uuid_708",
+      "cls": "w2group list_rec open",
+      "text": "추천 서비스추천 서비스월간연간",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_ptl_search_wq_uuid_711",
+      "cls": "w2group t",
+      "text": "추천 서비스",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_ptl_search_rcmd_month",
+      "cls": "w2anchor2 src_btn on",
+      "text": "월간",
+      "href": "javascript:void(null);"
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_ptl_search_rcmd_year",
+      "cls": "w2anchor2 src_btn",
+      "text": "연간",
+      "href": "javascript:void(null);"
+    },
+    {
+      "tag": "LI",
+      "id": "mf_wfHeader_ptl_search_wq_uuid_718",
+      "cls": "w2group list_pop",
+      "text": "인기 검색어인기 검색어주간월간",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_ptl_search_wq_uuid_721",
+      "cls": "w2group t",
+      "text": "인기 검색어",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_ptl_search_pop_w",
+      "cls": "w2anchor2 src_btn on",
+      "text": "주간",
+      "href": "javascript:void(null);"
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_ptl_search_pop_m",
+      "cls": "w2anchor2 src_btn",
+      "text": "월간",
+      "href": "javascript:void(null);"
+    },
+    {
+      "tag": "LI",
+      "id": "mf_wfHeader_ptl_search_wq_uuid_728",
+      "cls": "w2group list_srv open",
+      "text": "서비스 바로가기서비스 바로가기해당 단어로 시작하는 검색어가 없습니다.",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_ptl_search_wq_uuid_731",
+      "cls": "w2group t",
+      "text": "서비스 바로가기",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_ptl_search_noSrvc",
+      "cls": "w2textbox ",
+      "text": "해당 단어로 시작하는 검색어가 없습니다.",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "mf_wfHeader_ptl_search_wq_uuid_736",
+      "cls": "w2group list_sch",
+      "text": "자동완성 검색어자동완성 검색어해당 단어로 시작하는 검색어가 없습니다.",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_ptl_search_wq_uuid_739",
+      "cls": "w2group t",
+      "text": "자동완성 검색어",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_ptl_search_noComm",
+      "cls": "w2textbox ",
+      "text": "해당 단어로 시작하는 검색어가 없습니다.",
+      "href": ""
+    },
+    {
+      "tag": "INPUT",
+      "id": "mf_wfHeader_ptl_search_btn_reset",
+      "cls": "w2trigger btn_cm btn_reset",
+      "text": "초기화",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "mf_wfHeader_hdGroup0020",
+      "cls": "w2group my_hometax",
+      "text": "나의 홈택스",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_hdGroup002",
+      "cls": "w2group btn_home",
+      "text": "나의 홈택스",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_352",
+      "cls": "w2textbox ",
+      "text": "나의 홈택스",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "mf_wfHeader_wq_uuid_353",
+      "cls": "w2group my_hometax mu",
+      "text": "나의 메뉴",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_btn_mymn",
+      "cls": "w2group btn_home",
+      "text": "나의 메뉴",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_355",
+      "cls": "w2textbox ",
+      "text": "나의 메뉴",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "mf_wfHeader_hdGroup0050",
+      "cls": "w2group allmenu",
+      "text": "전체메뉴",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_hdGroup005",
+      "cls": "w2group btn_all",
+      "text": "전체메뉴",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_362",
+      "cls": "w2textbox txt",
+      "text": "전체메뉴",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "mf_wfHeader_hdGroup007",
+      "cls": "w2group go_semu",
+      "text": "세무대리",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_group1505",
+      "cls": "w2group btn_semu",
+      "text": "세무대리",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "UL",
+      "id": "mf_wfHeader_hdGroup911",
+      "cls": "w2group menu_1st",
+      "text": "계산서·영수증·카드              전자(세금)계산서 발급                  전자(세금)",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "mf_wfHeader_hdGroup922",
+      "cls": "w2group ",
+      "text": "계산서·영수증·카드              전자(세금)계산서 발급                  전자(세금)",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_wq_uuid_369",
+      "cls": "w2group ",
+      "text": "계산서·영수증·카드",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_370",
+      "cls": "w2textbox ",
+      "text": "계산서·영수증·카드",
+      "href": ""
+    },
+    {
+      "tag": "UL",
+      "id": "mf_wfHeader_menu46Scrollbox",
+      "cls": "w2group menu_2st",
+      "text": "전자(세금)계산서 발급                  전자(세금)계산서 발급\t    \t\t\t전자(세금)계산서 ",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_group_1",
+      "cls": "",
+      "text": "전자(세금)계산서 발급                  전자(세금)계산서 발급\t    \t\t\t전자(세금)계산서 ",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "",
+      "cls": "w2group ",
+      "text": "전자(세금)계산서 발급",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 발급",
+      "href": ""
+    },
+    {
+      "tag": "DIV",
+      "id": "menuUl46_4601000000",
+      "cls": "w2group menu_3st_wrap",
+      "text": "전자(세금)계산서 발급\t    \t\t\t전자(세금)계산서 건별발급\t\t\t\t전자(세금)계산서 수정발급\t\t\t\t\t\t\t반",
+      "href": ""
+    },
+    {
+      "tag": "UL",
+      "id": "menu3Ul_46_4601000000",
+      "cls": "w2group menu_3st",
+      "text": "전자(세금)계산서 건별발급\t\t\t\t전자(세금)계산서 수정발급\t\t\t\t\t\t\t반복/복사 발급\t\t\t\t\t\t\t전자(세금)",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "combineMenu_46_4601010100",
+      "cls": "w2group",
+      "text": "전자(세금)계산서 건별발급",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "combineMenuAtag_4601010100",
+      "cls": "",
+      "text": "전자(세금)계산서 건별발급",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 건별발급",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "combineMenu_46_4601010400",
+      "cls": "w2group",
+      "text": "전자(세금)계산서 수정발급",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "combineMenuAtag_4601010400",
+      "cls": "",
+      "text": "전자(세금)계산서 수정발급",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 수정발급",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_temp20",
+      "cls": "w2group hav_child",
+      "text": "반복/복사 발급\t\t\t\t\t\t\t전자(세금)계산서 반복발급\t\t\t\t전자(세금)계산서 복사발급",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_46_temp20",
+      "cls": "",
+      "text": "반복/복사 발급",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "반복/복사 발급",
+      "href": ""
+    },
+    {
+      "tag": "UL",
+      "id": "menu4Ul_2_temp20",
+      "cls": "w2group menu_4st",
+      "text": "전자(세금)계산서 반복발급\t\t\t\t전자(세금)계산서 복사발급",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4601010200",
+      "cls": "w2group",
+      "text": "전자(세금)계산서 반복발급",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "combineMenuAtag_4601010200",
+      "cls": "",
+      "text": "전자(세금)계산서 반복발급",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 반복발급",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4601010300",
+      "cls": "w2group",
+      "text": "전자(세금)계산서 복사발급",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "combineMenuAtag_4601010300",
+      "cls": "",
+      "text": "전자(세금)계산서 복사발급",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 복사발급",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4601010000",
+      "cls": "w2group hav_child",
+      "text": "일괄/공동매입분 발급\t\t\t\t전자(세금)계산서 건별발급\t\t\t\t\t전자(세금)계산서 수정발급\t\t\t\t\t전자(세금)계",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601010000",
+      "cls": "",
+      "text": "일괄/공동매입분 발급",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "일괄/공동매입분 발급",
+      "href": ""
+    },
+    {
+      "tag": "UL",
+      "id": "menu4Ul_46_4601010000",
+      "cls": "w2group menu_4st",
+      "text": "전자(세금)계산서 건별발급\t\t\t\t\t전자(세금)계산서 수정발급\t\t\t\t\t전자(세금)계산서 일괄발급\t\t\t\t\t전자(",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4601010100",
+      "cls": "",
+      "text": "전자(세금)계산서 건별발급",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601010100",
+      "cls": "",
+      "text": "전자(세금)계산서 건별발급",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 건별발급",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4601010400",
+      "cls": "",
+      "text": "전자(세금)계산서 수정발급",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601010400",
+      "cls": "",
+      "text": "전자(세금)계산서 수정발급",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 수정발급",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4601010500",
+      "cls": "",
+      "text": "전자(세금)계산서 일괄발급",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601010500",
+      "cls": "",
+      "text": "전자(세금)계산서 일괄발급",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 일괄발급",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4601010600",
+      "cls": "",
+      "text": "전자(세금)계산서 일괄발급(100건 초과 시)",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601010600",
+      "cls": "",
+      "text": "전자(세금)계산서 일괄발급(100건 초과 시)",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 일괄발급(100건 초과 시)",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4601010200",
+      "cls": "",
+      "text": "전자(세금)계산서 반복발급",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601010200",
+      "cls": "",
+      "text": "전자(세금)계산서 반복발급",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 반복발급",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4601010300",
+      "cls": "",
+      "text": "전자(세금)계산서 복사발급",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601010300",
+      "cls": "",
+      "text": "전자(세금)계산서 복사발급",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 복사발급",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4601010700",
+      "cls": "",
+      "text": "전자(세금)계산서 일괄수정발급",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601010700",
+      "cls": "",
+      "text": "전자(세금)계산서 일괄수정발급",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 일괄수정발급",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4601010800",
+      "cls": "",
+      "text": "전자(세금)계산서 전기료 등 공동매입분 발급",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601010800",
+      "cls": "",
+      "text": "전자(세금)계산서 전기료 등 공동매입분 발급",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 전기료 등 공동매입분 발급",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4601020000",
+      "cls": "w2group hav_child",
+      "text": "거래처 및 품목 관리\t\t\t\t전자(세금)계산서 거래처 관리\t\t\t\t\t전자(세금)계산서 거래처 품목",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601020000",
+      "cls": "",
+      "text": "거래처 및 품목 관리",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "거래처 및 품목 관리",
+      "href": ""
+    },
+    {
+      "tag": "UL",
+      "id": "menu4Ul_46_4601020000",
+      "cls": "w2group menu_4st",
+      "text": "전자(세금)계산서 거래처 관리\t\t\t\t\t전자(세금)계산서 거래처 품목",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4601020100",
+      "cls": "",
+      "text": "전자(세금)계산서 거래처 관리",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601020100",
+      "cls": "",
+      "text": "전자(세금)계산서 거래처 관리",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 거래처 관리",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4601020200",
+      "cls": "",
+      "text": "전자(세금)계산서 거래처 품목",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601020200",
+      "cls": "",
+      "text": "전자(세금)계산서 거래처 품목",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 거래처 품목",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4601030000",
+      "cls": "w2group hav_child",
+      "text": "메일 관리\t\t\t\t(발송‧수신)내역조회 및 재발송\t\t\t\t\t수신전용 메일 신청",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601030000",
+      "cls": "",
+      "text": "메일 관리",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "메일 관리",
+      "href": ""
+    },
+    {
+      "tag": "UL",
+      "id": "menu4Ul_46_4601030000",
+      "cls": "w2group menu_4st",
+      "text": "(발송‧수신)내역조회 및 재발송\t\t\t\t\t수신전용 메일 신청",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4601030100",
+      "cls": "",
+      "text": "(발송‧수신)내역조회 및 재발송",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601030100",
+      "cls": "",
+      "text": "(발송‧수신)내역조회 및 재발송",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "(발송‧수신)내역조회 및 재발송",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4601030200",
+      "cls": "",
+      "text": "수신전용 메일 신청",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601030200",
+      "cls": "",
+      "text": "수신전용 메일 신청",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "수신전용 메일 신청",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4601040000",
+      "cls": "w2group hav_child",
+      "text": "발급 보류/예정 목록 조회\t\t\t\t전자(세금)계산서 발급 보류목록 조회\t\t\t\t\t전자(세금)계산서 발급 예정목록",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601040000",
+      "cls": "",
+      "text": "발급 보류/예정 목록 조회",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "발급 보류/예정 목록 조회",
+      "href": ""
+    },
+    {
+      "tag": "UL",
+      "id": "menu4Ul_46_4601040000",
+      "cls": "w2group menu_4st",
+      "text": "전자(세금)계산서 발급 보류목록 조회\t\t\t\t\t전자(세금)계산서 발급 예정목록 조회",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4601040100",
+      "cls": "",
+      "text": "전자(세금)계산서 발급 보류목록 조회",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601040100",
+      "cls": "",
+      "text": "전자(세금)계산서 발급 보류목록 조회",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 발급 보류목록 조회",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4601040200",
+      "cls": "",
+      "text": "전자(세금)계산서 발급 예정목록 조회",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601040200",
+      "cls": "",
+      "text": "전자(세금)계산서 발급 예정목록 조회",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 발급 예정목록 조회",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_group_2",
+      "cls": "",
+      "text": "전자(세금)계산서 조회                  전자(세금)계산서 조회\t        \t\t\t조회\t\t\t\t",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "",
+      "cls": "w2group ",
+      "text": "전자(세금)계산서 조회",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 조회",
+      "href": ""
+    },
+    {
+      "tag": "DIV",
+      "id": "menuUl46_4609000000",
+      "cls": "w2group menu_3st_wrap",
+      "text": "전자(세금)계산서 조회\t        \t\t\t조회\t\t\t\t발급 목록조회\t\t\t\t\t건별 상세조회\t\t\t\t\t월/분기별 ",
+      "href": ""
+    },
+    {
+      "tag": "UL",
+      "id": "menu3Ul_46_4609000000",
+      "cls": "w2group menu_3st",
+      "text": "조회\t\t\t\t발급 목록조회\t\t\t\t\t건별 상세조회\t\t\t\t\t월/분기별 목록조회\t\t\t\t\t부가가치세 수정신고 대상 조",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4609050000",
+      "cls": "w2group hav_child",
+      "text": "조회\t\t\t\t발급 목록조회\t\t\t\t\t건별 상세조회\t\t\t\t\t월/분기별 목록조회\t\t\t\t\t부가가치세 수정신고 대상 조",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609050000",
+      "cls": "",
+      "text": "조회",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "조회",
+      "href": ""
+    },
+    {
+      "tag": "UL",
+      "id": "menu4Ul_46_4609050000",
+      "cls": "w2group menu_4st",
+      "text": "발급 목록조회\t\t\t\t\t건별 상세조회\t\t\t\t\t월/분기별 목록조회\t\t\t\t\t부가가치세 수정신고 대상 조회\t\t\t\t\t",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4609050100",
+      "cls": "",
+      "text": "발급 목록조회",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609050100",
+      "cls": "",
+      "text": "발급 목록조회",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "발급 목록조회",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4609050200",
+      "cls": "",
+      "text": "건별 상세조회",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609050200",
+      "cls": "",
+      "text": "건별 상세조회",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "건별 상세조회",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4609050300",
+      "cls": "",
+      "text": "월/분기별 목록조회",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609050300",
+      "cls": "",
+      "text": "월/분기별 목록조회",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "월/분기별 목록조회",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4609050400",
+      "cls": "",
+      "text": "부가가치세 수정신고 대상 조회",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609050400",
+      "cls": "",
+      "text": "부가가치세 수정신고 대상 조회",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "부가가치세 수정신고 대상 조회",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4609050500",
+      "cls": "",
+      "text": "수정발급이력조회",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609050500",
+      "cls": "",
+      "text": "수정발급이력조회",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "수정발급이력조회",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4609060000",
+      "cls": "w2group hav_child",
+      "text": "합계표·통계 조회\t\t\t\t합계표 조회\t\t\t\t\t간이과세자 매입 합계표 조회\t\t\t\t\t기간별 매출/매입 통계 조회\t",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609060000",
+      "cls": "",
+      "text": "합계표·통계 조회",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "합계표·통계 조회",
+      "href": ""
+    },
+    {
+      "tag": "UL",
+      "id": "menu4Ul_46_4609060000",
+      "cls": "w2group menu_4st",
+      "text": "합계표 조회\t\t\t\t\t간이과세자 매입 합계표 조회\t\t\t\t\t기간별 매출/매입 통계 조회\t\t\t\t\t발급유형별 매출/",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4609060100",
+      "cls": "",
+      "text": "합계표 조회",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609060100",
+      "cls": "",
+      "text": "합계표 조회",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "합계표 조회",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4609060200",
+      "cls": "",
+      "text": "간이과세자 매입 합계표 조회",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609060200",
+      "cls": "",
+      "text": "간이과세자 매입 합계표 조회",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "간이과세자 매입 합계표 조회",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4609060300",
+      "cls": "",
+      "text": "기간별 매출/매입 통계 조회",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609060300",
+      "cls": "",
+      "text": "기간별 매출/매입 통계 조회",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "기간별 매출/매입 통계 조회",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4609060400",
+      "cls": "",
+      "text": "발급유형별 매출/매입 통계",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609060400",
+      "cls": "",
+      "text": "발급유형별 매출/매입 통계",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "발급유형별 매출/매입 통계",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4609070000",
+      "cls": "w2group hav_child",
+      "text": "주민등록번호 수취분 전환 및 조회\t\t\t\t전자(세금)계산서 주민등록번호 수취분 전환\t\t\t\t\t전자(세금)계산서 ",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609070000",
+      "cls": "",
+      "text": "주민등록번호 수취분 전환 및 조회",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "주민등록번호 수취분 전환 및 조회",
+      "href": ""
+    },
+    {
+      "tag": "UL",
+      "id": "menu4Ul_46_4609070000",
+      "cls": "w2group menu_4st",
+      "text": "전자(세금)계산서 주민등록번호 수취분 전환\t\t\t\t\t전자(세금)계산서 주민등록번호 수취분 전환 내역 조회\t\t\t",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4609070100",
+      "cls": "",
+      "text": "전자(세금)계산서 주민등록번호 수취분 전환",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609070100",
+      "cls": "",
+      "text": "전자(세금)계산서 주민등록번호 수취분 전환",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 주민등록번호 수취분 전환",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4609070200",
+      "cls": "",
+      "text": "전자(세금)계산서 주민등록번호 수취분 전환 내역 조회",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609070200",
+      "cls": "",
+      "text": "전자(세금)계산서 주민등록번호 수취분 전환 내역 조회",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 주민등록번호 수취분 전환 내역 조회",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4609070300",
+      "cls": "",
+      "text": "전자(세금)계산서 주민등록번호 수취분 조회",
+      "href": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609070300",
+      "cls": "",
+      "text": "전자(세금)계산서 주민등록번호 수취분 조회",
+      "href": "javascript:void(0);"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 주민등록번호 수취분 조회",
+      "href": ""
+    },
+    {
+      "tag": "LI",
+      "id": "menu_46_4609110000",
+      "cls": "w2group hav_child",
+      "text": "제3자 발급사실 조회 및 수정 발급사실 알림\t\t\t\t발급사실 조회 및 수정 발급사실 알림 신청\t\t\t\t\t수정 발",
+      "href": ""
+    }
+  ],
+  "login_page_reached": true,
+  "login_page_elements": [
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_wq_uuid_279",
+      "cls": "w2group ",
+      "text": "본문 바로가기",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_280",
+      "cls": "w2textbox ",
+      "text": "본문 바로가기",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_wq_uuid_282",
+      "cls": "w2group ",
+      "text": "주메뉴 바로가기",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_283",
+      "cls": "w2textbox ",
+      "text": "주메뉴 바로가기",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_wq_uuid_291",
+      "cls": "w2group ",
+      "text": "표준정의서",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_292",
+      "cls": "w2textbox txt_b",
+      "text": "표준정의서",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_wq_uuid_294",
+      "cls": "w2group ",
+      "text": "가이드샘플",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_295",
+      "cls": "w2textbox ",
+      "text": "가이드샘플",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "INPUT",
+      "id": "mf_wfHeader_group1508",
+      "cls": "w2trigger btn_cm",
+      "text": "사업자전환",
+      "type": "button",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_group1502",
+      "cls": "w2group ",
+      "text": "회원정보조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_hdTxtUserInfo",
+      "cls": "w2textbox ",
+      "text": "회원정보조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_308",
+      "cls": "w2textbox ",
+      "text": ":비회원으로 로그인 되었습니다.",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_group1503",
+      "cls": "w2group ",
+      "text": "로그인",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_group840",
+      "cls": "w2group ",
+      "text": "모의계산",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_314",
+      "cls": "w2textbox ",
+      "text": "모의계산",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_group1501",
+      "cls": "w2group ",
+      "text": "인증센터",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_317",
+      "cls": "w2textbox ",
+      "text": "인증센터",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_group1507",
+      "cls": "w2group ",
+      "text": "부서사용자신청",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_320",
+      "cls": "w2textbox ",
+      "text": "부서사용자신청",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_hdGroup001",
+      "cls": "w2group logo_hometax",
+      "text": "국세청 홈택스 HomeTax",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_329",
+      "cls": "w2textbox screen_hide",
+      "text": "국세청 홈택스 HomeTax",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "INPUT",
+      "id": "mf_wfHeader_wq_uuid_332",
+      "cls": "w2trigger m_sch_btn",
+      "text": "검색",
+      "type": "button",
+      "name": ""
+    },
+    {
+      "tag": "INPUT",
+      "id": "mf_wfHeader_header_query",
+      "cls": "w2input sch_txt_box w2input_mandatory",
+      "text": "검색어를 입력하세요!",
+      "type": "text",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_sch_pop",
+      "cls": "w2anchor2 sch_pop",
+      "text": "결과내 재검색",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "INPUT",
+      "id": "mf_wfHeader_reSearch_input_0",
+      "cls": "w2checkbox_input",
+      "text": "on",
+      "type": "checkbox",
+      "name": "mf_wfHeader_reSearch_input"
+    },
+    {
+      "tag": "LABEL",
+      "id": "",
+      "cls": "w2checkbox_label ",
+      "text": "결과내 재검색",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "INPUT",
+      "id": "mf_wfHeader_wq_uuid_342",
+      "cls": "w2trigger sch_btn",
+      "text": "검색",
+      "type": "button",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_ptl_search_wq_uuid_711",
+      "cls": "w2group t",
+      "text": "추천 서비스",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_ptl_search_rcmd_month",
+      "cls": "w2anchor2 src_btn on",
+      "text": "월간",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_ptl_search_rcmd_year",
+      "cls": "w2anchor2 src_btn",
+      "text": "연간",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_ptl_search_wq_uuid_721",
+      "cls": "w2group t",
+      "text": "인기 검색어",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_ptl_search_pop_w",
+      "cls": "w2anchor2 src_btn on",
+      "text": "주간",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_ptl_search_pop_m",
+      "cls": "w2anchor2 src_btn",
+      "text": "월간",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_ptl_search_wq_uuid_731",
+      "cls": "w2group t",
+      "text": "서비스 바로가기",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_ptl_search_noSrvc",
+      "cls": "w2textbox ",
+      "text": "해당 단어로 시작하는 검색어가 없습니다.",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_ptl_search_wq_uuid_739",
+      "cls": "w2group t",
+      "text": "자동완성 검색어",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_ptl_search_noComm",
+      "cls": "w2textbox ",
+      "text": "해당 단어로 시작하는 검색어가 없습니다.",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "INPUT",
+      "id": "mf_wfHeader_ptl_search_btn_reset",
+      "cls": "w2trigger btn_cm btn_reset",
+      "text": "초기화",
+      "type": "button",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_hdGroup002",
+      "cls": "w2group btn_home",
+      "text": "나의 홈택스",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_352",
+      "cls": "w2textbox ",
+      "text": "나의 홈택스",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_btn_mymn",
+      "cls": "w2group btn_home",
+      "text": "나의 메뉴",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_355",
+      "cls": "w2textbox ",
+      "text": "나의 메뉴",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_hdGroup005",
+      "cls": "w2group btn_all",
+      "text": "전체메뉴",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_362",
+      "cls": "w2textbox txt",
+      "text": "전체메뉴",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_group1505",
+      "cls": "w2group btn_semu",
+      "text": "세무대리",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_wq_uuid_369",
+      "cls": "w2group",
+      "text": "계산서·영수증·카드",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_370",
+      "cls": "w2textbox ",
+      "text": "계산서·영수증·카드",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "",
+      "cls": "w2group ",
+      "text": "전자(세금)계산서 발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "combineMenuAtag_4601010100",
+      "cls": "",
+      "text": "전자(세금)계산서 건별발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 건별발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "combineMenuAtag_4601010400",
+      "cls": "",
+      "text": "전자(세금)계산서 수정발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 수정발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_46_temp20",
+      "cls": "",
+      "text": "반복/복사 발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "반복/복사 발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "combineMenuAtag_4601010200",
+      "cls": "",
+      "text": "전자(세금)계산서 반복발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 반복발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "combineMenuAtag_4601010300",
+      "cls": "",
+      "text": "전자(세금)계산서 복사발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 복사발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601010000",
+      "cls": "",
+      "text": "일괄/공동매입분 발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "일괄/공동매입분 발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601010100",
+      "cls": "",
+      "text": "전자(세금)계산서 건별발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 건별발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601010400",
+      "cls": "",
+      "text": "전자(세금)계산서 수정발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 수정발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601010500",
+      "cls": "",
+      "text": "전자(세금)계산서 일괄발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 일괄발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601010600",
+      "cls": "",
+      "text": "전자(세금)계산서 일괄발급(100건 초과 시)",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 일괄발급(100건 초과 시)",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601010200",
+      "cls": "",
+      "text": "전자(세금)계산서 반복발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 반복발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601010300",
+      "cls": "",
+      "text": "전자(세금)계산서 복사발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 복사발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601010700",
+      "cls": "",
+      "text": "전자(세금)계산서 일괄수정발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 일괄수정발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601010800",
+      "cls": "",
+      "text": "전자(세금)계산서 전기료 등 공동매입분 발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 전기료 등 공동매입분 발급",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601020000",
+      "cls": "",
+      "text": "거래처 및 품목 관리",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "거래처 및 품목 관리",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601020100",
+      "cls": "",
+      "text": "전자(세금)계산서 거래처 관리",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 거래처 관리",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601020200",
+      "cls": "",
+      "text": "전자(세금)계산서 거래처 품목",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 거래처 품목",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601030000",
+      "cls": "",
+      "text": "메일 관리",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "메일 관리",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601030100",
+      "cls": "",
+      "text": "(발송‧수신)내역조회 및 재발송",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "(발송‧수신)내역조회 및 재발송",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601030200",
+      "cls": "",
+      "text": "수신전용 메일 신청",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "수신전용 메일 신청",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601040000",
+      "cls": "",
+      "text": "발급 보류/예정 목록 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "발급 보류/예정 목록 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601040100",
+      "cls": "",
+      "text": "전자(세금)계산서 발급 보류목록 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 발급 보류목록 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4601040200",
+      "cls": "",
+      "text": "전자(세금)계산서 발급 예정목록 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 발급 예정목록 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "",
+      "cls": "w2group ",
+      "text": "전자(세금)계산서 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609050000",
+      "cls": "",
+      "text": "조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609050100",
+      "cls": "",
+      "text": "발급 목록조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "발급 목록조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609050200",
+      "cls": "",
+      "text": "건별 상세조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "건별 상세조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609050300",
+      "cls": "",
+      "text": "월/분기별 목록조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "월/분기별 목록조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609050400",
+      "cls": "",
+      "text": "부가가치세 수정신고 대상 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "부가가치세 수정신고 대상 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609050500",
+      "cls": "",
+      "text": "수정발급이력조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "수정발급이력조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609060000",
+      "cls": "",
+      "text": "합계표·통계 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "합계표·통계 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609060100",
+      "cls": "",
+      "text": "합계표 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "합계표 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609060200",
+      "cls": "",
+      "text": "간이과세자 매입 합계표 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "간이과세자 매입 합계표 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609060300",
+      "cls": "",
+      "text": "기간별 매출/매입 통계 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "기간별 매출/매입 통계 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609060400",
+      "cls": "",
+      "text": "발급유형별 매출/매입 통계",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "발급유형별 매출/매입 통계",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609070000",
+      "cls": "",
+      "text": "주민등록번호 수취분 전환 및 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "주민등록번호 수취분 전환 및 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609070100",
+      "cls": "",
+      "text": "전자(세금)계산서 주민등록번호 수취분 전환",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 주민등록번호 수취분 전환",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609070200",
+      "cls": "",
+      "text": "전자(세금)계산서 주민등록번호 수취분 전환 내역 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 주민등록번호 수취분 전환 내역 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609070300",
+      "cls": "",
+      "text": "전자(세금)계산서 주민등록번호 수취분 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 주민등록번호 수취분 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609110000",
+      "cls": "",
+      "text": "제3자 발급사실 조회 및 수정 발급사실 알림",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "제3자 발급사실 조회 및 수정 발급사실 알림",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609110100",
+      "cls": "",
+      "text": "발급사실 조회 및 수정 발급사실 알림 신청",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "발급사실 조회 및 수정 발급사실 알림 신청",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609110200",
+      "cls": "",
+      "text": "수정 발급사실 알림 신청내역 관리",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "수정 발급사실 알림 신청내역 관리",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609110300",
+      "cls": "",
+      "text": "수정 발급사실 제공 동의(비동의) 처리",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "수정 발급사실 제공 동의(비동의) 처리",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609110400",
+      "cls": "",
+      "text": "발급사실 일괄조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "발급사실 일괄조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609090000",
+      "cls": "",
+      "text": "자료 신청",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "자료 신청",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609090100",
+      "cls": "",
+      "text": "전자(세금)계산서 자료 신청",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 자료 신청",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609090200",
+      "cls": "",
+      "text": "전자(세금)계산서 대량자료 신청결과 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 대량자료 신청결과 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609100000",
+      "cls": "",
+      "text": "본지점·총괄납부 조회권한 관리",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "본지점·총괄납부 조회권한 관리",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609100100",
+      "cls": "",
+      "text": "본지점 조회권한 동의 및 취소",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "본지점 조회권한 동의 및 취소",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4609100200",
+      "cls": "",
+      "text": "총괄납부 조회권한 동의 및 취소",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "총괄납부 조회권한 동의 및 취소",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "",
+      "cls": "w2group ",
+      "text": "전자(세금)계산서 겸용서식/시스템/MAS 사업자",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 겸용서식/시스템/MAS 사업자",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4602010000",
+      "cls": "",
+      "text": "겸용서식 사업자 파일제출",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "겸용서식 사업자 파일제출",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4602020000",
+      "cls": "",
+      "text": "시스템 사업자 수신함 관리",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "시스템 사업자 수신함 관리",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4602030000",
+      "cls": "",
+      "text": "시스템 사업자 접수 진행상태 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "시스템 사업자 접수 진행상태 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4602040000",
+      "cls": "",
+      "text": "시스템 사업자 자기점검표",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "시스템 사업자 자기점검표",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4602050000",
+      "cls": "",
+      "text": "MAS 사업자 정보관리",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "MAS 사업자 정보관리",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4602060000",
+      "cls": "",
+      "text": "MAS 사업자 정보등록",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "MAS 사업자 정보등록",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4602070000",
+      "cls": "",
+      "text": "MAS 사업자 발급내역 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "MAS 사업자 발급내역 조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "",
+      "cls": "w2group ",
+      "text": "전자(세금)계산서 표준검증",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자(세금)계산서 표준검증",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4603010000",
+      "cls": "",
+      "text": "검증대상 시스템선택",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "검증대상 시스템선택",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4603020000",
+      "cls": "",
+      "text": "검증대상 시스템조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "검증대상 시스템조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4603030000",
+      "cls": "",
+      "text": "단위기능 검증결과조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "단위기능 검증결과조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4603040000",
+      "cls": "",
+      "text": "상호운영성 검증결과조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "상호운영성 검증결과조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4603050000",
+      "cls": "",
+      "text": "전자세금계산서 제출 웹서비스 검증",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자세금계산서 제출 웹서비스 검증",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4603060000",
+      "cls": "",
+      "text": "처리결과수신 웹서비스 검증",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "처리결과수신 웹서비스 검증",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4603070000",
+      "cls": "",
+      "text": "처리결과요청제출 웹서비스 검증",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "처리결과요청제출 웹서비스 검증",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4603080000",
+      "cls": "",
+      "text": "인증신청",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "인증신청",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4603090000",
+      "cls": "",
+      "text": "인증결과조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "인증결과조회",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4603100000",
+      "cls": "",
+      "text": "전자계산서 구조검증",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자계산서 구조검증",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4603110000",
+      "cls": "",
+      "text": "전자세금계산서 구조검증",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자세금계산서 구조검증",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4603120000",
+      "cls": "",
+      "text": "전자세금계산서 구조검증 (겸용서식전용)",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자세금계산서 구조검증 (겸용서식전용)",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4603130000",
+      "cls": "",
+      "text": "전자세금계산서 보안검증",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자세금계산서 보안검증",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4603140000",
+      "cls": "",
+      "text": "전자세금계산서(제출/처리결과수신) 검증",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자세금계산서(제출/처리결과수신) 검증",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4603150000",
+      "cls": "",
+      "text": "전자세금계산서(처리결과요청제출) 검증",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "전자세금계산서(처리결과요청제출) 검증",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "",
+      "cls": "w2group ",
+      "text": "현금영수증(근로자·소비자)",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "현금영수증(근로자·소비자)",
+      "type": "",
+      "name": ""
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4604010000",
+      "cls": "",
+      "text": "근로자·소비자 조회/변경",
+      "type": "",
+      "name": ""
+    }
+  ],
+  "errors": [],
+  "hometax_status": 200,
+  "login_page_url": "https://hometax.go.kr/websquare/websquare.html?w2xPath=/ui/pp/index_pp.xml&menuCd=index3",
+  "main_page_elements_count": 200,
+  "login_page_elements_count": 200
+}

@@ -1,0 +1,237 @@
+"""
+AutoTax — [탭4] 연간 신고 데이터 탭
+plan.md §10.4 — 월별 선택 합산 + 엑셀 다운로드
+"""
+from PySide6.QtWidgets import (
+    QWidget, QVBoxLayout, QHBoxLayout, QTableWidget, QTableWidgetItem,
+    QPushButton, QLabel, QComboBox, QCheckBox, QHeaderView,
+    QAbstractItemView, QMessageBox, QFrame, QFileDialog
+)
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QFont, QColor
+
+from gui.widgets import (
+    Panel, Colors, format_money,
+    BTN_PRIMARY, BTN_SECONDARY, BTN_SUCCESS
+)
+from db.repository import Repository
+from core.crypto import CryptoManager
+from core.excel_generator import generate_annual_excel
+
+
+class AnnualTab(QWidget):
+    """연간 신고 데이터 탭 — 월별 선택 합산"""
+
+    def __init__(self, repo: Repository, crypto: CryptoManager, parent=None):
+        super().__init__(parent)
+        self.repo = repo
+        self.crypto = crypto
+        self.setObjectName('annualTab')
+        self._setup_ui()
+
+    def _setup_ui(self):
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(24, 24, 24, 24)
+        layout.setSpacing(20)
+
+        # ── 연도 + 월 선택 영역 ──
+        selector_frame = QFrame()
+        selector_frame.setStyleSheet(f"""
+            QFrame {{
+                background: white;
+                border: 1px solid {Colors.BORDER};
+                border-radius: 8px;
+                padding: 16px;
+            }}
+        """)
+        sel_layout = QVBoxLayout(selector_frame)
+        sel_layout.setSpacing(12)
+
+        # 연도
+        top_row = QHBoxLayout()
+        lbl_year = QLabel('연도 선택:')
+        lbl_year.setStyleSheet(f"font-size: 14px; font-weight: 600; color: {Colors.TEXT_PRIMARY};")
+        top_row.addWidget(lbl_year)
+
+        combo_style = f"""
+            QComboBox {{
+                border: 1px solid {Colors.BORDER};
+                border-radius: 6px;
+                padding: 6px 12px;
+                font-size: 14px;
+                min-width: 100px;
+            }}
+        """
+        self.year_combo = QComboBox()
+        self.year_combo.setStyleSheet(combo_style)
+        import datetime
+        current_year = datetime.datetime.now().year
+        for y in range(2024, 2031):
+            self.year_combo.addItem(f'{y}년', str(y))
+        idx = self.year_combo.findData(str(current_year))
+        if idx >= 0:
+            self.year_combo.setCurrentIndex(idx)
+        top_row.addWidget(self.year_combo)
+        top_row.addStretch()
+
+        btn_query = QPushButton('조회 (선택 월 합산)')
+        btn_query.setStyleSheet(BTN_PRIMARY)
+        btn_query.setCursor(Qt.PointingHandCursor)
+        btn_query.clicked.connect(self._query)
+        top_row.addWidget(btn_query)
+
+        btn_excel = QPushButton('연간 엑셀 다운로드')
+        btn_excel.setStyleSheet(BTN_SUCCESS)
+        btn_excel.setCursor(Qt.PointingHandCursor)
+        btn_excel.clicked.connect(self._download_excel)
+        top_row.addWidget(btn_excel)
+
+        sel_layout.addLayout(top_row)
+
+        # 월 체크박스 (plan.md §10.4)
+        month_row = QHBoxLayout()
+        month_row.setSpacing(8)
+        lbl_months = QLabel('월 선택:')
+        lbl_months.setStyleSheet(f"font-size: 13px; color: {Colors.TEXT_SECONDARY};")
+        month_row.addWidget(lbl_months)
+
+        self.month_checks = []
+        for m in range(1, 13):
+            cb = QCheckBox(f'{m}월')
+            cb.setChecked(True)
+            cb.setStyleSheet("font-size: 13px;")
+            self.month_checks.append(cb)
+            month_row.addWidget(cb)
+
+        btn_all = QPushButton('전체')
+        btn_all.setStyleSheet(BTN_SECONDARY + "QPushButton { padding: 4px 10px; font-size: 11px; }")
+        btn_all.setCursor(Qt.PointingHandCursor)
+        btn_all.clicked.connect(lambda: [cb.setChecked(True) for cb in self.month_checks])
+        month_row.addWidget(btn_all)
+
+        btn_none = QPushButton('해제')
+        btn_none.setStyleSheet(BTN_SECONDARY + "QPushButton { padding: 4px 10px; font-size: 11px; }")
+        btn_none.setCursor(Qt.PointingHandCursor)
+        btn_none.clicked.connect(lambda: [cb.setChecked(False) for cb in self.month_checks])
+        month_row.addWidget(btn_none)
+
+        sel_layout.addLayout(month_row)
+        layout.addWidget(selector_frame)
+
+        # ── 결과 테이블 ──
+        self.panel = Panel('연간 합산 데이터')
+
+        self.table = QTableWidget()
+        self.table.setColumnCount(7)
+        self.table.setHorizontalHeaderLabels([
+            '주민번호', '강사명', '업종코드',
+            '연간 총지급액', '연간 총소득세', '연간 총지방소득세', '연간 총실지급액'
+        ])
+        for i in range(self.table.columnCount()):
+            self.table.horizontalHeader().setSectionResizeMode(i, QHeaderView.ResizeToContents)
+        self.table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+        self.table.verticalHeader().setVisible(False)
+        self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.table.setAlternatingRowColors(True)
+        self.table.setSortingEnabled(True)
+        self.table.setStyleSheet(f"""
+            QTableWidget {{
+                border: none; font-size: 13px; gridline-color: {Colors.BORDER};
+            }}
+            QTableWidget::item {{ padding: 8px 12px; }}
+            QHeaderView::section {{
+                background: #FAFAFA; color: {Colors.TEXT_SECONDARY};
+                font-weight: 500; font-size: 13px; padding: 10px 12px;
+                border: none; border-bottom: 2px solid {Colors.BORDER};
+            }}
+            QTableWidget::item:alternate {{ background: #FAFCFE; }}
+        """)
+
+        self.panel.body_layout.addWidget(self.table)
+        layout.addWidget(self.panel)
+
+    def _get_selected_months(self) -> list[str]:
+        """선택된 월 리스트 반환"""
+        months = []
+        for i, cb in enumerate(self.month_checks):
+            if cb.isChecked():
+                months.append(f'{i+1:02d}')
+        return months
+
+    def _query(self):
+        """선택 월 합산 조회"""
+        year = self.year_combo.currentData()
+        months = self._get_selected_months()
+
+        if not months:
+            QMessageBox.warning(self, '월 선택', '조회할 월을 1개 이상 선택하세요.')
+            return
+
+        data = self.repo.get_annual_summary(year, months)
+        self.table.setSortingEnabled(False)
+        self.table.setRowCount(len(data))
+
+        for row, d in enumerate(data):
+            # 주민번호 마스킹
+            rid = d.get('resident_id', '')
+            try:
+                decrypted = self.crypto.decrypt(rid)
+                masked = decrypted[:6] + '-*******' if len(decrypted) >= 6 else '***'
+            except Exception:
+                masked = rid[:6] + '-*******' if len(rid) >= 6 else '***'
+
+            self.table.setItem(row, 0, QTableWidgetItem(masked))
+
+            name_item = QTableWidgetItem(d.get('name', ''))
+            name_item.setFont(QFont('Pretendard', 10, QFont.DemiBold))
+            self.table.setItem(row, 1, name_item)
+
+            self.table.setItem(row, 2, QTableWidgetItem(d.get('industry_code', '')))
+
+            for col, key in enumerate(['annual_total', 'annual_income_tax',
+                                        'annual_local_tax', 'annual_net_payment'], 3):
+                val = d.get(key, 0) or 0
+                item = QTableWidgetItem(format_money(val))
+                item.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
+                if col == 3:
+                    item.setFont(QFont('Pretendard', 10, QFont.DemiBold))
+                if col in (4, 5):
+                    item.setForeground(QColor(Colors.ERROR))
+                self.table.setItem(row, col, item)
+
+        self.table.setSortingEnabled(True)
+
+        if not data:
+            QMessageBox.information(
+                self, '조회 결과',
+                f'{year}년 선택 월({", ".join(months)})에 해당하는 데이터가 없습니다.'
+            )
+
+    def _download_excel(self):
+        """연간 엑셀 다운로드"""
+        year = self.year_combo.currentData()
+        months = self._get_selected_months()
+
+        if not months:
+            QMessageBox.warning(self, '월 선택', '다운로드할 월을 선택하세요.')
+            return
+
+        # 저장 경로 선택
+        default_name = f'연간거주자사업소득지급명세서_{year}.xlsx'
+        filepath, _ = QFileDialog.getSaveFileName(
+            self, '엑셀 저장', default_name,
+            'Excel 파일 (*.xlsx);;모든 파일 (*.*)'
+        )
+        if not filepath:
+            return
+
+        try:
+            import os
+            output_dir = os.path.dirname(filepath)
+            generate_annual_excel(self.repo, self.crypto, year, months, output_dir)
+            QMessageBox.information(self, '다운로드 완료', f'파일이 저장되었습니다:\n{filepath}')
+        except ValueError as e:
+            QMessageBox.warning(self, '오류', str(e))
+        except Exception as e:
+            QMessageBox.critical(self, '오류', f'엑셀 생성 실패:\n{str(e)}')

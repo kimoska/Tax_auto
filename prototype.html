@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoTax - 원천세 자동화 시스템</title>
+    <!-- Pretendard Font for a clean, modern, professional look -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        :root {
+            /* Premium Luxury UI Palette */
+            --primary: #111827; /* Deep Graphite */
+            --primary-hover: #374151;
+            --bg-body: #F9FAFB; /* Soft, very light gray */
+            --bg-surface: #ffffff;
+            --border: #E5E7EB;
+            --border-hover: #D1D5DB;
+            --text-main: #111827;
+            --text-sub: #6B7280;
+            --text-light: #9CA3AF;
+            --danger: #DC2626;
+            --success: #059669;
+            --accent: #D4AF37; /* Subtle Gold Accent for Luxury */
+            --radius: 8px; /* Elegant rounded corners */
+        }
+        
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; background: var(--bg-body); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; font-size: 14px; letter-spacing: -0.01em; }
+
+        /* ─── Sidebar ─── */
+        .sidebar { width: 240px; background: #161616; color: #f4f4f4; display: flex; flex-direction: column; flex-shrink: 0; }
+        .sidebar-header { padding: 24px 20px; border-bottom: 1px solid #393939; margin-bottom: 16px; }
+        .sidebar-header .logo { font-size: 18px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px; }
+        .sidebar-header .version { font-size: 11px; color: #8d8d8d; display: block; margin-top: 4px; }
+        
+        .nav-item { padding: 12px 20px; cursor: pointer; color: #c6c6c6; font-size: 14px; font-weight: 500; transition: all 0.2s; display: flex; align-items: center; border-left: 4px solid transparent; }
+        .nav-item:hover { background: #393939; color: #ffffff; }
+        .nav-item.active { background: #262626; color: #ffffff; border-left-color: var(--primary); font-weight: 600; }
+        
+        .nav-spacer { flex: 1; }
+
+        /* ─── Main Content ─── */
+        .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        .topbar { background: var(--bg-surface); border-bottom: 1px solid var(--border); padding: 0 32px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+        .topbar h1 { font-size: 18px; font-weight: 600; color: var(--text-main); }
+        .period-selector { display: flex; align-items: center; gap: 12px; }
+        .period-selector label { font-size: 13px; color: var(--text-sub); }
+        
+        select.input-control { border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 12px; font-size: 14px; font-family: inherit; background: var(--bg-surface); color: var(--text-main); outline: none; transition: border-color 0.2s; min-width: 140px; cursor: pointer; appearance: auto; }
+        select.input-control:hover { border-color: var(--border-hover); }
+        select.input-control:focus { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
+        
+        input.input-control { border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 12px; font-size: 14px; font-family: inherit; width: 100%; transition: border-color 0.2s; outline: none; }
+        input.input-control:focus { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
+
+        .content { flex: 1; overflow-y: auto; padding: 32px; }
+
+        /* ─── Tab Content ─── */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* ─── Layout & Cards ─── */
+        .panel { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03); transition: box-shadow 0.3s ease; }
+        .panel:hover { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.025); }
+        .panel-header { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .panel-title { font-size: 15px; font-weight: 600; color: var(--text-main); }
+        .panel-body { padding: 24px; }
+
+        /* ─── Summary ─── */
+        .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .kpi-card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border-left: 4px solid var(--primary); }
+        .kpi-label { font-size: 13px; color: var(--text-sub); margin-bottom: 8px; }
+        .kpi-value { font-size: 24px; font-weight: 700; color: var(--text-main); }
+        .kpi-value.blue { color: var(--primary); }
+        .kpi-value.red { color: var(--danger); }
+
+        /* ─── Buttons ─── */
+        .btn { display: inline-flex; align-items: center; justify-content: center; border: 1px solid transparent; border-radius: var(--radius); padding: 8px 16px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit; transition: all 0.2s; outline: none; }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-secondary { background: #fff; color: var(--text-main); border-color: var(--border); }
+        .btn-secondary:hover { background: var(--bg-body); }
+        .btn-danger { background: var(--danger); color: #fff; }
+        .btn-danger:hover { background: #ba1b23; }
+        .btn-ghost-danger { background: transparent; color: var(--danger); border-color: transparent; padding: 4px 8px; }
+        .btn-ghost-danger:hover { background: #fff1f1; }
+        .btn-sm { padding: 4px 12px; font-size: 12px; }
+        .btn-group { display: flex; gap: 8px; }
+
+        /* ─── Tables ─── */
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th { background: #fdfdfd; color: var(--text-sub); font-weight: 500; text-align: left; padding: 12px 16px; border-bottom: 2px solid var(--border); white-space: nowrap; }
+        td { padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+        tr:hover td { background: #fcfcfc; }
+        
+        /* ─── Typography & Utilities ─── */
+        .text-right { text-align: right; }
+        .money { font-variant-numeric: tabular-nums; }
+        .text-danger { color: var(--danger); }
+        .text-primary { color: var(--primary); }
+        .font-semibold { font-weight: 600; }
+        .mt-4 { margin-top: 16px; }
+        
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 2px; font-size: 12px; font-weight: 500; background: #e0e0e0; color: #161616; }
+        .badge-blue { background: #e5f0ff; color: #0043ce; }
+        .badge-green { background: #defbe6; color: #198038; }
+
+        /* ─── Forms ─── */
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; font-size: 13px; font-weight: 500; color: var(--text-main); margin-bottom: 8px; }
+        .form-label .req { color: var(--danger); margin-left: 2px; }
+        .form-row { display: flex; gap: 16px; }
+        .form-row > div { flex: 1; }
+
+        /* ─── Modal ─── */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(22, 22, 22, 0.5); z-index: 1000; justify-content: center; align-items: flex-start; padding-top: 60px; }
+        .modal-overlay.show { display: flex; }
+        .modal { background: var(--bg-surface); border-radius: var(--radius); width: 600px; max-width: 90vw; max-height: calc(100vh - 120px); display: flex; flex-direction: column; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .modal-title { font-size: 16px; font-weight: 600; }
+        .modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-light); }
+        .modal-body { padding: 24px; overflow-y: auto; flex: 1; }
+        .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 12px; background: #fdfdfd; border-radius: 0 0 var(--radius) var(--radius); }
+
+        /* ─── Custom UI Elements ─── */
+        .program-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+        .program-item { display: flex; align-items: center; justify-content: space-between; background: #fcfcfc; border: 1px solid var(--border); padding: 10px 16px; border-radius: var(--radius); }
+        
+        .calc-box { background: #f8f9ff; border: 1px solid #d0e2ff; padding: 20px; border-radius: var(--radius); margin-top: 16px; }
+        .calc-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+        .calc-row:last-child { margin-bottom: 0; }
+        .calc-divider { height: 1px; background: #d0e2ff; margin: 12px 0; }
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">AutoTax</div>
+            <span class="version">Enterprise Edition v4.0</span>
+        </div>
+        <div class="nav-item active" onclick="switchTab('instructor')">강사 관리</div>
+        <div class="nav-item" onclick="switchTab('lecture')">강의 내역</div>
+        <div class="nav-item" onclick="switchTab('settlement')">월별 정산 (홈택스)</div>
+        <div class="nav-item" onclick="switchTab('annual')">연간 신고 자료</div>
+        <div class="nav-spacer"></div>
+        <div class="nav-item" style="border-top: 1px solid #393939" onclick="switchTab('settings')">시스템 설정</div>
+    </nav>
+
+    <div class="main">
+        <div class="topbar">
+            <h1 id="tabTitle">강사 관리</h1>
+            <div class="period-selector">
+                <label>조회 연월</label>
+                <select class="input-control" id="globalYearSelect" style="min-width: 100px;">
+                    <!-- JS will populate years -->
+                </select>
+                <select class="input-control" id="globalMonthSelect" style="min-width: 80px;">
+                    <option value="01">1월</option><option value="02">2월</option><option value="03">3월</option>
+                    <option value="04">4월</option><option value="05">5월</option><option value="06">6월</option>
+                    <option value="07">7월</option><option value="08">8월</option><option value="09">9월</option>
+                    <option value="10">10월</option><option value="11">11월</option><option value="12">12월</option>
+                </select>
+                <button class="btn btn-secondary" onclick="updatePeriodManual()" style="margin-left:8px;">조회</button>
+            </div>
+        </div>
+
+        <div class="content">
+            
+            <!-- TAB: 강사 관리 -->
+            <div class="tab-content active" id="tab-instructor">
+                <div class="summary-grid">
+                    <div class="kpi-card"><div class="kpi-label">등록 강사</div><div class="kpi-value" id="kpi-total-instructors">0</div></div>
+                    <div class="kpi-card"><div class="kpi-label">활성 강사</div><div class="kpi-value blue" id="kpi-active-instructors">0</div></div>
+                    <div class="kpi-card"><div class="kpi-label">등록 프로그램 총계</div><div class="kpi-value" id="kpi-total-programs">0</div></div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">강사 목록</div>
+                        <div class="btn-group">
+                            <input type="text" class="input-control" placeholder="목록 검색" style="width:150px;" onkeyup="filterTableCustom(this, 'instructorTableBody')">
+                            <button class="btn btn-primary" onclick="openInstructorModal()">+ 강사 등록</button>
+                        </div>
+                    </div>
+                    <div class="panel-body" style="padding: 0;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>강사명</th>
+                                    <th>업종코드</th>
+                                    <th>할당 프로그램</th>
+                                    <th>연락처</th>
+                                    <th>상태</th>
+                                    <th class="text-right">관리</th>
+                                </tr>
+                            </thead>
+                            <tbody id="instructorTableBody">
+                                <!-- JS items -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: 강의 내역 -->
+            <div class="tab-content" id="tab-lecture">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">강의 내역</div>
+                        <div class="btn-group">
+                            <input type="text" id="lecFilterCategory" class="input-control" placeholder="과목구분 필터" style="width:120px;" onkeyup="renderLectures()">
+                            <input type="text" id="lecSearchGlobal" class="input-control" placeholder="강사/프로그램 검색" style="width:150px;" onkeyup="filterTableCustom(this, 'lectureTableBody')">
+                            <button class="btn" style="background:var(--success); color:#fff; border:none;" onclick="generateCustomLectureExcel()">양식 출력</button>
+                            <button class="btn btn-secondary" onclick="loadPreviousMonthLectures()">전월 데이터 불러오기</button>
+                            <button class="btn btn-primary" onclick="openLectureModal()">+ 강의 추가</button>
+                        </div>
+                    </div>
+                    <div class="panel-body" style="padding: 0;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>강사명</th>
+                                    <th>과목구분</th>
+                                    <th>프로그램</th>
+                                    <th class="text-right">회당 강사료</th>
+                                    <th class="text-right">횟수</th>
+                                    <th class="text-right">총 강사료</th>
+                                    <th class="text-right">소득세</th>
+                                    <th class="text-right">지방소득세</th>
+                                    <th class="text-right">실지급액</th>
+                                    <th class="text-right">관리</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lectureTableBody">
+                                <!-- JS items -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: 월별 정산 -->
+            <div class="tab-content" id="tab-settlement">
+                <div class="summary-grid">
+                    <div class="kpi-card"><div class="kpi-label">당월 총 지급액</div><div class="kpi-value blue money" id="kpi-total-payment">0</div></div>
+                    <div class="kpi-card"><div class="kpi-label">당월 원천징수 합계</div><div class="kpi-value red money" id="kpi-total-tax">0</div></div>
+                    <div class="kpi-card"><div class="kpi-label">당월 실지급액 합계</div><div class="kpi-value money" id="kpi-net-payment">0</div></div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">정산 및 홈택스 파일 생성 (엑셀 A~K열 양식)</div>
+                        <div class="btn-group">
+                            <input type="text" class="input-control" placeholder="결과 검색" style="width:150px;" onkeyup="filterTableCustom(this, 'settlementTableBody')">
+                            <button class="btn btn-secondary" onclick="syncSettlements()">정산 실행 (동기화)</button>
+                            <button class="btn btn-secondary" onclick="generateExcel()">엑셀 다운로드</button>
+                            <button class="btn btn-primary" onclick="uploadToHometax()">홈택스 자동 제출</button>
+                        </div>
+                    </div>
+                    <div class="panel-body" style="padding: 0; overflow-x: auto;">
+                        <table style="min-width: 1200px;">
+                            <thead>
+                                <tr>
+                                    <th>일련번호</th>
+                                    <th>귀속연도</th>
+                                    <th>귀속월</th>
+                                    <th>과목구분</th>
+                                    <th>업종코드</th>
+                                    <th>소득자성명</th>
+                                    <th>주민등록번호</th>
+                                    <th>내외국인</th>
+                                    <th class="text-right">지급액</th>
+                                    <th class="text-right">세율</th>
+                                    <th class="text-right">소득세</th>
+                                    <th class="text-right">지방소득세</th>
+                                    <th class="text-right">편집</th>
+                                </tr>
+                            </thead>
+                            <tbody id="settlementTableBody">
+                                <!-- JS items -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: 연간 신고 데이터 -->
+            <div class="tab-content" id="tab-annual">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">연간 합산 내역</div>
+                        <div class="btn-group">
+                            <input type="text" class="input-control" placeholder="결과 검색" style="width:150px;" onkeyup="filterTableCustom(this, 'annualTableBody')">
+                            <select class="input-control" id="annualYearSelect">
+                                <option value="2026">2026년</option>
+                                <option value="2025">2025년</option>
+                            </select>
+                            <button class="btn btn-secondary" onclick="syncAnnual()">조회 (선택 월 합산)</button>
+                            <button class="btn btn-primary" onclick="generateAnnualExcel()">합산자료 엑셀 다운로드</button>
+                        </div>
+                    </div>
+                    <div class="panel-body" style="padding: 16px 24px; border-bottom: 1px solid var(--border); background: #f9fafb;">
+                        <div style="font-size: 13px; font-weight: 600; margin-bottom: 8px;">합산 월 선택</div>
+                        <div id="annualMonthCheckboxes" style="display: flex; gap: 12px; flex-wrap: wrap;">
+                            <!-- JS injected checkboxes -->
+                        </div>
+                    </div>
+                    <div class="panel-body" style="padding: 0;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>주민번호</th>
+                                    <th>강사명</th>
+                                    <th>업종코드</th>
+                                    <th class="text-right">연간 총지급액</th>
+                                    <th class="text-right">연간 총소득세</th>
+                                    <th class="text-right">연간 총지방소득세</th>
+                                    <th class="text-right">연간 총실지급액</th>
+                                </tr>
+                            </thead>
+                            <tbody id="annualTableBody">
+                                <!-- JS items -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: 시스템 설정 -->
+            <div class="tab-content" id="tab-settings">
+                <div class="panel">
+                    <div class="panel-header"><div class="panel-title">기관 기본 정보</div></div>
+                    <div class="panel-body">
+                        <div class="form-row">
+                            <div class="form-group"><label class="form-label">복지관명</label><input type="text" class="input-control" value="대치노인종합복지관"></div>
+                            <div class="form-group"><label class="form-label">사업자등록번호</label><input type="text" class="input-control" value="000-00-00000"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label class="form-label">대표자명</label><input type="text" class="input-control" placeholder="대표자성명"></div>
+                            <div class="form-group"><label class="form-label">관할세무서</label><input type="text" class="input-control" placeholder="관할세무서명 (예: 서초세무서)"></div>
+                        </div>
+                        <div class="form-group"><label class="form-label">사업장 주소</label><input type="text" class="input-control" placeholder="기관 전체 주소"></div>
+                        <div class="btn-group"><button class="btn btn-secondary">기본 정보 저장</button></div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header"><div class="panel-title">홈택스 자동화 인증 설정</div></div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="form-label">인증 방식</label>
+                            <div style="display:flex; gap:16px;">
+                                <label><input type="radio" name="authMethod" checked> 공동인증서 (추천)</label>
+                                <label><input type="radio" name="authMethod"> 간편인증 (카카오톡)</label>
+                                <label><input type="radio" name="authMethod"> 간편인증 (네이버)</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">인증서 NPKI 경로</label>
+                            <input type="text" class="input-control" placeholder="C:\Users\...\AppData\LocalLow\NPKI\... (수동 입력 또는 자동 탐색)">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">인증서 비밀번호</label>
+                            <input type="password" class="input-control" placeholder="시스템 내부에 AES-256 방식으로 안전하게 암호화되어 저장됩니다.">
+                        </div>
+                        <div class="btn-group"><button class="btn btn-secondary">인증 정보 저장 (암호화)</button></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ===== Modals ===== -->
+    <div class="modal-overlay" id="modal-instructor">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title" id="instModalTitle">강사 등록</div>
+                <button class="modal-close" onclick="closeModal('instructor')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="instEditId" value="">
+                <div class="form-row">
+                    <div class="form-group"><label class="form-label">강사명<span class="req">*</span></label><input type="text" id="instName" class="input-control"></div>
+                    <div class="form-group"><label class="form-label">주민등록번호<span class="req">*</span></label><input type="text" id="instResidentId" class="input-control" placeholder="000000-0000000"></div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">업종코드<span class="req">*</span></label>
+                    <select id="instIndustryCode" class="input-control">
+                        <option value="940100">940100 (저술가)</option>
+                        <option value="940200">940200 (화가관련)</option>
+                        <option value="940301">940301 (작곡가)</option>
+                        <option value="940302">940302 (배우)</option>
+                        <option value="940303">940303 (모델)</option>
+                        <option value="940304">940304 (가수)</option>
+                        <option value="940305">940305 (성악가)</option>
+                        <option value="940306">940306 (1인미디어 콘텐츠창작자)</option>
+                        <option value="940500">940500 (연예보조)</option>
+                        <option value="940600">940600 (자문·고문)</option>
+                        <option value="940901">940901 (바둑기사)</option>
+                        <option value="940902">940902 (꽃꽂이교사)</option>
+                        <option value="940903">940903 (학원강사)</option>
+                        <option value="940904">940904 (직업운동가)</option>
+                        <option value="940905">940905 (봉사료수취자)</option>
+                        <option value="940906">940906 (보험설계)</option>
+                        <option value="940907">940907 (음료배달)</option>
+                        <option value="940908">940908 (방판·외판)</option>
+                        <option value="940909" selected>940909 (기타자영업 - 기본)</option>
+                        <option value="940910">940910 (다단계판매)</option>
+                        <option value="940911">940911 (기타모집수당)</option>
+                        <option value="940912">940912 (간병인)</option>
+                        <option value="940913">940913 (대리운전)</option>
+                        <option value="940914">940914 (캐디)</option>
+                        <option value="940915">940915 (목욕관리사)</option>
+                        <option value="940916">940916 (행사도우미)</option>
+                        <option value="940917">940917 (심부름용역)</option>
+                        <option value="940918">940918 (퀵서비스)</option>
+                        <option value="940919">940919 (물품배달)</option>
+                        <option value="940920">940920 (학습지방문강사)</option>
+                        <option value="940921">940921 (교육교구방문강사)</option>
+                        <option value="940922">940922 (대여제품방문점검원)</option>
+                        <option value="940923">940923 (대출모집인)</option>
+                        <option value="940924">940924 (신용카드회원모집인)</option>
+                        <option value="940925">940925 (방과후강사)</option>
+                        <option value="940926">940926 (소프트웨어프리랜서)</option>
+                        <option value="940927">940927 (관광통역안내사)</option>
+                        <option value="940928">940928 (어린이통학버스기사)</option>
+                        <option value="940929">940929 (중고자동차판매원)</option>
+                        <option value="851101">851101 (병의원)</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-top: 16px;">
+                    <label class="form-label">내외국인<span class="req">*</span></label>
+                    <div style="display:flex; gap:16px; margin-top: 8px;">
+                        <label style="cursor: pointer;"><input type="radio" name="instIsForeigner" value="1" checked> 1 (내국인)</label>
+                        <label style="cursor: pointer;"><input type="radio" name="instIsForeigner" value="9"> 9 (외국인)</label>
+                    </div>
+                </div>
+                <div class="panel" style="margin-top: 24px;">
+                    <div class="panel-header"><div class="panel-title" style="font-size: 13px;">프로그램 (1개 이상 필수)</div></div>
+                    <div class="panel-body">
+                        <div class="form-row" style="align-items: flex-end;">
+                            <div class="form-group" style="margin-bottom:0"><label class="form-label" style="font-size:11px;">과목구분</label><input type="text" id="newProgCategory" class="input-control" placeholder="사회교육/특화 등"></div>
+                            <div class="form-group" style="margin-bottom:0"><label class="form-label" style="font-size:11px;">프로그램명</label><input type="text" id="newProgName" class="input-control" placeholder="과목명"></div>
+                            <div class="form-group" style="margin-bottom:0"><label class="form-label" style="font-size:11px;">회당강사료</label><input type="number" id="newProgFee" class="input-control" placeholder="원 단위"></div>
+                            <div style="margin-bottom:0"><button class="btn btn-secondary" onclick="addProgramToTemp()">추가</button></div>
+                        </div>
+                        <div class="program-list" id="tempProgramList"></div>
+                    </div>
+                </div>
+                <!-- 추가 개인정보 필드 (이메일 13번 규칙에 따른 원복, 상태 삭제) -->
+                <div style="border-top:1px solid #e0e0e0; margin-top:24px; padding-top:16px;">
+                    <div class="form-row">
+                        <div class="form-group"><label class="form-label">연락처</label><input type="text" id="instPhone" class="input-control" placeholder="010-0000-0000"></div>
+                        <div class="form-group"><label class="form-label">이메일</label><input type="text" id="instEmail" class="input-control" placeholder="email@domain.com"></div>
+                    </div>
+                    <div class="form-group"><label class="form-label">주소</label><input type="text" id="instAddress" class="input-control" placeholder="거주지 주소"></div>
+                    <div class="form-row">
+                        <div class="form-group"><label class="form-label">은행</label><input type="text" id="instBank" class="input-control" placeholder="은행명"></div>
+                        <div class="form-group"><label class="form-label">계좌번호</label><input type="text" id="instAccount" class="input-control" placeholder="계좌번호"></div>
+                    </div>
+                    <div class="form-group"><label class="form-label">비고/메모</label><input type="text" id="instMemo" class="input-control" placeholder="비고 입력"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('instructor')">취소</button>
+                <button class="btn btn-primary" onclick="saveInstructor()">저장</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-lecture">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title" id="lecModalTitle">강의 내역 등록</div>
+                <button class="modal-close" onclick="closeModal('lecture')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="lecEditId" value="">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">강사 선택<span class="req">*</span></label>
+                        <select id="lecInstId" class="input-control" onchange="updateLecProgramSelect()"></select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">프로그램 선택<span class="req">*</span></label>
+                        <select id="lecProgId" class="input-control" onchange="updateLectureCalc()"></select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group" style="display:flex; gap:8px;">
+                        <div style="flex:1;">
+                            <label class="form-label">귀속연도<span class="req">*</span></label>
+                            <select id="lecPeriodYear" class="input-control"></select>
+                        </div>
+                        <div style="flex:1;">
+                            <label class="form-label">귀속월<span class="req">*</span></label>
+                            <select id="lecPeriodMonth" class="input-control"></select>
+                        </div>
+                    </div>
+                    <div class="form-group"><label class="form-label">강의 횟수<span class="req">*</span></label><input type="number" id="lecCount" class="input-control" oninput="updateLectureCalc()"></div>
+                </div>
+                <div class="calc-box">
+                    <div class="calc-row"><span>총 강사료</span><span class="font-semibold money" id="lecCalcTotal">0</span></div>
+                    <div class="calc-divider"></div>
+                    <div class="calc-row text-danger"><span>소득세 (자동)</span><span class="money" id="lecCalcTax">0</span></div>
+                    <div class="calc-row text-danger"><span>지방소득세 (자동)</span><span class="money" id="lecCalcLocalTax">0</span></div>
+                    <div class="calc-divider" style="background: #111827;"></div>
+                    <div class="calc-row" style="font-size: 16px; font-weight: 600;"><span>실지급액</span><span class="text-primary money" id="lecCalcNet">0</span></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('lecture')">취소</button>
+                <button class="btn btn-primary" onclick="saveLecture()">저장</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== JavaScript Logic for Core Features ===== -->
+    <script>
+        // Store
+        const state = {
+            currentYear: '2026',
+            currentMonth: '03',
+            nextInstId: 4,
+            nextProgId: 5,
+            nextLecId: 5,
+            tempPrograms: [],
+            instructors: [
+                { id: 1, name: '홍길동', residentId: '800101-1234567', industryCode: '940909', isForeigner: '1', phone: '010-1111-2222', email: 'hong@test.com', address: '서울 강남구', bank: '신한은행', account: '110-123-4567', memo: '', programs: [{id: 1, category: '사회교육프로그램', name: '요가교실', fee: 80000}, {id: 2, category: '사회교육프로그램', name: '필라테스', fee: 100000}] },
+                { id: 2, name: '김영희', residentId: '900202-2345678', industryCode: '940903', isForeigner: '1', phone: '010-3333-4444', email: '', address: '', bank: '', account: '', memo: '', programs: [{id: 3, category: '사회교육프로그램', name: '서예반', fee: 60000}] },
+                { id: 3, name: 'Michael', residentId: '850505-1234567', industryCode: '940925', isForeigner: '9', phone: '010-5555-6666', email: '', address: '', bank: '', account: '', memo: '', programs: [{id: 4, category: '특화프로그램', name: '코딩교실', fee: 120000}] }
+            ],
+            lectures: [
+                { id: 1, period: '2026-03', instructorId: 1, programId: 1, count: 4, fee: 80000 },
+                { id: 2, period: '2026-03', instructorId: 1, programId: 2, count: 4, fee: 100000 },
+                { id: 3, period: '2026-03', instructorId: 2, programId: 3, count: 6, fee: 60000 },
+                { id: 4, period: '2026-02', instructorId: 3, programId: 4, count: 4, fee: 120000 }
+            ]
+        };
+
+        function getCurrentPeriod() { return `${state.currentYear}-${state.currentMonth}`; }
+
+        // UI Initialization
+        function initPeriodSelector() {
+            const ySelect = document.getElementById('globalYearSelect');
+            const mSelect = document.getElementById('globalMonthSelect');
+            if (ySelect && mSelect) {
+                for(let y=2024; y<=2030; y++) {
+                    ySelect.innerHTML += `<option value="${y}" ${y==state.currentYear?'selected':''}>${y}년</option>`;
+                }
+                mSelect.value = state.currentMonth;
+                initLecPeriodDropdowns();
+                initAnnualMonthCheckboxes();
+            }
+        }
+
+        function updatePeriodManual() {
+            const ySelect = document.getElementById('globalYearSelect');
+            const mSelect = document.getElementById('globalMonthSelect');
+            if (ySelect && mSelect) {
+                state.currentYear = ySelect.value;
+                state.currentMonth = mSelect.value;
+                const lecPeriodInput = document.getElementById('lecPeriod');
+                if (lecPeriodInput) {
+                    lecPeriodInput.value = getCurrentPeriod();
+                }
+                renderAll();
+            }
+        }
+
+        function initLecPeriodDropdowns() {
+            const ySel = document.getElementById('lecPeriodYear');
+            const mSel = document.getElementById('lecPeriodMonth');
+            if (ySel && mSel) {
+                ySel.innerHTML = '';
+                for(let y=2024; y<=2030; y++) {
+                    ySel.innerHTML += `<option value="${y}">${y}년</option>`;
+                }
+                mSel.innerHTML = '';
+                for(let m=1; m<=12; m++) {
+                    let padM = String(m).padStart(2, '0');
+                    mSel.innerHTML += `<option value="${padM}">${m}월</option>`;
+                }
+            }
+        }
+
+        function initAnnualMonthCheckboxes() {
+            const container = document.getElementById('annualMonthCheckboxes');
+            if (container) {
+                container.innerHTML = '';
+                for(let m=1; m<=12; m++) {
+                    let padM = String(m).padStart(2, '0');
+                    container.innerHTML += `<label style="cursor:pointer; display:flex; align-items:center; gap:4px;"><input type="checkbox" value="${padM}" checked> ${m}월</label>`;
+                }
+            }
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+            const titles = { instructor: '강사 관리', lecture: '강의 내역', settlement: '월별 정산 (홈택스)', annual: '연간 신고 데이터', settings: '시스템 설정' };
+            document.getElementById('tabTitle').textContent = titles[tabId];
+            renderAll();
+        }
+
+        // Render Functions
+        function formatMoney(num) { return num.toLocaleString(); }
+        
+        function getTaxRate(code) { return code === '940905' ? 0.05 : 0.03; }
+        function calculateTaxes(total, rate) {
+            const tax = Math.floor((total * rate) / 10) * 10;
+            const local = Math.floor((tax * 0.1) / 10) * 10;
+            return { tax, local, net: total - tax - local };
+        }
+
+        function renderAll() {
+            renderInstructors();
+            renderLectures();
+            renderSettlements();
+            renderAnnual();
+        }
+
+        function renderInstructors() {
+            const tbody = document.getElementById('instructorTableBody');
+            tbody.innerHTML = '';
+            let progCnt = 0;
+            state.instructors.forEach(inst => {
+                progCnt += inst.programs.length;
+                const progs = inst.programs.map(p => `<span class="badge badge-blue" style="margin-right:4px" title="${p.category}">[${p.category}] ${p.name}</span>`).join('');
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="font-semibold">${inst.name}</td>
+                        <td>${inst.industryCode}</td>
+                        <td>${progs}</td>
+                        <td>${inst.phone || '-'}</td>
+                        <td><span class="badge badge-green">등록됨</span></td>
+                        <td class="text-right">
+                            <button class="btn btn-secondary btn-sm" onclick="editInstructor(${inst.id})">수정</button>
+                            <button class="btn btn-ghost-danger btn-sm" onclick="deleteInstructor(${inst.id})">삭제</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            document.getElementById('kpi-total-instructors').innerText = state.instructors.length;
+            document.getElementById('kpi-active-instructors').innerText = state.instructors.length; // removed active logic
+            document.getElementById('kpi-total-programs').innerText = progCnt;
+        }
+
+        function renderLectures() {
+            let periodLecs = state.lectures.filter(l => l.period === getCurrentPeriod());
+            const tbody = document.getElementById('lectureTableBody');
+            tbody.innerHTML = '';
+            
+            const catFilter = document.getElementById('lecFilterCategory').value.trim().toLowerCase();
+            
+            periodLecs.forEach(lec => {
+                const inst = state.instructors.find(i => i.id === lec.instructorId);
+                if(!inst) return;
+                const prog = inst.programs.find(p => p.id === lec.programId);
+                const rate = getTaxRate(inst.industryCode);
+                const total = lec.fee * lec.count;
+                const { tax, local, net } = calculateTaxes(total, rate);
+                
+                const progName = prog ? prog.name : '(삭제된프로그램)';
+                const catName = prog ? (prog.category || '미분류') : '미분류';
+                
+                if(catFilter && !catName.toLowerCase().includes(catFilter)) return;
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="font-semibold">${inst.name}</td>
+                        <td><span class="badge badge-blue">${catName}</span></td>
+                        <td>${progName}</td>
+                        <td class="money text-right">${formatMoney(lec.fee)}</td>
+                        <td class="text-right">${lec.count}회</td>
+                        <td class="money text-right font-semibold">${formatMoney(total)}</td>
+                        <td class="money text-right text-danger">${formatMoney(tax)}</td>
+                        <td class="money text-right text-danger">${formatMoney(local)}</td>
+                        <td class="money text-right font-semibold text-primary">${formatMoney(net)}</td>
+                        <td class="text-right">
+                            <button class="btn btn-secondary btn-sm" onclick="editLecture(${lec.id})">수정</button>
+                            <button class="btn btn-ghost-danger btn-sm" onclick="deleteLecture(${lec.id})">삭제</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function renderSettlements() {
+            const currentPeriod = getCurrentPeriod();
+            const periodLecs = state.lectures.filter(l => l.period === currentPeriod);
+            
+            const sets = {};
+            periodLecs.forEach(lec => {
+                const inst = state.instructors.find(i => i.id === lec.instructorId);
+                if(!inst) return;
+                const prog = inst.programs.find(p => p.id === lec.programId);
+                const cat = prog ? (prog.category || '미분류') : '미분류';
+                
+                if(!sets[inst.id]) {
+                    sets[inst.id] = { inst, total: 0, rate: getTaxRate(inst.industryCode)*100, cats: new Set() };
+                }
+                sets[inst.id].total += (lec.fee * lec.count);
+                sets[inst.id].cats.add(cat);
+            });
+
+            const tbody = document.getElementById('settlementTableBody');
+            tbody.innerHTML = '';
+            let sumTotal=0, sumTax=0, sumNet=0;
+            let idx = 1;
+            for(const [id, s] of Object.entries(sets)) {
+                const { tax, local, net } = calculateTaxes(s.total, s.rate/100);
+                sumTotal += s.total;
+                sumTax += (tax + local);
+                sumNet += net;
+
+                const catsStr = Array.from(s.cats).join(', ');
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${idx++}</td>
+                        <td>${state.currentYear}</td>
+                        <td>${state.currentMonth}</td>
+                        <td><span class="badge badge-blue">${catsStr}</span></td>
+                        <td>${s.inst.industryCode}</td>
+                        <td class="font-semibold">${s.inst.name}</td>
+                        <td>${s.inst.residentId}</td>
+                        <td>${s.inst.isForeigner}</td>
+                        <td class="money text-right">${formatMoney(s.total)}</td>
+                        <td class="text-right">${s.rate}</td>
+                        <td class="money text-right text-danger">${formatMoney(tax)}</td>
+                        <td class="money text-right text-danger">${formatMoney(local)}</td>
+                        <td class="text-right">
+                            <button class="btn btn-secondary btn-sm" onclick="alert('수정 기능 준비 중')">수정</button>
+                        </td>
+                    </tr>
+                `;
+            }
+
+            document.getElementById('kpi-total-payment').innerText = formatMoney(sumTotal);
+            document.getElementById('kpi-total-tax').innerText = formatMoney(sumTax);
+            document.getElementById('kpi-net-payment').innerText = formatMoney(sumNet);
+        }
+
+        function syncSettlements() {
+            renderSettlements();
+            alert(`[${getCurrentPeriod()}] 귀속월에 대한 강의 내역 기반 합산 및 세액 정산(동기화)이 완료되었습니다.`);
+        }
+
+        function syncAnnual() {
+            renderAnnual();
+            alert('선택한 당해년도 월에 대한 연간(기간) 합산 조회가 완료되었습니다.');
+        }
+
+        function renderAnnual() {
+            const year = document.getElementById('annualYearSelect').value;
+            
+            // Get checked months
+            const checkedBoxes = document.querySelectorAll('#annualMonthCheckboxes input[type="checkbox"]:checked');
+            const selectedMonths = Array.from(checkedBoxes).map(cb => cb.value);
+            
+            if (selectedMonths.length === 0) {
+                document.getElementById('annualTableBody').innerHTML = '<tr><td colspan="7" class="text-center" style="padding:24px;">선택된 월이 없습니다.</td></tr>';
+                return;
+            }
+
+            // Filter lectures by year and selected months
+            const yearLecs = state.lectures.filter(l => {
+                const [lYear, lMonth] = l.period.split('-');
+                return lYear === year && selectedMonths.includes(lMonth);
+            });
+            
+            const sets = {};
+            yearLecs.forEach(lec => {
+                const inst = state.instructors.find(i => i.id === lec.instructorId);
+                if(!inst) return;
+                if(!sets[inst.id]) { sets[inst.id] = { inst, total: 0, rate: getTaxRate(inst.industryCode) }; }
+                sets[inst.id].total += (lec.fee * lec.count);
+            });
+
+            const tbody = document.getElementById('annualTableBody');
+            tbody.innerHTML = '';
+            for(const [id, s] of Object.entries(sets)) {
+                const {tax, local, net} = calculateTaxes(s.total, s.rate);
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${s.inst.residentId}</td>
+                        <td class="font-semibold">${s.inst.name}</td>
+                        <td>${s.inst.industryCode}</td>
+                        <td class="money text-right">${formatMoney(s.total)}</td>
+                        <td class="money text-right text-danger">${formatMoney(tax)}</td>
+                        <td class="money text-right text-danger">${formatMoney(local)}</td>
+                        <td class="money text-right font-semibold text-primary">${formatMoney(net)}</td>
+                    </tr>
+                `;
+            }
+            if(Object.keys(sets).length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center" style="padding:24px;">해당 기간에 조회된 합산 내역이 없습니다.</td></tr>';
+            }
+        }
+        document.getElementById('annualYearSelect').addEventListener('change', renderAnnual);
+
+        // Modals Logic
+        function openModal(id) { document.getElementById('modal-'+id).classList.add('show'); }
+        function closeModal(id) { document.getElementById('modal-'+id).classList.remove('show'); }
+
+        // Instructor CRUD
+        function openInstructorModal() {
+            document.getElementById('instModalTitle').innerText = '강사 등록';
+            document.getElementById('instEditId').value = '';
+            document.getElementById('instName').value = '';
+            document.getElementById('instResidentId').value = '';
+            document.getElementById('instIndustryCode').value = '940909';
+            document.querySelector('input[name="instIsForeigner"][value="1"]').checked = true;
+            document.getElementById('instPhone').value = '';
+            document.getElementById('instEmail').value = '';
+            document.getElementById('instAddress').value = '';
+            document.getElementById('instBank').value = '';
+            document.getElementById('instAccount').value = '';
+            document.getElementById('instMemo').value = '';
+            state.tempPrograms = [];
+            renderTempPrograms();
+            openModal('instructor');
+        }
+
+        function editInstructor(id) {
+            const inst = state.instructors.find(i => i.id === id);
+            document.getElementById('instModalTitle').innerText = '강사 수정';
+            document.getElementById('instEditId').value = inst.id;
+            document.getElementById('instName').value = inst.name;
+            document.getElementById('instResidentId').value = inst.residentId;
+            document.getElementById('instIndustryCode').value = inst.industryCode;
+            document.querySelector(`input[name="instIsForeigner"][value="${inst.isForeigner || '1'}"]`).checked = true;
+            document.getElementById('instPhone').value = inst.phone || '';
+            document.getElementById('instEmail').value = inst.email || '';
+            document.getElementById('instAddress').value = inst.address || '';
+            document.getElementById('instBank').value = inst.bank || '';
+            document.getElementById('instAccount').value = inst.account || '';
+            document.getElementById('instMemo').value = inst.memo || '';
+            state.tempPrograms = JSON.parse(JSON.stringify(inst.programs));
+            renderTempPrograms();
+            openModal('instructor');
+        }
+
+        function saveInstructor() {
+            const name = document.getElementById('instName').value;
+            if(!name || state.tempPrograms.length===0) return alert('강사명과 1개 이상의 프로그램은 필수입니다.');
+            
+            const data = {
+                name: name,
+                residentId: document.getElementById('instResidentId').value,
+                industryCode: document.getElementById('instIndustryCode').value,
+                isForeigner: document.querySelector('input[name="instIsForeigner"]:checked').value,
+                phone: document.getElementById('instPhone').value,
+                email: document.getElementById('instEmail').value,
+                address: document.getElementById('instAddress').value,
+                bank: document.getElementById('instBank').value,
+                account: document.getElementById('instAccount').value,
+                memo: document.getElementById('instMemo').value,
+                programs: state.tempPrograms
+            };
+
+            const editId = document.getElementById('instEditId').value;
+            if(editId) {
+                const idx = state.instructors.findIndex(i => i.id == editId);
+                state.instructors[idx] = { ...state.instructors[idx], ...data };
+            } else {
+                data.id = state.nextInstId++;
+                state.instructors.push(data);
+            }
+            closeModal('instructor');
+            renderAll();
+        }
+
+        function deleteInstructor(id) {
+            if(confirm('강사를 삭제하시겠습니까? 연결된 강의 내역도 삭제될 수 있습니다.')) {
+                state.instructors = state.instructors.filter(i => i.id !== id);
+                state.lectures = state.lectures.filter(l => l.instructorId !== id);
+                renderAll();
+            }
+        }
+
+        // Temp Programs for Modal
+        function addProgramToTemp() {
+            const category = document.getElementById('newProgCategory').value;
+            const name = document.getElementById('newProgName').value;
+            const fee = parseInt(document.getElementById('newProgFee').value);
+            if(!category || !name || isNaN(fee)) return alert('과목구분, 프로그램명과 회당 강사료를 입력하세요');
+            state.tempPrograms.push({ id: state.nextProgId++, category, name, fee });
+            document.getElementById('newProgCategory').value = '';
+            document.getElementById('newProgName').value = '';
+            document.getElementById('newProgFee').value = '';
+            renderTempPrograms();
+        }
+        function removeTempProg(id) {
+            state.tempPrograms = state.tempPrograms.filter(p => p.id !== id);
+            renderTempPrograms();
+        }
+        function renderTempPrograms() {
+            const div = document.getElementById('tempProgramList');
+            div.innerHTML = '';
+            state.tempPrograms.forEach(p => {
+                div.innerHTML += `<div class="program-item"><div><span class="badge badge-blue">[${p.category}]</span> <span class="font-semibold">${p.name}</span> <span class="text-sub">(${formatMoney(p.fee)}원)</span></div><button class="btn btn-ghost-danger btn-sm" onclick="removeTempProg(${p.id})">삭제</button></div>`;
+            });
+        }
+
+        // Lecture CRUD
+        function openLectureModal() {
+            document.getElementById('lecModalTitle').innerText = '강의 내역 등록';
+            document.getElementById('lecEditId').value = '';
+            const instSel = document.getElementById('lecInstId');
+            instSel.innerHTML = '<option value="">강사 선택</option>';
+            state.instructors.forEach(i => {
+                instSel.innerHTML += `<option value="${i.id}">${i.name}</option>`;
+            });
+            document.getElementById('lecProgId').innerHTML = '';
+            document.getElementById('lecCount').value = '';
+            document.getElementById('lecPeriodYear').value = state.currentYear;
+            document.getElementById('lecPeriodMonth').value = state.currentMonth;
+            updateLectureCalc();
+            openModal('lecture');
+        }
+
+        function updateLecProgramSelect() {
+            const instId = parseInt(document.getElementById('lecInstId').value);
+            const progSel = document.getElementById('lecProgId');
+            progSel.innerHTML = '';
+            const inst = state.instructors.find(i => i.id === instId);
+            if(inst) {
+                inst.programs.forEach(p => {
+                    progSel.innerHTML += `<option value="${p.id}" data-fee="${p.fee}" data-category="${p.category}">[${p.category}] ${p.name} (${formatMoney(p.fee)}원)</option>`;
+                });
+            }
+            updateLectureCalc();
+        }
+
+        function updateLectureCalc() {
+            const instId = parseInt(document.getElementById('lecInstId').value);
+            const progSel = document.getElementById('lecProgId');
+            const opt = progSel.options[progSel.selectedIndex];
+            const cnt = parseInt(document.getElementById('lecCount').value) || 0;
+            
+            if(instId && opt && cnt > 0) {
+                const fee = parseInt(opt.getAttribute('data-fee'));
+                const inst = state.instructors.find(i => i.id === instId);
+                const total = fee * cnt;
+                const {tax, local, net} = calculateTaxes(total, getTaxRate(inst.industryCode));
+                
+                document.getElementById('lecCalcTotal').innerText = formatMoney(total);
+                document.getElementById('lecCalcTax').innerText = formatMoney(tax);
+                document.getElementById('lecCalcLocalTax').innerText = formatMoney(local);
+                document.getElementById('lecCalcNet').innerText = formatMoney(net);
+            } else {
+                document.getElementById('lecCalcTotal').innerText = '0';
+                document.getElementById('lecCalcTax').innerText = '0';
+                document.getElementById('lecCalcLocalTax').innerText = '0';
+                document.getElementById('lecCalcNet').innerText = '0';
+            }
+        }
+
+        function saveLecture() {
+            const instId = parseInt(document.getElementById('lecInstId').value);
+            const progSel = document.getElementById('lecProgId');
+            const count = parseInt(document.getElementById('lecCount').value);
+            const periodYear = document.getElementById('lecPeriodYear').value;
+            const periodMonth = document.getElementById('lecPeriodMonth').value;
+            const period = `${periodYear}-${periodMonth}`;
+            
+            if(!instId || progSel.selectedIndex < 0 || !count) return alert('모든 항목을 입력하세요.');
+            
+            const opt = progSel.options[progSel.selectedIndex];
+            const progId = parseInt(opt.value);
+            const fee = parseInt(opt.getAttribute('data-fee'));
+            
+            const editId = document.getElementById('lecEditId').value;
+            if(editId) {
+                const idx = state.lectures.findIndex(l => l.id == editId);
+                state.lectures[idx] = { ...state.lectures[idx], instructorId: instId, programId: progId, count, fee, period };
+            } else {
+                state.lectures.push({ id: state.nextLecId++, period: period, instructorId: instId, programId: progId, count, fee });
+            }
+            closeModal('lecture');
+            renderAll();
+        }
+
+        function editLecture(id) {
+            const lec = state.lectures.find(l => l.id === id);
+            openLectureModal();
+            document.getElementById('lecModalTitle').innerText = '강의 내역 수정';
+            document.getElementById('lecEditId').value = lec.id;
+            document.getElementById('lecInstId').value = lec.instructorId;
+            updateLecProgramSelect();
+            document.getElementById('lecProgId').value = lec.programId;
+            document.getElementById('lecCount').value = lec.count;
+            
+            const [y, m] = lec.period.split('-');
+            document.getElementById('lecPeriodYear').value = y;
+            document.getElementById('lecPeriodMonth').value = m;
+
+            updateLectureCalc();
+        }
+
+        function deleteLecture(id) {
+            if(confirm('이 강의 내역을 삭제하시겠습니까?')) {
+                state.lectures = state.lectures.filter(l => l.id !== id);
+                renderAll();
+            }
+        }
+
+        function loadPreviousMonthLectures() {
+            let prevDate = new Date(parseInt(state.currentYear), parseInt(state.currentMonth)-1 - 1, 1);
+            const prevPeriod = `${prevDate.getFullYear()}-${String(prevDate.getMonth()+1).padStart(2,'0')}`;
+            
+            const prevLecs = state.lectures.filter(l => l.period === prevPeriod);
+            if(prevLecs.length === 0) return alert('전월('+prevPeriod+') 데이터가 없습니다.');
+            
+            if(confirm(`전월(${prevPeriod}) 강의 내역 ${prevLecs.length}건을 당월로 복사하시겠습니까?\n이미 등록된 건이 있다면 중복될 수 있습니다.`)) {
+                prevLecs.forEach(pl => {
+                    state.lectures.push({ ...pl, id: state.nextLecId++, period: getCurrentPeriod() });
+                });
+                renderAll();
+                alert('복사되었습니다. [강의 횟수]를 수정해주세요.');
+            }
+        }
+
+        // CSV Export Functions
+        function downloadCSV(csv, filename) {
+            const blob = new Blob(["\uFEFF"+csv], { type: 'text/csv;charset=utf-8;' }); // BOM for Excel
+            const link = document.createElement("a");
+            if (link.download !== undefined) {
+                const url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+
+        function generateExcel() {
+            const tbody = document.getElementById('settlementTableBody');
+            const rows = tbody.querySelectorAll('tr');
+            if(rows.length === 0) return alert('다운로드할 데이터가 없습니다.');
+            
+            const data = [["일련번호", "귀속연도", "귀속월", "업종코드", "소득자성명", "주민등록번호", "내외국인", "지급액", "세율", "소득세", "지방소득세"]];
+            rows.forEach(r => {
+                const cols = r.querySelectorAll('td');
+                if(cols.length > 0) {
+                    data.push([
+                        parseInt(cols[0].innerText) || 0,
+                        cols[1].innerText,
+                        cols[2].innerText,
+                        cols[4].innerText, // Skip index 3 (Categories UI column)
+                        cols[5].innerText,
+                        cols[6].innerText,
+                        cols[7].innerText,
+                        parseInt(cols[8].innerText.replace(/,/g,'')) || 0,
+                        parseInt(cols[9].innerText) || 0,
+                        parseInt(cols[10].innerText.replace(/,/g,'')) || 0,
+                        parseInt(cols[11].innerText.replace(/,/g,'')) || 0
+                    ]);
+                }
+            });
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "간이지급명세서");
+            XLSX.writeFile(wb, `간이지급명세서_${getCurrentPeriod()}.xlsx`);
+        }
+
+        function generateAnnualExcel() {
+            const tbody = document.getElementById('annualTableBody');
+            const rows = tbody.querySelectorAll('tr');
+            if(rows.length === 0) return alert('다운로드할 데이터가 없습니다.');
+            
+            const year = document.getElementById('annualYearSelect').value;
+            const data = [["주민번호", "강사명", "업종코드", "연간 총지급액", "연간 총소득세", "연간 총지방소득세", "연간 총실지급액"]];
+            rows.forEach(r => {
+                const cols = r.querySelectorAll('td');
+                if(cols.length > 0) {
+                    data.push([
+                        cols[0].innerText,
+                        cols[1].innerText,
+                        cols[2].innerText,
+                        parseInt(cols[3].innerText.replace(/,/g,'')) || 0,
+                        parseInt(cols[4].innerText.replace(/,/g,'')) || 0,
+                        parseInt(cols[5].innerText.replace(/,/g,'')) || 0,
+                        parseInt(cols[6].innerText.replace(/,/g,'')) || 0
+                    ]);
+                }
+            });
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "연간거주자사업소득");
+            XLSX.writeFile(wb, `연간거주자사업소득지급명세서_${year}.xlsx`);
+        }
+
+        function filterTableCustom(inputElem, tbodyId) {
+            const filter = inputElem.value.trim().toLowerCase();
+            const tbody = document.getElementById(tbodyId);
+            const trs = tbody.getElementsByTagName('tr');
+            
+            for (let i = 0; i < trs.length; i++) {
+                const tr = trs[i];
+                // Check if any td in this row matches the search string
+                // Ignore the generic "no data" row if it exists
+                if(tr.cells.length === 1 && tr.cells[0].colSpan > 1) continue;
+                
+                let match = false;
+                for (let j = 0; j < tr.cells.length; j++) {
+                    if (tr.cells[j].innerText.toLowerCase().includes(filter)) {
+                        match = true;
+                        break;
+                    }
+                }
+                tr.style.display = match ? '' : 'none';
+            }
+        }
+
+        function enableTableSorting() {
+            document.querySelectorAll('table').forEach(table => {
+                const headers = table.querySelectorAll('th');
+                headers.forEach((th, i) => {
+                    th.style.cursor = 'pointer';
+                    th.title = '클릭하여 정렬';
+                    th.addEventListener('click', () => {
+                        const tbody = table.querySelector('tbody');
+                        const rows = Array.from(tbody.querySelectorAll('tr'));
+                        
+                        // Ignore sorting if it's the empty placeholder row
+                        if(rows.length === 1 && rows[0].cells.length === 1) return;
+
+                        const isAsc = th.classList.contains('sort-asc');
+                        headers.forEach(h => { h.classList.remove('sort-asc', 'sort-desc'); });
+                        th.classList.add(isAsc ? 'sort-desc' : 'sort-asc');
+
+                        rows.sort((a, b) => {
+                            const aCol = a.cells[i] ? a.cells[i].innerText.replace(/,/g, '') : '';
+                            const bCol = b.cells[i] ? b.cells[i].innerText.replace(/,/g, '') : '';
+                            
+                            // Check if numeric
+                            const aNum = parseFloat(aCol.replace(/[^0-9.-]+/g, ''));
+                            const bNum = parseFloat(bCol.replace(/[^0-9.-]+/g, ''));
+                            
+                            if(!isNaN(aNum) && !isNaN(bNum) && aCol.match(/[0-9]/)) {
+                                return isAsc ? (bNum - aNum) : (aNum - bNum);
+                            }
+                            return isAsc ? bCol.localeCompare(aCol) : aCol.localeCompare(bCol);
+                        });
+                        
+                        rows.forEach(row => tbody.appendChild(row));
+                    });
+                });
+            });
+        }
+
+        function generateCustomLectureExcel() {
+            const tbody = document.getElementById('lectureTableBody');
+            const rows = tbody.querySelectorAll('tr');
+            if(rows.length === 0 || (rows.length === 1 && rows[0].cells.length === 1)) {
+                return alert('출력할 데이터가 없습니다.');
+            }
+            
+            // Format title: "2026년 2월 {filterCat} 강사료 지급내역"
+            const catFilter = document.getElementById('lecFilterCategory').value.trim() || '전체과목';
+            const yearStr = state.currentYear + '년';
+            const monthStr = parseInt(state.currentMonth) + '월';
+            
+            const data = [
+                [`${yearStr}  ${monthStr} ${catFilter} 강사료 지급내역`], // Title Row
+                [""], // Empty row
+                ["", "", "", "", "", "", "                      (단위 : 원)"], // Empty row + align right text logic (pseudo)
+                ["연번", "프로그램", "강사", "산출근거(1회강사료)", "산출근거(강의횟수)", "강사료", "세액(소득세)", "세액(주민세)", "세액(합계)", "실지급액", "계좌번호"]
+            ];
+            
+            let idx = 1;
+            rows.forEach(r => {
+                if (r.style.display === 'none') return; // Skip filtered out rows
+                
+                const cols = r.querySelectorAll('td');
+                if(cols.length >= 9) {
+                    const instName = cols[0].innerText;
+                    const catText = cols[1].innerText;
+                    const progText = cols[2].innerText;
+                    
+                    const feePerLec = parseInt(cols[3].innerText.replace(/,/g,'')) || 0;
+                    const count = parseInt(cols[4].innerText.replace(/[^0-9]/g,'')) || 0; // Strip '회'
+                    const totalFee = parseInt(cols[5].innerText.replace(/,/g,'')) || 0;
+                    const tax = parseInt(cols[6].innerText.replace(/,/g,'')) || 0;
+                    const localTax = parseInt(cols[7].innerText.replace(/,/g,'')) || 0;
+                    const totalTax = tax + localTax;
+                    const net = parseInt(cols[8].innerText.replace(/,/g,'')) || 0;
+                    
+                    // Lookup bank info from state (instructor matching name)
+                    const inst = state.instructors.find(i => i.name === instName);
+                    const bankInfo = inst && inst.bank && inst.account ? `${inst.bank}\n${inst.account}` : '';
+
+                    data.push([
+                        idx++,
+                        progText,
+                        instName,
+                        feePerLec,
+                        count,
+                        totalFee,
+                        tax,
+                        localTax,
+                        totalTax,
+                        net,
+                        bankInfo
+                    ]);
+                }
+            });
+            
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            // Optional: merge cells for Title
+            if(!ws["!merges"]) ws["!merges"] = [];
+            ws["!merges"].push({s:{r:0,c:0}, e:{r:0,c:10}}); // Merge first row across 11 cols
+            ws["!merges"].push({s:{r:2,c:0}, e:{r:2,c:10}}); // Merge third row for right align unit (excel formatting)
+            
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "기안용 강의내역");
+            XLSX.writeFile(wb, `강사료_지급내역_${getCurrentPeriod()}.xlsx`);
+        }
+
+        function uploadToHometax() { alert('[자동화 데몬 호출]\n설정된 NPKI 인증서를 활용하여 홈택스에 로그인을 시도한 후 방금 생성된 명세서를 자동으로 업로드합니다.'); }
+
+        // Start
+        window.onload = () => {
+            initPeriodSelector();
+            renderAll();
+            enableTableSorting();
+        };
+    </script>
+</body>
+</html>

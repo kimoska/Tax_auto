@@ -1,0 +1,259 @@
+{
+  "steps": [
+    {
+      "step": "브라우저 실행",
+      "status": "OK",
+      "detail": "Chromium headless=False"
+    },
+    {
+      "step": "홈택스 접속",
+      "status": "OK",
+      "detail": "status=200, url=https://hometax.go.kr/websquare/websquare.html?w2xPath=/ui/pp/index_pp.xml"
+    },
+    {
+      "step": "로그인 버튼 탐색",
+      "status": "FAIL",
+      "detail": "모든 셀렉터 실패"
+    },
+    {
+      "step": "로그인 페이지 분석",
+      "status": "OK",
+      "detail": "총 0개 보이는 요소, 인증관련 0개"
+    },
+    {
+      "step": "공동인증서 탭 탐색",
+      "status": "WARN",
+      "detail": "자동 탐색 실패 — F12에서 인증서 탭의 id를 확인해주세요"
+    },
+    {
+      "step": "GNB \"지급명세\" 메뉴 탐색",
+      "status": "OK",
+      "detail": "23개 발견"
+    },
+    {
+      "step": "전체메뉴 클릭",
+      "status": "OK",
+      "detail": ""
+    },
+    {
+      "step": "전체메뉴→지급명세 탐색",
+      "status": "OK",
+      "detail": "3개"
+    }
+  ],
+  "errors": [],
+  "final_url": "https://hometax.go.kr/websquare/websquare.html?w2xPath=/ui/pp/index_pp.xml&menuCd=index3",
+  "screenshots": [],
+  "login_elements": [],
+  "login_all_count": 0,
+  "gnb_menus": [
+    {
+      "tag": "GNB-1depth",
+      "id": "mf_wfHeader_wq_uuid_369",
+      "text": "계산서·영수증·카드"
+    },
+    {
+      "tag": "GNB-1depth",
+      "id": "mf_wfHeader_wq_uuid_378",
+      "text": "증명·등록·신청"
+    },
+    {
+      "tag": "GNB-1depth",
+      "id": "mf_wfHeader_wq_uuid_398",
+      "text": "세금신고"
+    },
+    {
+      "tag": "GNB-1depth",
+      "id": "menuAtag_4200000000",
+      "text": "납부·고지·환급"
+    },
+    {
+      "tag": "GNB-1depth",
+      "id": "mf_wfHeader_wq_uuid_438",
+      "text": "지급명세·자료·공익법인"
+    },
+    {
+      "tag": "GNB-1depth",
+      "id": "mf_wfHeader_wq_uuid_578",
+      "text": "장려금·연말정산·기부금"
+    },
+    {
+      "tag": "GNB-1depth",
+      "id": "mf_wfHeader_wq_uuid_598",
+      "text": "상담·불복·제보"
+    },
+    {
+      "tag": "GNB-1depth",
+      "id": "mf_wfHeader_wq_uuid_618",
+      "text": "세무대리·납세관리"
+    },
+    {
+      "tag": "GNB-1depth",
+      "id": "mf_wfHeader_wq_uuid_627",
+      "text": "비회원"
+    }
+  ],
+  "jigup_elements": [
+    {
+      "tag": "LI",
+      "id": "mf_wfHeader_hdGroup918",
+      "cls": "w2group ",
+      "text": "지급명세·자료·공익법인              일용·간이지급명세서/사업장제공자 등의 과세자료 제출명세서 제출"
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_wq_uuid_438",
+      "cls": "w2group ",
+      "text": "지급명세·자료·공익법인"
+    },
+    {
+      "tag": "SPAN",
+      "id": "mf_wfHeader_wq_uuid_439",
+      "cls": "w2textbox ",
+      "text": "지급명세·자료·공익법인"
+    },
+    {
+      "tag": "LI",
+      "id": "menu_44_group_1",
+      "cls": "",
+      "text": "일용·간이지급명세서/사업장제공자 등의 과세자료 제출명세서 제출(매월·반기)                  일"
+    },
+    {
+      "tag": "A",
+      "id": "",
+      "cls": "w2group ",
+      "text": "일용·간이지급명세서/사업장제공자 등의 과세자료 제출명세서 제출(매월·반기)"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "일용·간이지급명세서/사업장제공자 등의 과세자료 제출명세서 제출(매월·반기)"
+    },
+    {
+      "tag": "LI",
+      "id": "menu_44_4401100000",
+      "cls": "w2group ",
+      "text": "직접작성 제출"
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4401100000",
+      "cls": "",
+      "text": "직접작성 제출"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "직접작성 제출"
+    },
+    {
+      "tag": "LI",
+      "id": "menu_44_group_2",
+      "cls": "",
+      "text": "(근로·사업 등) 지급명세서 제출                  (근로·사업 등) 지급명세서 제출\t     "
+    },
+    {
+      "tag": "A",
+      "id": "",
+      "cls": "w2group ",
+      "text": "(근로·사업 등) 지급명세서 제출"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "(근로·사업 등) 지급명세서 제출"
+    },
+    {
+      "tag": "LI",
+      "id": "menu_44_4402070000",
+      "cls": "w2group ",
+      "text": "지급명세서 제출/내역조회"
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4402070000",
+      "cls": "",
+      "text": "지급명세서 제출/내역조회"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "지급명세서 제출/내역조회"
+    },
+    {
+      "tag": "LI",
+      "id": "menu_44_4402050000",
+      "cls": "w2group hav_child",
+      "text": "(모의계산) 퇴직소득 지급명세서 \t\t\t\t2018년\t\t\t\t\t2019년\t\t\t\t\t2020년\t\t\t\t\t2021년\t\t\t"
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4402050000",
+      "cls": "",
+      "text": "(모의계산) 퇴직소득 지급명세서"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "(모의계산) 퇴직소득 지급명세서"
+    },
+    {
+      "tag": "LI",
+      "id": "mf_wfHeader_hdGroup920",
+      "cls": "w2group ",
+      "text": "장려금·연말정산·기부금              근로·자녀장려금                  근로·자녀장려금"
+    },
+    {
+      "tag": "LI",
+      "id": "menu_45_group_4",
+      "cls": "",
+      "text": "편리한 연말정산                  편리한 연말정산\t        \t\t\t(근로자용) 공제신고서 작"
+    },
+    {
+      "tag": "LI",
+      "id": "menu_45_4505080000",
+      "cls": "w2group ",
+      "text": "(회사용) 지급명세서 작성관리"
+    },
+    {
+      "tag": "A",
+      "id": "menuAtag_4505080000",
+      "cls": "",
+      "text": "(회사용) 지급명세서 작성관리"
+    },
+    {
+      "tag": "SPAN",
+      "id": "",
+      "cls": "",
+      "text": "(회사용) 지급명세서 작성관리"
+    }
+  ],
+  "allmenu_jigup": [
+    {
+      "tag": "LI",
+      "id": "mf_wfHeader_UTXPPBAD22_wframe_wq_uuid_989_tab_tabs5",
+      "text": "지급명세·자료·공익법인",
+      "x": -88,
+      "y": 396
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "text": "지급명세·자료·공익법인",
+      "x": -88,
+      "y": 396
+    },
+    {
+      "tag": "A",
+      "id": "mf_wfHeader_UTXPPBAD22_wframe_wq_uuid_989_tab_tabs5_tabHTML",
+      "text": "지급명세·자료·공익법인",
+      "x": -73,
+      "y": 412
+    }
+  ]
+}
