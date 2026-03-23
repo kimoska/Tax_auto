@@ -108,80 +108,7 @@ class SettingsTab(QWidget):
         org_panel.body_layout.addWidget(org_body)
         layout.addWidget(org_panel)
 
-        # ── 홈택스 인증 설정 ──
-        auth_panel = Panel('홈택스 인증 설정')
 
-        auth_body = QWidget()
-        auth_layout = QVBoxLayout(auth_body)
-        auth_layout.setContentsMargins(24, 20, 24, 20)
-        auth_layout.setSpacing(14)
-
-        lbl_method = QLabel('인증 방식')
-        lbl_method.setStyleSheet(label_style)
-        auth_layout.addWidget(lbl_method)
-        self.auth_method = QComboBox()
-        self.auth_method.setStyleSheet(input_style)
-        self.auth_method.addItem('공동·금융인증서', 'certificate')
-        self.auth_method.addItem('간편인증 (민간인증서)', 'simple')
-        self.auth_method.addItem('모바일신분증', 'mobile_id')
-        self.auth_method.addItem('생체(얼굴·지문) 인증', 'bio')
-        self.auth_method.addItem('비회원 로그인', 'non_member')
-        auth_layout.addWidget(self.auth_method)
-
-        # ── 인증서 저장 위치 ──
-        lbl_location = QLabel('인증서 저장 위치')
-        lbl_location.setStyleSheet(label_style)
-        auth_layout.addWidget(lbl_location)
-        self.cert_location = QComboBox()
-        self.cert_location.setStyleSheet(input_style)
-        self.cert_location.addItem('하드디스크 이동식', 'harddisk')
-        self.cert_location.addItem('브라우저', 'browser')
-        self.cert_location.addItem('금융인증서', 'financial')
-        self.cert_location.addItem('휴대전화', 'mobile')
-        self.cert_location.addItem('스마트인증', 'smart')
-        auth_layout.addWidget(self.cert_location)
-
-        # ── 인증서 소유자 키워드 ──
-        lbl_keyword = QLabel('인증서 소유자 키워드 (선택)')
-        lbl_keyword.setStyleSheet(label_style)
-        auth_layout.addWidget(lbl_keyword)
-        self.cert_keyword = QLineEdit()
-        self.cert_keyword.setStyleSheet(input_style)
-        self.cert_keyword.setPlaceholderText('예: 김관영 (비워두면 첫 번째 인증서 사용)')
-        auth_layout.addWidget(self.cert_keyword)
-
-        cert_row = QHBoxLayout()
-        cert_col = QVBoxLayout()
-        lbl_cert = QLabel('인증서 경로')
-        lbl_cert.setStyleSheet(label_style)
-        cert_col.addWidget(lbl_cert)
-        cert_input_row = QHBoxLayout()
-        self.cert_path = QLineEdit()
-        self.cert_path.setStyleSheet(input_style)
-        self.cert_path.setPlaceholderText('C:\\Users\\...\\NPKI\\...')
-        btn_browse = QPushButton('찾아보기')
-        btn_browse.setStyleSheet(BTN_SECONDARY + "QPushButton { padding: 8px 14px; }")
-        btn_browse.setCursor(Qt.PointingHandCursor)
-        btn_browse.clicked.connect(self._browse_cert)
-        cert_input_row.addWidget(self.cert_path)
-        cert_input_row.addWidget(btn_browse)
-        cert_col.addLayout(cert_input_row)
-        cert_row.addLayout(cert_col)
-        auth_layout.addLayout(cert_row)
-
-        pw_col = QVBoxLayout()
-        lbl_pw = QLabel('인증서 비밀번호 (암호화 저장)')
-        lbl_pw.setStyleSheet(label_style)
-        pw_col.addWidget(lbl_pw)
-        self.cert_password = QLineEdit()
-        self.cert_password.setEchoMode(QLineEdit.Password)
-        self.cert_password.setStyleSheet(input_style)
-        self.cert_password.setPlaceholderText('••••••••')
-        pw_col.addWidget(self.cert_password)
-        auth_layout.addLayout(pw_col)
-
-        auth_panel.body_layout.addWidget(auth_body)
-        layout.addWidget(auth_panel)
 
         # ── 저장 버튼 ──
         btn_row = QHBoxLayout()
@@ -214,28 +141,7 @@ class SettingsTab(QWidget):
         self.org_tax_office.setText(_get('org_tax_office'))
         self.org_address.setText(_get('org_address'))
 
-        method = _get('auth_method')
-        idx = self.auth_method.findData(method)
-        if idx >= 0:
-            self.auth_method.setCurrentIndex(idx)
 
-        self.cert_path.setText(_get('cert_path'))
-
-        location = _get('cert_location')
-        loc_idx = self.cert_location.findData(location)
-        if loc_idx >= 0:
-            self.cert_location.setCurrentIndex(loc_idx)
-
-        self.cert_keyword.setText(_get('cert_keyword'))
-
-        # 비밀번호 복호화
-        pw_setting = self.repo.get_setting('cert_password')
-        if pw_setting and pw_setting['value']:
-            try:
-                decrypted = self.crypto.decrypt(pw_setting['value'])
-                self.cert_password.setText(decrypted)
-            except Exception:
-                pass
 
     def _save_settings(self):
         """설정값 DB에 저장"""
@@ -244,15 +150,6 @@ class SettingsTab(QWidget):
         self.repo.update_setting('org_representative', self.org_rep.text().strip())
         self.repo.update_setting('org_tax_office', self.org_tax_office.text().strip())
         self.repo.update_setting('org_address', self.org_address.text().strip())
-        self.repo.update_setting('auth_method', self.auth_method.currentData())
-        self.repo.update_setting('cert_location', self.cert_location.currentData())
-        self.repo.update_setting('cert_keyword', self.cert_keyword.text().strip())
-        self.repo.update_setting('cert_path', self.cert_path.text().strip())
 
-        # 비밀번호 암호화 저장
-        pw = self.cert_password.text().strip()
-        if pw:
-            encrypted = self.crypto.encrypt(pw)
-            self.repo.update_setting('cert_password', encrypted, is_encrypted=1)
 
         QMessageBox.information(self, '설정 저장', '설정이 저장되었습니다.')

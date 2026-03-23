@@ -1,10 +1,9 @@
 """
-AutoTax — RPA 오케스트레이터 (실제 구현)
+AutoTax — RPA 오케스트레이터
 login → 메뉴 이동 → upload 파이프라인.
-로그인 세션 재사용 지원 (storage_state).
+매 실행 시 깨끗한 브라우저 세션으로 시작 (세션 재사용 없음).
 """
 import asyncio
-import json
 import logging
 import os
 
@@ -12,32 +11,23 @@ from playwright.async_api import async_playwright
 
 logger = logging.getLogger(__name__)
 
-# 세션 파일 경로 (재로그인 방지)
-SESSION_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                           '.hometax_session')
-SESSION_FILE = os.path.join(SESSION_DIR, 'state.json')
-
 
 class RPARunner:
     """
     RPA 실행 관리자.
     1. Playwright → Chromium (headless=False)
-    2. 세션 파일이 있으면 재사용 시도
+    2. 매번 깨끗한 브라우저 세션으로 시작
     3. HometaxLogin 으로 로그인
     4. HometaxUploader 로 엑셀 업로드
     5. 사용자에게 제출 확인 안내
     6. 브라우저 열어둠 (사용자가 확인/제출)
     """
 
-    def __init__(self, auth_method: str = 'certificate',
-                 cert_path: str = '', cert_password: str = '',
-                 cert_location: str = 'harddisk', cert_keyword: str = '',
-                 excel_path: str = ''):
+    def __init__(self, auth_method: str = 'certificate', cert_keyword: str = '', cert_drive: str = 'C', cert_password: str = '', excel_path: str = ''):
         self.auth_method = auth_method
-        self.cert_path = cert_path
-        self.cert_password = cert_password
-        self.cert_location = cert_location
         self.cert_keyword = cert_keyword
+        self.cert_drive = cert_drive
+        self.cert_password = cert_password
         self.excel_path = excel_path
         self._progress_callback = None
 
@@ -72,46 +62,38 @@ class RPARunner:
                     args=[
                         '--start-maximized',
                         '--disable-blink-features=AutomationControlled',
+                        # 저 브라우저 권한 창(기기 액세스 허용)이 안 뜨게 하는 핵심 플래그
+                        '--disable-features=BlockInsecurePrivateNetworkRequests',
+                        '--disable-web-security',
+                        '--allow-running-insecure-content',
                     ],
                 )
 
-                # 세션 복원 시도
                 context = await self._create_context(browser)
                 page = await context.new_page()
 
-                # ── 1단계: 로그인 ──
-                self._emit(2, 10, '홈택스 로그인 시작...')
-
+                # ── 로그인 검증 및 실행 ──
+                self._emit(2, 10, '홈택스 자동 로그인 로직 시작...')
+                # 홈택스 초기 화면은 이미 HometaxLogin이 감당함
                 from rpa.hometax_login import HometaxLogin
                 login_handler = HometaxLogin(
-                    page,
+                    page, 
                     auth_method=self.auth_method,
-                    cert_password=self.cert_password,
-                    cert_location=self.cert_location,
                     cert_keyword=self.cert_keyword,
+                    cert_drive=self.cert_drive,
+                    cert_password=self.cert_password
                 )
 
                 def login_progress(step, total, msg):
-                    # 로그인은 step 2~5 범위
                     mapped_step = 2 + int(step * 3 / total)
                     self._emit(mapped_step, 10, f'[로그인] {msg}')
 
-                login_success = await login_handler.login(progress_callback=login_progress)
-
-                if not login_success:
-                    result['message'] = (
-                        '홈택스 로그인에 실패했습니다.\n'
-                        '인증서를 선택하지 않았거나 시간이 초과되었을 수 있습니다.\n'
-                        '다시 시도해주세요.'
-                    )
-                    # 브라우저는 열어둠 — 사용자가 수동 로그인 가능
-                    self._emit(10, 10, '❌ 로그인 실패 — 브라우저를 닫지 않고 유지')
+                is_success = await login_handler.login(progress_callback=login_progress)
+                if not is_success:
+                    result['message'] = "로그인에 실패했습니다. 브라우저 화면을 확인하세요."
                     await self._keep_browser_open(page, browser)
                     return result
-
-                # 로그인 성공 → 세션 저장
-                await self._save_session(context)
-
+                
                 # ── 2단계: 엑셀 업로드 ──
                 self._emit(6, 10, '간이지급명세서 업로드 시작...')
 
@@ -153,31 +135,21 @@ class RPARunner:
         return result
 
     async def _create_context(self, browser):
-        """브라우저 컨텍스트 생성 (세션 복원 포함)"""
+        """브라우저 컨텍스트 생성 (항상 깨끗한 세션으로 시작)"""
         context_opts = {
             'viewport': {'width': 1280, 'height': 900},
             'locale': 'ko-KR',
             'timezone_id': 'Asia/Seoul',
         }
-
-        # 저장된 세션 파일이 있으면 복원 시도
-        if os.path.exists(SESSION_FILE):
-            try:
-                context_opts['storage_state'] = SESSION_FILE
-                logger.info('이전 세션 복원 시도 중...')
-            except Exception:
-                logger.warning('세션 복원 실패 — 새 세션 사용')
+        
+        # [수정] 기존 세션 복원 로직 제거 (사용자 요청: 이전 기록이 방해하지 않도록)
+        # if os.path.exists(SESSION_FILE): ... 제거
 
         return await browser.new_context(**context_opts)
 
     async def _save_session(self, context):
-        """로그인 세션 저장 (다음 실행 시 재사용)"""
-        try:
-            os.makedirs(SESSION_DIR, exist_ok=True)
-            await context.storage_state(path=SESSION_FILE)
-            logger.info(f'세션 저장 완료: {SESSION_FILE}')
-        except Exception as e:
-            logger.warning(f'세션 저장 실패: {e}')
+        """로그인 세션 저장 로직 제거 (항상 새로운 로그인 보장)"""
+        pass
 
     async def _keep_browser_open(self, page, browser):
         """브라우저를 열어둔 채 사용자 확인 대기 (5분)"""

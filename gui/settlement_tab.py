@@ -285,31 +285,38 @@ class SettlementTab(QWidget):
                                 '정산 데이터가 없습니다. 먼저 [정산 재계산]을 실행하세요.')
             return
 
-        # 설정에서 인증 정보 로드
-        crypto = CryptoManager()
-        auth_method = (self.repo.get_setting('auth_method') or {}).get('value', 'certificate')
-        cert_path = (self.repo.get_setting('cert_path') or {}).get('value', '')
-        cert_pw_setting = self.repo.get_setting('cert_password')
-        cert_password = ''
-        if cert_pw_setting and cert_pw_setting.get('value'):
-            try:
-                cert_password = crypto.decrypt(cert_pw_setting['value'])
-            except Exception:
-                pass
-
         # 엑셀 파일 생성
         try:
+            crypto = CryptoManager()
             excel_path = generate_hometax_excel(self.repo, crypto, self.current_period)
         except Exception as e:
             QMessageBox.critical(self, '오류', f'엑셀 생성 실패:\n{str(e)}')
             return
+        
+        # [수정 사항] 홈택스 업로드 시작 전 로그인/인증서 선택 창 표시
+        from gui.login_window import LoginWindow
+        from PySide6.QtWidgets import QDialog
+        
+        login_dialog = LoginWindow(repo=self.repo, crypto=crypto, parent=self)
+        if login_dialog.exec() != QDialog.Accepted:
+            # 사용자가 로그인 창을 닫거나 취소한 경우 중단
+            return
+
+        # 방금 로그인 창에서 선택한 인증서 정보 직접 추출 (체크박스 무관하게 최신값 반영)
+        selected_cert = login_dialog.selected_cert
+        
+        auth_method = 'certificate'
+        cert_keyword = selected_cert.subject_cn if selected_cert else ''
+        cert_drive = selected_cert.path[0].upper() if selected_cert and selected_cert.path else 'C'
+        cert_password = login_dialog.pw_input.text()
 
         # RPA 다이얼로그 실행
         dialog = RPAProgressDialog(
-            auth_method=auth_method,
-            cert_path=cert_path,
-            cert_password=cert_password,
             excel_path=excel_path,
+            auth_method=auth_method,
+            cert_keyword=cert_keyword,
+            cert_drive=cert_drive,
+            cert_password=cert_password,
             parent=self,
         )
         dialog.exec()

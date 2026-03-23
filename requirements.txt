@@ -1,23 +1,9 @@
-# AutoTax - 강사료 원천세 자동화 시스템
-# Python 3.11+
-
-# GUI
 PySide6>=6.6.0
 PyQt-Fluent-Widgets>=1.5.0
-
-# Database (sqlite3 is built-in)
-
-# Excel
 openpyxl>=3.1.2
 pandas>=2.1.0
-
-# Encryption
 cryptography>=41.0.0
-
-# RPA (Phase 5)
 playwright>=1.40.0
 pywinauto>=0.6.8
 pyautogui>=0.9.54
-
-# Testing
 pytest>=7.4.0

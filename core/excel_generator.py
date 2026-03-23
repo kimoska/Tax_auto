@@ -10,6 +10,7 @@ from openpyxl.utils import get_column_letter
 
 from db.repository import Repository
 from core.crypto import CryptoManager
+import csv
 
 
 # ─────────────────────────────────────────────
@@ -121,6 +122,63 @@ def generate_hometax_excel(
     filepath = os.path.join(output_dir, filename)
 
     wb.save(filepath)
+    wb.save(filepath)
+    return filepath
+
+
+def generate_hometax_csv(
+    repo: Repository,
+    crypto: CryptoManager,
+    period: str,
+    output_dir: str = None,
+) -> str:
+    """
+    홈택스 간이지급명세서(사업소득) CSV 파일 생성.
+    사용자 요청에 따라 변환파일 제출용으로 CSV를 생성합니다.
+    """
+    settlements = repo.get_settlements_by_period(period)
+    if not settlements:
+        raise ValueError(f'{period} 기간에 정산 데이터가 없습니다.')
+
+    year, month = period.split('-')
+
+    if output_dir is None:
+        output_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    os.makedirs(output_dir, exist_ok=True)
+
+    filename = f'간이지급명세서_{period}.csv'
+    filepath = os.path.join(output_dir, filename)
+
+    with open(filepath, 'w', newline='', encoding='utf-8-sig') as f:
+        writer = csv.writer(f)
+        writer.writerow(HOMETAX_HEADERS)
+
+        for idx, s in enumerate(settlements, 1):
+            try:
+                rid = crypto.decrypt(s['resident_id'])
+            except Exception:
+                rid = s.get('resident_id', '')
+
+            if len(rid) == 13 and '-' not in rid:
+                rid_formatted = f'{rid[:6]}-{rid[6:]}'
+            else:
+                rid_formatted = rid
+
+            values = [
+                idx,
+                year,
+                month,
+                s['industry_code'],
+                s.get('name', ''),
+                rid_formatted,
+                s['is_foreigner'],
+                s['total_payment'],
+                s['tax_rate'],
+                s['final_income_tax'],
+                s['final_local_tax'],
+            ]
+            writer.writerow(values)
+
     return filepath
 
 

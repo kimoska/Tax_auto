@@ -35,8 +35,7 @@ class RPAWorker(QThread):
 class RPAProgressDialog(QDialog):
     """RPA 진행 상태 모달 다이얼로그"""
 
-    def __init__(self, auth_method: str, cert_path: str, cert_password: str,
-                 excel_path: str, parent=None):
+    def __init__(self, excel_path: str, auth_method: str = 'certificate', cert_keyword: str = '', cert_drive: str = 'C', cert_password: str = '', parent=None):
         super().__init__(parent)
         self.setWindowTitle('홈택스 자동 업로드')
         self.setMinimumWidth(520)
@@ -48,7 +47,8 @@ class RPAProgressDialog(QDialog):
         self._worker = None
         self._runner = RPARunner(
             auth_method=auth_method,
-            cert_path=cert_path,
+            cert_keyword=cert_keyword,
+            cert_drive=cert_drive,
             cert_password=cert_password,
             excel_path=excel_path,
         )

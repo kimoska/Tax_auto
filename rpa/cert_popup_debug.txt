@@ -1,0 +1,48 @@
+cert_drive=D, cert_keyword=대치노인복지관 승인(BizBank)008802120110217188002508
+
+매체 탭 구조:
+[
+  {
+    "tag": "A",
+    "id": "stg_web_kftc",
+    "text": "브라우저",
+    "className": "stg_01",
+    "visible": true
+  },
+  {
+    "tag": "A",
+    "id": "stg_finance",
+    "text": "금융인증서",
+    "className": "stg_01",
+    "visible": true
+  },
+  {
+    "tag": "A",
+    "id": "stg_hdd",
+    "text": "하드디스크이동식",
+    "className": "",
+    "visible": true
+  },
+  {
+    "tag": "A",
+    "id": "stg_mobile",
+    "text": "휴대전화",
+    "className": "stg_01",
+    "visible": true
+  },
+  {
+    "tag": "A",
+    "id": "stg_smartcertnx",
+    "text": "스마트인증",
+    "className": "stg_01",
+    "visible": true
+  },
+  {
+    "tag": "A",
+    "id": "stg_token",
+    "text": "보안토큰",
+    "className": "stg_02",
+    "visible": true
+  }
+]
+

@@ -48,14 +48,14 @@ class HometaxUploader:
                        '[간이지급명세서(거주자의 사업소득)] 선택 중...')
             await self._select_income_type()
 
-            # ── 4: 엑셀 파일 업로드 ──
+            # ── 4: 상세내역 작성하기 버튼 대기 및 클릭 ──
             self._emit(progress_callback, 4, total,
-                       '엑셀 파일 업로드 중...')
-            await self._upload_file(excel_path)
+                       '원천징수의무자 확인 과정 대기 및 [상세내역 작성하기] 클릭...')
+            await self._click_write_details()
 
             # ── 5: 완료 ──
             self._emit(progress_callback, 5, total,
-                       '✅ 업로드 완료! 오류 여부 확인 후 [제출] 버튼을 직접 클릭하세요.')
+                       '✅ 폼 진입 완료! 사업소득자 상세내역을 개별 작성해 주세요.')
             return True
 
         except Exception as e:
@@ -142,63 +142,89 @@ class HometaxUploader:
             logger.warning('모든 메뉴 이동 방법 실패')
 
     async def _select_income_type(self):
-        """간이지급명세서(거주자의 사업소득) 선택 + 일괄등록"""
-        # 소득자료 종류 선택 화면 (로그인 후에만 접근 가능 → 셀렉터는 텍스트 기반)
-        income_sels = [
-            'text=간이지급명세서(거주자의 사업소득)',
-            'text=거주자의 사업소득',
-            'a:has-text("거주자의 사업소득")',
-            'span:has-text("거주자의 사업소득")',
-            'text=간이지급명세서',
-        ]
-        await self._try_click(income_sels, '거주자의 사업소득')
-        await self.page.wait_for_timeout(2000)
+        """직접작성 제출 페이지 내 간이지급명세서(거주자의 사업소득) 선택"""
+        # 1. 지급명세서 선택 Dropdown — 정확한 ID: mf_txppWframe_mateKndCd
+        try:
+            select_box = self.page.locator('#mf_txppWframe_mateKndCd')
+            
+            if await select_box.is_visible(timeout=10000):
+                # select_option으로 label 기반 선택
+                await select_box.select_option(label='간이지급명세서(거주자의 사업소득)')
+                logger.info('[지급명세서 선택] 간이지급명세서(거주자의 사업소득) 선택 완료')
+                await self.page.wait_for_timeout(2000)
+            else:
+                # JS fallback: WebSquare 커스텀 셀렉트박스일 수 있으므로 JS로 값 변경 시도
+                logger.warning('select_option 실패 — JS로 값 세팅 시도')
+                await self.page.evaluate('''() => {
+                    const sel = document.getElementById('mf_txppWframe_mateKndCd');
+                    if (sel) {
+                        for (let i = 0; i < sel.options.length; i++) {
+                            if (sel.options[i].text.includes('거주자의 사업소득')) {
+                                sel.selectedIndex = i;
+                                sel.dispatchEvent(new Event('change', {bubbles: true}));
+                                break;
+                            }
+                        }
+                    }
+                }''')
+                await self.page.wait_for_timeout(2000)
+                logger.info('[JS fallback] 간이지급명세서(거주자의 사업소득) 선택 시도 완료')
+        except Exception as e:
+            logger.warning(f'지급명세서 드롭다운 선택 실패: {e}')
 
-        # 확인/선택 버튼
-        await self._try_click(
-            ['text=선택하기', 'text=확인', 'text=다음',
-             'button:has-text("확인")', 'button:has-text("선택")'],
-            '확인 버튼')
-        await self.page.wait_for_timeout(2000)
-
-        # 일괄등록
-        await self._try_click(
-            ['text=일괄등록', 'text=엑셀 업로드', 'a:has-text("일괄")',
-             'button:has-text("일괄")', 'span:has-text("일괄등록")'],
-            '일괄등록')
-        await self.page.wait_for_timeout(2000)
-
-    async def _upload_file(self, filepath: str):
-        """엑셀 파일 업로드 (input[type=file] 우선, file_chooser 차선)"""
-        abs_path = os.path.abspath(filepath)
-
-        # 방법 1: input[type=file]
-        file_inputs = self.page.locator('input[type="file"]')
-        if await file_inputs.count() > 0:
-            await file_inputs.first.set_input_files(abs_path)
-            await self.page.wait_for_timeout(3000)
-            await self._try_click(
-                ['text=업로드', 'text=확인', 'button:has-text("업로드")'],
-                '업로드 확인')
-            return
-
-        # 방법 2: 파일 버튼 → file_chooser
-        for sel in ['text=파일첨부', 'text=찾아보기', 'text=파일선택',
-                    'button:has-text("파일")', 'button:has-text("찾아보기")']:
+    async def _click_write_details(self):
+        """상세내역 작성하기 버튼 클릭 후, 나타나는 팝업/폼 내용을 캡처"""
+        try:
+            btn = self.page.locator('#mf_txppWframe_btnDpclWrt')
+            
+            logger.info("상세내역 작성하기 버튼 클릭 시도!")
+            if await btn.is_visible(timeout=5000):
+                await btn.click(force=True)
+                logger.info("상세내역 작성하기 버튼 클릭 완료! 팝업/폼 로딩 대기...")
+                await self.page.wait_for_timeout(5000)
+            else:
+                logger.warning("상세내역 작성하기 버튼이 보이지 않습니다.")
+                return
+            
+            # 버튼 클릭 후 나타나는 팝업(작성 중 데이터 있음/전월 불러오기 등) + 폼 내용을 캡처
             try:
-                loc = self.page.locator(sel).first
-                if await loc.is_visible(timeout=2000):
-                    async with self.page.expect_file_chooser(timeout=10000) as fc:
-                        await loc.click()
-                    chooser = await fc.value
-                    await chooser.set_files(abs_path)
-                    await self.page.wait_for_timeout(3000)
-                    await self._try_click(['text=업로드', 'text=확인'], '업로드 확인')
-                    return
-            except Exception:
-                continue
+                dump_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'popup_inspection_result.txt')
+                
+                # 1. 팝업/모달 다이얼로그 캡처 (w2window, w2alert, confirm 등)
+                popup_html = await self.page.evaluate('''() => {
+                    const popups = Array.from(document.querySelectorAll(
+                        '.w2window, .w2alert, .w2confirm, [class*="popup"], [class*="modal"], [class*="dialog"], [role="dialog"], [role="alertdialog"]'
+                    ));
+                    // 보이는 팝업만 수집
+                    const visible = popups.filter(el => {
+                        const style = window.getComputedStyle(el);
+                        return style.display !== 'none' && style.visibility !== 'hidden';
+                    });
+                    return visible.map(el => el.outerHTML).join('\n--- POPUP SEPARATOR ---\n');
+                }''')
+                
+                # 2. 페이지 전체에서 보이는 버튼/입력칸 캡처
+                form_html = await self.page.evaluate('''() => {
+                    const els = Array.from(document.querySelectorAll('input, select, button, textarea'));
+                    const visible = els.filter(el => {
+                        const rect = el.getBoundingClientRect();
+                        return rect.width > 0 && rect.height > 0;
+                    });
+                    return visible.map(el => el.outerHTML.replace(/\\s+/g, ' ')).join('\n');
+                }''')
+                
+                with open(dump_path, 'w', encoding='utf-8') as f:
+                    f.write("=== POPUP/MODAL (상세내역 작성하기 클릭 후 나타난 팝업) ===\n")
+                    f.write(popup_html if popup_html else "(팝업 없음)")
+                    f.write("\n\n=== VISIBLE FORM ELEMENTS (화면에 보이는 입력칸/버튼) ===\n")
+                    f.write(form_html)
+                
+                logger.info(f"클릭 후 화면 상태를 '{dump_path}'에 저장했습니다.")
+            except Exception as inner_e:
+                logger.debug(f"HTML 덤프 실패: {inner_e}")
 
-        logger.warning('파일 input 못 찾음 → 사용자가 직접 업로드해주세요')
+        except Exception as e:
+            logger.warning(f'상세내역 작성하기 버튼 제어 중 오류 발생: {e}')
 
     async def _try_click(self, selectors: list, label: str) -> bool:
         for sel in selectors:
