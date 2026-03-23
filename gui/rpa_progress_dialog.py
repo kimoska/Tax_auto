@@ -3,7 +3,8 @@ AutoTax — RPA 진행 상태 다이얼로그
 """
 from PySide6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel,
-    QPushButton, QProgressBar, QFrame, QTextEdit
+    QPushButton, QProgressBar, QFrame, QTextEdit,
+    QMessageBox
 )
 from PySide6.QtCore import Qt, QThread, Signal
 from PySide6.QtGui import QFont
@@ -35,7 +36,7 @@ class RPAWorker(QThread):
 class RPAProgressDialog(QDialog):
     """RPA 진행 상태 모달 다이얼로그"""
 
-    def __init__(self, excel_path: str, auth_method: str = 'certificate', cert_keyword: str = '', cert_drive: str = 'C', cert_password: str = '', parent=None):
+    def __init__(self, excel_path: str, auth_method: str = 'certificate', cert_keyword: str = '', cert_drive: str = 'C', cert_password: str = '', settlements: list = None, parent=None):
         super().__init__(parent)
         self.setWindowTitle('홈택스 자동 업로드')
         self.setMinimumWidth(520)
@@ -51,6 +52,7 @@ class RPAProgressDialog(QDialog):
             cert_drive=cert_drive,
             cert_password=cert_password,
             excel_path=excel_path,
+            settlements=settlements or [],
         )
 
         self._setup_ui()
@@ -69,7 +71,7 @@ class RPAProgressDialog(QDialog):
 
         # 진행 바
         self.progress_bar = QProgressBar()
-        self.progress_bar.setRange(0, 8)
+        self.progress_bar.setRange(0, 10)
         self.progress_bar.setValue(0)
         self.progress_bar.setFixedHeight(12)
         self.progress_bar.setStyleSheet(f"""
@@ -166,14 +168,64 @@ class RPAProgressDialog(QDialog):
         self._log(f'[{step}/{total}] {message}')
 
     def _on_finished(self, result: dict):
-        """RPA 완료"""
+        """RPA 완료 — 상세 요약 알림 + 제출 안내"""
         self._result = result
         self.btn_start.setEnabled(True)
 
         if result.get('success'):
-            self.title_label.setText('✅ 업로드 완료')
+            self.title_label.setText('✅ 동기화 완료')
             self.btn_start.setText('재실행')
             self._log('✅ ' + result.get('message', '완료'))
+
+            # ── 1단계: 상세 요약 알림 ──
+            sync_details = result.get('sync_details', {})
+            details_list = sync_details.get('details', [])
+            updated = sync_details.get('updated', 0)
+            deleted = sync_details.get('deleted', 0)
+            added = sync_details.get('added', 0)
+
+            summary_lines = [
+                '📊 홈택스 동기화 결과\n',
+                f'  ✏️ 수정: {updated}건',
+                f'  🗑️ 삭제: {deleted}건',
+                f'  ➕ 신규: {added}건',
+                '\n────────────────────────────\n',
+            ]
+            if details_list:
+                summary_lines.append('📋 상세 내역:\n')
+                for detail in details_list:
+                    summary_lines.append(f'  {detail}')
+            else:
+                summary_lines.append('(변경 사항 없음)')
+
+            summary_text = '\n'.join(summary_lines)
+
+            summary_box = QMessageBox(self)
+            summary_box.setWindowTitle('📊 동기화 결과 보고')
+            summary_box.setText(summary_text)
+            summary_box.setIcon(QMessageBox.Information)
+            summary_box.setStandardButtons(QMessageBox.Ok)
+            summary_box.button(QMessageBox.Ok).setText('완료')
+            summary_box.exec()
+
+            # ── 2단계: 제출 안내 알림 ──
+            guide_text = (
+                '✅ 모든 데이터가 홈택스에 반영되었습니다.\n\n'
+                '이제 홈택스 브라우저에서 다음을 확인해주세요:\n\n'
+                '1️⃣  상세내역 목록 및 총 지급액이 올바른지 확인\n'
+                '2️⃣  확인이 완료되면 [제출하러 가기] 버튼 클릭\n'
+                '3️⃣  제출 후 접수증을 다운로드하여 보관\n\n'
+                '⚠️  브라우저를 닫지 마세요!\n'
+                '     제출이 완료될 때까지 열어두셔야 합니다.'
+            )
+            guide_box = QMessageBox(self)
+            guide_box.setWindowTitle('📌 제출 안내')
+            guide_box.setText(guide_text)
+            guide_box.setIcon(QMessageBox.Warning)
+            guide_box.setStandardButtons(QMessageBox.Ok)
+            guide_box.button(QMessageBox.Ok).setText('확인')
+            guide_box.exec()
+
         else:
             self.title_label.setText('❌ 업로드 실패')
             self.btn_start.setText('재시도')

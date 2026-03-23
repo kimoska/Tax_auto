@@ -23,12 +23,13 @@ class RPARunner:
     6. 브라우저 열어둠 (사용자가 확인/제출)
     """
 
-    def __init__(self, auth_method: str = 'certificate', cert_keyword: str = '', cert_drive: str = 'C', cert_password: str = '', excel_path: str = ''):
+    def __init__(self, auth_method: str = 'certificate', cert_keyword: str = '', cert_drive: str = 'C', cert_password: str = '', excel_path: str = '', settlements: list = None):
         self.auth_method = auth_method
         self.cert_keyword = cert_keyword
         self.cert_drive = cert_drive
         self.cert_password = cert_password
         self.excel_path = excel_path
+        self.settlements = settlements or []
         self._progress_callback = None
 
     def set_progress_callback(self, callback):
@@ -54,79 +55,85 @@ class RPARunner:
         try:
             self._emit(1, 10, 'Playwright 브라우저 시작 중...')
 
-            async with async_playwright() as pw:
-                # Chromium 실행 (headless=False — 사용자가 화면 확인)
-                browser = await pw.chromium.launch(
-                    headless=False,
-                    slow_mo=300,  # 안정성을 위한 딜레이
-                    args=[
-                        '--start-maximized',
-                        '--disable-blink-features=AutomationControlled',
-                        # 저 브라우저 권한 창(기기 액세스 허용)이 안 뜨게 하는 핵심 플래그
-                        '--disable-features=BlockInsecurePrivateNetworkRequests',
-                        '--disable-web-security',
-                        '--allow-running-insecure-content',
-                    ],
+            pw = await async_playwright().start()
+            # Chromium 실행 (headless=False — 사용자가 화면 확인)
+            browser = await pw.chromium.launch(
+                headless=False,
+                slow_mo=300,
+                args=[
+                    '--start-maximized',
+                    '--disable-blink-features=AutomationControlled',
+                    '--disable-features=BlockInsecurePrivateNetworkRequests',
+                    '--disable-web-security',
+                    '--allow-running-insecure-content',
+                ],
+            )
+
+            context = await self._create_context(browser)
+            page = await context.new_page()
+
+            # ── 로그인 검증 및 실행 ──
+            self._emit(2, 10, '홈택스 자동 로그인 로직 시작...')
+            from rpa.hometax_login import HometaxLogin
+            login_handler = HometaxLogin(
+                page, 
+                auth_method=self.auth_method,
+                cert_keyword=self.cert_keyword,
+                cert_drive=self.cert_drive,
+                cert_password=self.cert_password
+            )
+
+            def login_progress(step, total, msg):
+                mapped_step = 2 + int(step * 3 / total)
+                self._emit(mapped_step, 10, f'[로그인] {msg}')
+
+            is_success = await login_handler.login(progress_callback=login_progress)
+            if not is_success:
+                result['message'] = "로그인에 실패했습니다. 브라우저 화면을 확인하세요."
+                return result
+            
+            # ── 2단계: 엑셀 업로드 ──
+            self._emit(6, 10, '간이지급명세서 업로드 시작...')
+
+            from rpa.hometax_uploader import HometaxUploader
+            uploader = HometaxUploader(page)
+
+            sync_result = {}
+
+            def upload_progress(step, total, msg):
+                mapped_step = 6 + int(step * 3 / total)
+                self._emit(mapped_step, 10, f'[업로드] {msg}')
+
+            upload_success = await uploader.upload_excel(
+                self.excel_path,
+                settlements=self.settlements,
+                progress_callback=upload_progress,
+            )
+
+            # sync_result 가져오기 (uploader가 반환한 상세 결과)
+            if hasattr(uploader, '_last_sync_result'):
+                sync_result = uploader._last_sync_result
+
+            if upload_success:
+                result['success'] = True
+                result['sync_details'] = sync_result
+                result['message'] = (
+                    '✅ 동기화 완료!\n\n'
+                    '⚠️ 중요:\n'
+                    '1. 홈택스 화면에서 목록과 총 지급액을 확인하세요.\n'
+                    '2. 확인 후 [제출하러 가기] 버튼을 직접 클릭하세요.\n'
+                    '3. 제출 후 접수증을 다운로드 / 보관하세요.\n\n'
+                    '브라우저를 닫지 마세요!'
+                )
+            else:
+                result['message'] = (
+                    '업로드 과정에서 문제가 발생했습니다.\n'
+                    '브라우저 화면을 확인하고 수동으로 진행해주세요.'
                 )
 
-                context = await self._create_context(browser)
-                page = await context.new_page()
-
-                # ── 로그인 검증 및 실행 ──
-                self._emit(2, 10, '홈택스 자동 로그인 로직 시작...')
-                # 홈택스 초기 화면은 이미 HometaxLogin이 감당함
-                from rpa.hometax_login import HometaxLogin
-                login_handler = HometaxLogin(
-                    page, 
-                    auth_method=self.auth_method,
-                    cert_keyword=self.cert_keyword,
-                    cert_drive=self.cert_drive,
-                    cert_password=self.cert_password
-                )
-
-                def login_progress(step, total, msg):
-                    mapped_step = 2 + int(step * 3 / total)
-                    self._emit(mapped_step, 10, f'[로그인] {msg}')
-
-                is_success = await login_handler.login(progress_callback=login_progress)
-                if not is_success:
-                    result['message'] = "로그인에 실패했습니다. 브라우저 화면을 확인하세요."
-                    await self._keep_browser_open(page, browser)
-                    return result
-                
-                # ── 2단계: 엑셀 업로드 ──
-                self._emit(6, 10, '간이지급명세서 업로드 시작...')
-
-                from rpa.hometax_uploader import HometaxUploader
-                uploader = HometaxUploader(page)
-
-                def upload_progress(step, total, msg):
-                    mapped_step = 6 + int(step * 3 / total)
-                    self._emit(mapped_step, 10, f'[업로드] {msg}')
-
-                upload_success = await uploader.upload_excel(
-                    self.excel_path,
-                    progress_callback=upload_progress,
-                )
-
-                if upload_success:
-                    result['success'] = True
-                    result['message'] = (
-                        '✅ 엑셀 업로드 완료!\n\n'
-                        '⚠️ 중요:\n'
-                        '1. 홈택스 화면에서 오류가 없는지 확인하세요.\n'
-                        '2. 확인 후 [제출] 버튼을 직접 클릭하세요.\n'
-                        '3. 제출 후 접수증을 다운로드/보관하세요.\n\n'
-                        '브라우저를 닫지 마세요!'
-                    )
-                else:
-                    result['message'] = (
-                        '엑셀 업로드 과정에서 문제가 발생했습니다.\n'
-                        '브라우저 화면을 확인하고 수동으로 진행해주세요.'
-                    )
-
-                self._emit(10, 10, '완료 — 브라우저에서 확인 후 제출하세요')
-                await self._keep_browser_open(page, browser)
+            self._emit(10, 10, '완료 — 브라우저에서 확인 후 제출하세요')
+            # 브라우저를 닫지 않음! Playwright도 정리하지 않음.
+            # 사용자가 직접 브라우저를 닫으면 자연스럽게 종료됨.
 
         except Exception as e:
             logger.error(f'RPA 실행 오류: {e}')
@@ -141,27 +148,7 @@ class RPARunner:
             'locale': 'ko-KR',
             'timezone_id': 'Asia/Seoul',
         }
-        
-        # [수정] 기존 세션 복원 로직 제거 (사용자 요청: 이전 기록이 방해하지 않도록)
-        # if os.path.exists(SESSION_FILE): ... 제거
-
         return await browser.new_context(**context_opts)
-
-    async def _save_session(self, context):
-        """로그인 세션 저장 로직 제거 (항상 새로운 로그인 보장)"""
-        pass
-
-    async def _keep_browser_open(self, page, browser):
-        """브라우저를 열어둔 채 사용자 확인 대기 (5분)"""
-        try:
-            await page.wait_for_timeout(300_000)  # 5분
-        except Exception:
-            pass
-        finally:
-            try:
-                await browser.close()
-            except Exception:
-                pass
 
     def run_sync(self) -> dict:
         """동기 래퍼 (GUI 스레드에서 호출용)"""

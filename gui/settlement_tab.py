@@ -310,6 +310,19 @@ class SettlementTab(QWidget):
         cert_drive = selected_cert.path[0].upper() if selected_cert and selected_cert.path else 'C'
         cert_password = login_dialog.pw_input.text()
 
+        # 정산 데이터를 RPA에 전달 (홈택스 목록 수정용)
+        settlement_data = [
+            {
+                'name': s.get('name', ''),
+                'resident_id': s.get('resident_id', ''),
+                'total_payment': s.get('total_payment', 0),
+                'industry_code': s.get('industry_code', '940909'),
+                'is_foreigner': s.get('is_foreigner', '1'),
+                'period': self.current_period,
+            }
+            for s in settlements
+        ]
+
         # RPA 다이얼로그 실행
         dialog = RPAProgressDialog(
             excel_path=excel_path,
@@ -317,6 +330,7 @@ class SettlementTab(QWidget):
             cert_keyword=cert_keyword,
             cert_drive=cert_drive,
             cert_password=cert_password,
+            settlements=settlement_data,
             parent=self,
         )
         dialog.exec()
