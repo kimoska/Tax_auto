@@ -317,7 +317,6 @@ class SettlementTab(QWidget):
         """홈택스 11컬럼 엑셀 다운로드"""
         from PySide6.QtWidgets import QFileDialog
         from core.excel_generator import generate_hometax_excel
-        from core.crypto import CryptoManager
 
         settlements = self.repo.get_settlements_by_period(self.current_period)
         if not settlements:
@@ -357,8 +356,7 @@ class SettlementTab(QWidget):
 
         # 엑셀 파일 생성
         try:
-            crypto = CryptoManager()
-            excel_path = generate_hometax_excel(self.repo, crypto, self.current_period)
+            excel_path = generate_hometax_excel(self.repo, self.current_period)
         except Exception as e:
             QMessageBox.critical(self, '오류', f'엑셀 생성 실패:\n{str(e)}')
             return

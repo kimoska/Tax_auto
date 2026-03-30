@@ -220,19 +220,15 @@ class InstructorTab(QWidget):
             # 연락처
             self.table.setItem(row, 4, QTableWidgetItem(inst.get('phone', '') or '-'))
 
-            # 주민번호 마스킹 강화 (예: YYMMDD-*******)
-            try:
-                decrypted_rid = self.crypto.decrypt(inst['resident_id'])
-            except Exception:
-                decrypted_rid = inst['resident_id']
-                
-            if '-' in decrypted_rid:
-                parts = decrypted_rid.split('-')
+            # 주민번호 마스킹 (평문에서 앞 6자리만 표시)
+            raw_rid = inst.get('resident_id', '')
+            if '-' in raw_rid:
+                parts = raw_rid.split('-')
                 masked_rid = f"{parts[0]}-*******"
-            elif len(decrypted_rid) >= 13:
-                masked_rid = decrypted_rid[:6] + '-*******'
+            elif len(raw_rid) >= 6:
+                masked_rid = raw_rid[:6] + '-*******'
             else:
-                masked_rid = decrypted_rid
+                masked_rid = raw_rid
             
             rid_item = QTableWidgetItem(masked_rid)
             rid_item.setTextAlignment(Qt.AlignCenter)
@@ -434,8 +430,7 @@ class InstructorTab(QWidget):
             # DB 저장
             count = 0
             for rid, data in instructor_map.items():
-                encrypted_rid = self.crypto.encrypt(rid)
-                data['info']['resident_id'] = encrypted_rid
+                data['info']['resident_id'] = rid
                 
                 # 강사 추가 (신규 등록만 지원하며, 주민번호 중복 체크 로직은 Repository 내부에 있음을 가정)
                 iid = self.repo.create_instructor(data['info'])
@@ -706,12 +701,8 @@ class InstructorDialog(QDialog):
 
         self.name_input.setText(inst['name'])
 
-        # 주민번호 복호화
-        try:
-            decrypted_rid = self.crypto.decrypt(inst['resident_id'])
-            self.rid_input.setText(decrypted_rid)
-        except Exception:
-            self.rid_input.setText(inst['resident_id'])
+        # 주민번호 (평문 직접 표시)
+        self.rid_input.setText(inst.get('resident_id', ''))
 
         # 업종코드
         idx = self.code_combo.findData(inst['industry_code'])
@@ -842,12 +833,10 @@ class InstructorDialog(QDialog):
         industry_code = self.code_combo.currentData()
         is_foreigner = '9' if self.fg_foreign.isChecked() else '1'
 
-        # 주민번호 암호화
-        encrypted_rid = self.crypto.encrypt(rid_normalized)
-
+        # 주민번호 (평문 저장 — Firebase 기관별 격리로 보안 보장)
         data = {
             'name': name,
-            'resident_id': encrypted_rid,
+            'resident_id': rid_normalized,
             'industry_code': industry_code,
             'is_foreigner': is_foreigner,
             'phone': self.phone_input.text().strip(),

@@ -25,7 +25,6 @@ HOMETAX_HEADERS = [
 
 def generate_hometax_excel(
     repo: Repository,
-    crypto: CryptoManager,
     period: str,
     output_dir: str = None,
 ) -> str:
@@ -35,7 +34,6 @@ def generate_hometax_excel(
 
     Args:
         repo: Repository 인스턴스
-        crypto: CryptoManager (주민번호 복호화용)
         period: 'YYYY-MM'
         output_dir: 저장 디렉토리 (None이면 프로젝트 루트)
 
@@ -76,11 +74,8 @@ def generate_hometax_excel(
     for idx, s in enumerate(settlements, 1):
         row = idx + 1
 
-        # 주민번호 복호화
-        try:
-            rid = crypto.decrypt(s['resident_id'])
-        except Exception:
-            rid = s.get('resident_id', '')
+        # 주민번호
+        rid = s.get('resident_id', '')
 
         # 주민번호 하이픈 형식 (홈택스 요구)
         if len(rid) == 13 and '-' not in rid:
@@ -128,7 +123,6 @@ def generate_hometax_excel(
 
 def generate_hometax_csv(
     repo: Repository,
-    crypto: CryptoManager,
     period: str,
     output_dir: str = None,
 ) -> str:
@@ -154,10 +148,7 @@ def generate_hometax_csv(
         writer.writerow(HOMETAX_HEADERS)
 
         for idx, s in enumerate(settlements, 1):
-            try:
-                rid = crypto.decrypt(s['resident_id'])
-            except Exception:
-                rid = s.get('resident_id', '')
+            rid = s.get('resident_id', '')
 
             if len(rid) == 13 and '-' not in rid:
                 rid_formatted = f'{rid[:6]}-{rid[6:]}'
@@ -348,7 +339,6 @@ def generate_custom_excel(
 
 def generate_annual_excel(
     repo: Repository,
-    crypto: CryptoManager,
     year: str,
     months: list[str] = None,
     output_dir: str = None,
@@ -358,7 +348,6 @@ def generate_annual_excel(
 
     Args:
         repo: Repository
-        crypto: CryptoManager
         year: '2026'
         months: 선택 월 리스트 (None이면 전체)
         output_dir: 저장 디렉토리
@@ -398,11 +387,8 @@ def generate_annual_excel(
         cell.alignment = Alignment(horizontal='center')
 
     for idx, row_data in enumerate(data, 2):
-        # 주민번호 복호화
-        try:
-            rid = crypto.decrypt(row_data['resident_id'])
-        except Exception:
-            rid = row_data.get('resident_id', '')
+        # 주민번호
+        rid = row_data.get('resident_id', '')
 
         if len(rid) == 13 and '-' not in rid:
             rid = f'{rid[:6]}-{rid[6:]}'

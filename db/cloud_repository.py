@@ -6,8 +6,6 @@ Firestore REST API를 통해 CRUD 수행
 import json
 from datetime import datetime, timezone
 from core.firestore_client import FirestoreClient
-
-
 import time
 
 class CloudRepository:
@@ -35,20 +33,36 @@ class CloudRepository:
     def _now_iso(self) -> str:
         return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
+    def preload_all(self):
+        """앱 시작 시 주요 데이터를 한 번에 메모리 캐시로 로드"""
+        # 1. 강사
+        instructors = self.client.list_documents(self._org('instructors'))
+        self._cache['instructors'] = sorted(instructors, key=lambda x: x.get('name', ''))
+        
+        # 2. 프로그램
+        programs = self.client.list_documents(self._org('instructor_programs'))
+        self._cache['programs'] = programs
+        
+        # 3. 강의
+        lectures = self.client.list_documents(self._org('lectures'))
+        self._cache['lectures'] = lectures
+        
+        # 4. 정산
+        settlements = self.client.list_documents(self._org('settlements'))
+        self._cache['settlements'] = settlements
+
     # ═══════════════════════════════════════════
     # 강사 (instructors)
     # ═══════════════════════════════════════════
 
     def get_all_instructors(self) -> list[dict]:
-        """전체 강사 목록 조회 (5초 캐싱)"""
-        now = time.time()
-        cached = self._cache.get('instructors')
-        if cached and now - cached['time'] < 5.0:
-            return cached['data']
+        """전체 강사 목록 조회 (무기한 캐시)"""
+        if 'instructors' in self._cache:
+            return self._cache['instructors']
             
         docs = self.client.list_documents(self._org('instructors'))
         result = sorted(docs, key=lambda x: x.get('name', ''))
-        self._cache['instructors'] = {'time': now, 'data': result}
+        self._cache['instructors'] = result
         return result
 
     def get_instructor(self, instructor_id) -> dict | None:
@@ -109,22 +123,17 @@ class CloudRepository:
     # ═══════════════════════════════════════════
 
     def get_programs_by_instructor(self, instructor_id) -> list[dict]:
-        """특정 강사의 프로그램 목록"""
-        docs = self.client.list_documents(
-            self._org('instructor_programs'),
-            filters=[('instructor_id', 'EQUAL', str(instructor_id))]
-        )
-        return docs
+        """특정 강사의 프로그램 목록 (전체 캐시에서 필터링 - HTTP 호출 제거)"""
+        programs = self.get_all_programs()
+        return [p for p in programs if str(p.get('instructor_id')) == str(instructor_id)]
 
     def get_all_programs(self) -> list[dict]:
-        """모든 프로그램 목록 (UI 성능 최적화용 - 5초 캐싱)"""
-        now = time.time()
-        cached = self._cache.get('programs')
-        if cached and now - cached['time'] < 5.0:
-            return cached['data']
+        """모든 프로그램 목록 (무기한 캐싱)"""
+        if 'programs' in self._cache:
+            return self._cache['programs']
             
         docs = self.client.list_documents(self._org('instructor_programs'))
-        self._cache['programs'] = {'time': now, 'data': docs}
+        self._cache['programs'] = docs
         return docs
 
     def get_program(self, program_id) -> dict | None:
@@ -180,13 +189,13 @@ class CloudRepository:
 
     def get_lectures_by_period(self, period: str) -> list[dict]:
         """
-        특정 기간의 강의 목록 (강사/프로그램 정보 병합).
-        SQLite의 JOIN 쿼리를 여러 조회 + 파이썬 병합으로 대체.
+        특정 기간의 강의 목록 (강사/프로그램 정보 병합) - 무기한 캐시 활용.
         """
-        lectures = self.client.list_documents(
-            self._org('lectures'),
-            filters=[('period', 'EQUAL', period)]
-        )
+        if 'lectures' in self._cache:
+            lectures = [l for l in self._cache['lectures'] if l.get('period') == period]
+        else:
+            self._cache['lectures'] = self.client.list_documents(self._org('lectures'))
+            lectures = [l for l in self._cache['lectures'] if l.get('period') == period]
 
         if not lectures:
             return []
@@ -199,7 +208,7 @@ class CloudRepository:
         for inst in all_instructors:
             instructors_map[inst['id']] = inst
 
-        all_programs = self.client.list_documents(self._org('instructor_programs'))
+        all_programs = self.get_all_programs()
         for prog in all_programs:
             programs_map[prog['id']] = prog
 
@@ -245,6 +254,8 @@ class CloudRepository:
             'updated_at': self._now_iso()
         }
         result = self.client.create_document(self._org('lectures'), doc_data)
+        self._invalidate_cache('lectures')
+        self._invalidate_cache('settlements') # 강의 추가 시 정산 데이터도 변경됨
         return result['id']
 
     def update_lecture(self, lecture_id, data: dict):
@@ -261,10 +272,14 @@ class CloudRepository:
             'updated_at': self._now_iso()
         }
         self.client.update_document(self._org(f'lectures/{lecture_id}'), doc_data)
+        self._invalidate_cache('lectures')
+        self._invalidate_cache('settlements')
 
     def delete_lecture(self, lecture_id):
         """강의 내역 삭제"""
         self.client.delete_document(self._org(f'lectures/{lecture_id}'))
+        self._invalidate_cache('lectures')
+        self._invalidate_cache('settlements')
 
     # ═══════════════════════════════════════════
     # 정산 (settlements) — COALESCE 로직 유지
@@ -385,6 +400,8 @@ class CloudRepository:
             doc_data['created_at'] = self._now_iso()
 
             self.client.create_document(self._org('settlements'), doc_data)
+        
+        self._invalidate_cache('settlements')
 
     def apply_override(self, settlement_id,
                        income_tax: int, local_tax: int,
@@ -419,6 +436,7 @@ class CloudRepository:
         self.client.update_document(
             self._org(f'settlements/{settlement_id}'), update_data
         )
+        self._invalidate_cache('settlements')
 
     def revert_override(self, settlement_id):
         """수동 수정 되돌리기 — final을 calc로 복원"""
@@ -453,6 +471,7 @@ class CloudRepository:
         self.client.update_document(
             self._org(f'settlements/{settlement_id}'), update_data
         )
+        self._invalidate_cache('settlements')
 
     # ═══════════════════════════════════════════
     # 환경설정 (settings) — Key-Value
@@ -543,14 +562,14 @@ class CloudRepository:
         else:
             periods = [f"{year}-{m:02d}" for m in range(1, 13)]
 
-        # 모든 정산 데이터 가져오기 (기간별)
+        # 모든 정산 데이터 가져오기 (전체 캐시에서 필터링)
         all_settlements = []
-        for period in periods:
-            settlements = self.client.list_documents(
-                self._org('settlements'),
-                filters=[('period', 'EQUAL', period)]
-            )
-            all_settlements.extend(settlements)
+        if 'settlements' not in self._cache:
+            self._cache['settlements'] = self.client.list_documents(self._org('settlements'))
+            
+        for s in self._cache['settlements']:
+            if s.get('period') in periods:
+                all_settlements.append(s)
 
         if not all_settlements:
             return []

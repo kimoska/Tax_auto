@@ -257,7 +257,7 @@ class AutoTaxWindow(QMainWindow):
         self.stack.addWidget(self.settlement_tab)
 
         # [4] 연간 신고 데이터 탭
-        self.annual_tab = AnnualTab(self.repo, self.crypto)
+        self.annual_tab = AnnualTab(self.repo)
         self.stack.addWidget(self.annual_tab)
 
         # 강의 내역 변경 시 정산/연간 탭 자동 새로고침

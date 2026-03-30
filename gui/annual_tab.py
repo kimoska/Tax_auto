@@ -22,10 +22,9 @@ from core.excel_generator import generate_annual_excel
 class AnnualTab(QWidget):
     """연간 신고 데이터 탭 — 월별 선택 합산"""
 
-    def __init__(self, repo: Repository, crypto: CryptoManager, parent=None):
+    def __init__(self, repo: Repository, parent=None):
         super().__init__(parent)
         self.repo = repo
-        self.crypto = crypto
         self.setObjectName('annualTab')
         self._setup_ui()
 
@@ -188,13 +187,9 @@ class AnnualTab(QWidget):
         self.table.setRowCount(len(data))
 
         for row, d in enumerate(data):
-            # 주민번호 마스킹
+            # 주민번호 마스킹 (평문 저장된 값에서 마스킹 처리)
             rid = d.get('resident_id', '')
-            try:
-                decrypted = self.crypto.decrypt(rid)
-                masked = decrypted[:6] + '-*******' if len(decrypted) >= 6 else '***'
-            except Exception:
-                masked = rid[:6] + '-*******' if len(rid) >= 6 else '***'
+            masked = rid[:6] + '-*******' if len(rid) >= 6 else '***'
 
             rid_item = QTableWidgetItem(masked)
             rid_item.setForeground(Qt.black)
@@ -260,9 +255,7 @@ class AnnualTab(QWidget):
             return
 
         try:
-            import os
-            output_dir = os.path.dirname(filepath)
-            generate_annual_excel(self.repo, self.crypto, year, months, output_dir)
+            generate_annual_excel(self.repo, year, months, output_dir)
             QMessageBox.information(self, '다운로드 완료', f'파일이 저장되었습니다:\n{filepath}')
         except ValueError as e:
             QMessageBox.warning(self, '오류', str(e))
