@@ -5,10 +5,10 @@ plan.md §5 Design System 기반
 from PySide6.QtWidgets import (
     QWidget, QHBoxLayout, QVBoxLayout, QLabel, QFrame,
     QGraphicsDropShadowEffect, QHeaderView, QTableWidgetItem,
-    QAbstractItemView
+    QAbstractItemView, QStyledItemDelegate, QStyleOptionViewItem, QStyle
 )
-from PySide6.QtCore import Qt, Signal
-from PySide6.QtGui import QColor, QFont
+from PySide6.QtCore import Qt, Signal, QRect, QPoint
+from PySide6.QtGui import QColor, QFont, QPen, QPainter
 
 
 # ─────────────────────────────────────────────
@@ -139,10 +139,11 @@ class PanelHeader(QFrame):
             f"font-size: 15px; font-weight: 600; color: {Colors.TEXT_PRIMARY}; border: none;"
         )
         self._layout.addWidget(self.title_label)
-        self._layout.addStretch()
+        self._layout.addStretch(1)
 
         self._btn_layout = QHBoxLayout()
-        self._btn_layout.setSpacing(8)
+        self._btn_layout.setSpacing(4)
+        self._btn_layout.setContentsMargins(0, 0, 0, 0)
         self._layout.addLayout(self._btn_layout)
 
     def add_widget(self, widget):
@@ -202,16 +203,16 @@ def make_button_style(bg: str, text: str = 'white', hover_bg: str = None) -> str
             color: {text};
             border: none;
             border-radius: 6px;
-            padding: 8px 16px;
-            font-size: 13px;
+            padding: 6px 10px;
+            font-size: 12px;
             font-weight: 500;
+            white-space: nowrap;
         }}
         QPushButton:hover {{
             background-color: {hover};
         }}
         QPushButton:pressed {{
             background-color: {hover};
-            padding-top: 9px;
         }}
         QPushButton:disabled {{
             background-color: #94A3B8;
@@ -241,3 +242,63 @@ BTN_GHOST_DANGER = f"""
         border-radius: 4px;
     }}
 """
+
+
+class CheckBoxDelegate(QStyledItemDelegate):
+    """
+    체크박스 커스텀 렌더러 - 검정 테두리 + 빨간색 V 체크마크
+    """
+    def paint(self, painter: QPainter, option: QStyleOptionViewItem, index):
+        # 배경 그리기
+        self.initStyleOption(option, index)
+        painter.save()
+        
+        # 배경 색상
+        if option.state & QStyle.State_Selected:
+            painter.fillRect(option.rect, QColor('#E0E7FF'))
+        elif index.row() % 2 == 1:
+            painter.fillRect(option.rect, QColor('#FAFCFE'))
+        else:
+            painter.fillRect(option.rect, QColor('white'))
+
+        # 체크박스 사각형 (중앙 배치)
+        box_size = 18
+        x = option.rect.center().x() - box_size // 2
+        y = option.rect.center().y() - box_size // 2
+        box_rect = QRect(x, y, box_size, box_size)
+
+        # 테두리 그리기 (검정색)
+        painter.setRenderHint(QPainter.Antialiasing)
+        pen = QPen(QColor('#334155'))
+        pen.setWidth(1)
+        painter.setPen(pen)
+        painter.setBrush(QColor('white'))
+        painter.drawRoundedRect(box_rect, 3, 3)
+
+        # 체크 상태이면 빨간색 V 그리기
+        check_state = index.data(Qt.CheckStateRole)
+        if check_state == Qt.Checked:
+            pen = QPen(QColor('#EF4444'))
+            pen.setWidth(3)
+            pen.setCapStyle(Qt.RoundCap)
+            pen.setJoinStyle(Qt.RoundJoin)
+            painter.setPen(pen)
+            # V 모양 그리기
+            margin = 4
+            p1 = QPoint(x + margin, y + box_size // 2)
+            p2 = QPoint(x + box_size // 2 - 1, y + box_size - margin - 1)
+            p3 = QPoint(x + box_size - margin, y + margin + 1)
+            painter.drawLine(p1, p2)
+            painter.drawLine(p2, p3)
+
+        painter.restore()
+
+    def editorEvent(self, event, model, option, index):
+        """클릭 시 체크 상태 토글"""
+        from PySide6.QtCore import QEvent
+        if event.type() in (QEvent.MouseButtonRelease, QEvent.MouseButtonDblClick):
+            current = index.data(Qt.CheckStateRole)
+            new_state = Qt.Unchecked if current == Qt.Checked else Qt.Checked
+            model.setData(index, new_state, Qt.CheckStateRole)
+            return True
+        return super().editorEvent(event, model, option, index)

@@ -11,13 +11,15 @@ from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QFont, QIcon
 
 from gui.widgets import Colors
+from gui.home_tab import HomeTab
 from gui.instructor_tab import InstructorTab
 from gui.lecture_tab import LectureTab
 from gui.settlement_tab import SettlementTab
 from gui.annual_tab import AnnualTab
-from gui.settings_tab import SettingsTab
-from db.repository import Repository
+from gui.help_tab import HelpTab
+from db.cloud_repository import CloudRepository
 from core.crypto import CryptoManager
+from core.updater import UpdateChecker
 
 import datetime
 
@@ -74,17 +76,17 @@ class AutoTaxWindow(QMainWindow):
     """AutoTax 메인 윈도우"""
 
     TAB_CONFIG = [
+        ('home', '홈 화면'),
         ('instructor', '강사 관리'),
         ('lecture', '강의 내역'),
-        ('settlement', '월별 정산 (홈택스)'),
-        ('annual', '연간 신고 데이터'),
+        ('settlement', '월별 정산'),
+        ('annual', '연간 신고데이터'),
+        ('help', '도움말 매뉴얼'),
     ]
 
-    BOTTOM_CONFIG = [
-        ('settings', '시스템 설정'),
-    ]
+    BOTTOM_CONFIG = []
 
-    def __init__(self, repo: Repository, crypto: CryptoManager):
+    def __init__(self, repo: CloudRepository, crypto: CryptoManager):
         super().__init__()
         self.repo = repo
         self.crypto = crypto
@@ -134,6 +136,26 @@ class AutoTaxWindow(QMainWindow):
         self._create_tabs()
         self._switch_tab(0)
 
+        # ── 업데이트 확인 ──
+        self._check_for_updates()
+
+    def _check_for_updates(self):
+        self.updater = UpdateChecker(current_version="v1.1.0")
+        self.updater.update_available.connect(self._on_update_available)
+        self.updater.error_occurred.connect(self._on_update_error)
+        self.updater.start()
+
+    def _on_update_available(self, version, desc, url):
+        notes = f"<b>[{version}] 업데이트 안내</b><br><br>{desc}"
+        notes = notes.replace('\n', '<br>')
+        self.home_tab.update_release_notes(notes)
+
+    def _on_update_error(self, err_msg):
+        # 업데이트 실패 시에도 기존 문구가 남지 않도록 안내
+        self.home_tab.update_release_notes(
+            f"공지사항을 불러오는 중 오류가 발생했습니다.<br><br><small style='color: #94A3B8;'>{err_msg}</small>"
+        )
+
     def _create_sidebar(self) -> QWidget:
         sidebar = QFrame()
         sidebar.setFixedWidth(240)
@@ -151,7 +173,7 @@ class AutoTaxWindow(QMainWindow):
 
         logo = QLabel('AutoTax')
         logo.setStyleSheet("color: white; font-size: 18px; font-weight: 700; border: none;")
-        version = QLabel('Enterprise Edition v4.0')
+        version = QLabel('Enterprise Edition v1.1.0')
         version.setStyleSheet("color: #8D8D8D; font-size: 11px; border: none;")
 
         header_layout.addWidget(logo)
@@ -170,86 +192,26 @@ class AutoTaxWindow(QMainWindow):
 
         layout.addStretch()
 
-        # 하단 구분선 + 설정
-        sep = QFrame()
-        sep.setFixedHeight(1)
-        sep.setStyleSheet("background: #393939;")
-        layout.addWidget(sep)
-
-        for tab_id, tab_name in self.BOTTOM_CONFIG:
-            btn = SidebarButton(tab_name)
-            idx = len(self.nav_buttons)
-            btn.clicked.connect(lambda checked, i=idx: self._switch_tab(i))
-            layout.addWidget(btn)
-            self.nav_buttons.append(btn)
-
         return sidebar
 
     def _create_topbar(self) -> QWidget:
         topbar = QFrame()
-        topbar.setFixedHeight(64)
-        topbar.setStyleSheet(f"""
-            QFrame {{
-                background: white;
-                border-bottom: 1px solid {Colors.BORDER};
-            }}
-        """)
-
+        topbar.setFixedHeight(80) # 조금 더 높게
+        topbar.setStyleSheet(f"background: white; border-bottom: 1px solid {Colors.BORDER};")
         layout = QHBoxLayout(topbar)
-        layout.setContentsMargins(32, 0, 32, 0)
+        layout.setContentsMargins(24, 0, 24, 0)
 
-        self.title_label = QLabel('강사 관리')
-        self.title_label.setStyleSheet(
-            f"font-size: 18px; font-weight: 600; color: {Colors.TEXT_PRIMARY}; border: none;"
-        )
+        # 타이틀 레이블 (현재 탭 이름 표시용)
+        self.title_label = QLabel('홈 화면')
+        self.title_label.setStyleSheet(f"font-size: 20px; font-weight: 700; color: {Colors.TEXT_PRIMARY}; border: none;")
         layout.addWidget(self.title_label)
         layout.addStretch()
-
-        # 기간 선택 콤보
-        combo_style = f"""
-            QComboBox {{
-                border: 1px solid {Colors.BORDER};
-                border-radius: 6px;
-                padding: 4px 10px;
-                font-size: 13px;
-                min-width: 80px;
-            }}
-        """
-        period_label = QLabel('조회기간:')
-        period_label.setStyleSheet(f"color: {Colors.TEXT_SECONDARY}; font-size: 13px; border: none;")
-        layout.addWidget(period_label)
-
-        self.year_combo = QComboBox()
-        self.year_combo.setStyleSheet(combo_style)
-        for y in range(2024, 2031):
-            self.year_combo.addItem(f'{y}년', str(y))
-        idx_y = self.year_combo.findData(self.current_year)
-        if idx_y >= 0:
-            self.year_combo.setCurrentIndex(idx_y)
-        self.year_combo.currentIndexChanged.connect(self._on_period_changed)
-        layout.addWidget(self.year_combo)
-
-        self.month_combo = QComboBox()
-        self.month_combo.setStyleSheet(combo_style)
-        for m in range(1, 13):
-            self.month_combo.addItem(f'{m}월', f'{m:02d}')
-        idx_m = self.month_combo.findData(self.current_month)
-        if idx_m >= 0:
-            self.month_combo.setCurrentIndex(idx_m)
-        self.month_combo.currentIndexChanged.connect(self._on_period_changed)
-        layout.addWidget(self.month_combo)
 
         return topbar
 
     def _on_period_changed(self):
-        """기간 변경 시 현재 탭 새로고침"""
-        self.current_year = self.year_combo.currentData() or self.current_year
-        self.current_month = self.month_combo.currentData() or self.current_month
-        period = f"{self.current_year}-{self.current_month}"
-
-        # 기간 인식 탭 업데이트
-        self.lecture_tab.set_period(period)
-        self.settlement_tab.set_period(period)
+        """기간 변경 시 (만약 전역적으로 필요하다면 사용)"""
+        pass
 
     def _create_statusbar(self) -> QWidget:
         bar = QFrame()
@@ -264,7 +226,7 @@ class AutoTaxWindow(QMainWindow):
         layout = QHBoxLayout(bar)
         layout.setContentsMargins(20, 0, 20, 0)
 
-        left = QLabel('AutoTax v4.0')
+        left = QLabel('AutoTax v1.1.0')
         left.setStyleSheet(f"color: {Colors.TEXT_SECONDARY}; font-size: 11px; border: none;")
         layout.addWidget(left)
         layout.addStretch()
@@ -275,27 +237,36 @@ class AutoTaxWindow(QMainWindow):
         """탭 위젯 생성 및 스택에 추가"""
         period = f"{self.current_year}-{self.current_month}"
 
-        # [0] 강사 관리 탭
+        # [0] 홈 화면 탭
+        self.home_tab = HomeTab()
+        self.home_tab.navigate_requested.connect(self._switch_tab)
+        self.stack.addWidget(self.home_tab)
+
+        # [1] 강사 관리 탭
         self.instructor_tab = InstructorTab(self.repo, self.crypto)
         self.stack.addWidget(self.instructor_tab)
 
-        # [1] 강의 내역 탭
+        # [2] 강의 내역 탭
         self.lecture_tab = LectureTab(self.repo)
         self.lecture_tab.set_period(period)
         self.stack.addWidget(self.lecture_tab)
 
-        # [2] 월별 정산 탭
+        # [3] 월별 정산 탭
         self.settlement_tab = SettlementTab(self.repo)
         self.settlement_tab.set_period(period)
         self.stack.addWidget(self.settlement_tab)
 
-        # [3] 연간 신고 데이터 탭
+        # [4] 연간 신고 데이터 탭
         self.annual_tab = AnnualTab(self.repo, self.crypto)
         self.stack.addWidget(self.annual_tab)
 
-        # [4] 시스템 설정 탭
-        self.settings_tab = SettingsTab(self.repo, self.crypto)
-        self.stack.addWidget(self.settings_tab)
+        # 강의 내역 변경 시 정산/연간 탭 자동 새로고침
+        self.lecture_tab.data_changed.connect(self.settlement_tab.refresh_data)
+        self.lecture_tab.data_changed.connect(self.annual_tab.refresh_data)
+
+        # [5] 도움말 매뉴얼 탭
+        self.help_tab = HelpTab()
+        self.stack.addWidget(self.help_tab)
 
     def _create_placeholder(self, name: str) -> QWidget:
         """미구현 탭 플레이스홀더"""
@@ -319,16 +290,15 @@ class AutoTaxWindow(QMainWindow):
         for i, btn in enumerate(self.nav_buttons):
             btn.set_active(i == index)
 
-        # 타이틀 업데이트
         all_tabs = self.TAB_CONFIG + self.BOTTOM_CONFIG
         if 0 <= index < len(all_tabs):
-            self.title_label.setText(all_tabs[index][1])
+            tab_id, tab_name = all_tabs[index]
+            self.title_label.setText(tab_name)
 
-        # 탭별 데이터 새로고침
-        period = f"{self.current_year}-{self.current_month}"
-        if index == 0:
+        # 탭별 데이터 새로고침 (기간은 사용자가 선택한 값 유지)
+        if index == 1:
             self.instructor_tab.refresh_data()
-        elif index == 1:
-            self.lecture_tab.set_period(period)
         elif index == 2:
-            self.settlement_tab.set_period(period)
+            self.lecture_tab.refresh_data()
+        elif index == 3:
+            self.settlement_tab.refresh_data()

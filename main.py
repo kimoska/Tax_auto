@@ -9,22 +9,15 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 if BASE_DIR not in sys.path:
     sys.path.insert(0, BASE_DIR)
 
-from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication, QDialog
 from PySide6.QtGui import QFont
 from PySide6.QtCore import Qt
 
-from db.connection import DatabaseConnection
-from db.schema import initialize_database
-from db.repository import Repository
+from core.firebase_auth import FirebaseAuth
+from db.cloud_repository import CloudRepository
 from core.crypto import CryptoManager
 from gui.app import AutoTaxWindow
-
-
-def setup_database() -> Repository:
-    """데이터베이스 초기화 및 Repository 생성"""
-    db = DatabaseConnection()
-    initialize_database(db)
-    return Repository(db)
+from gui.cloud_login_window import CloudLoginWindow
 
 
 def setup_security() -> CryptoManager:
@@ -73,10 +66,19 @@ def main():
     """)
 
     # ★ 초기화 ★
-    print("🔧 AutoTax 초기화 중...")
+    print("☁️ AutoTax 클라우드 버전 초기화 중...")
+    auth = FirebaseAuth()
+    login = CloudLoginWindow(auth)
+    
+    # 1) 로그인 창 실행
+    if login.exec() != QDialog.Accepted:
+        sys.exit(0)
+        
+    print("✅ 로그인 성공, 앱을 시작합니다.")
+    
+    # 2) 클라우드 리포지토리 생성
+    repo = CloudRepository(auth)
     crypto = setup_security()
-    repo = setup_database()
-    print("✅ 초기화 완료")
 
     # 메인 윈도우 생성 및 표시
     window = AutoTaxWindow(repo, crypto)

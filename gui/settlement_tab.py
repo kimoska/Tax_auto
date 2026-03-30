@@ -47,10 +47,31 @@ class SettlementTab(QWidget):
         kpi_layout.addWidget(self.kpi_net)
         layout.addLayout(kpi_layout)
 
+        # ── 년/월 선택 영역 (패널 위 별도 행, 오른쪽 정렬) ──
+        combo_style = f"QComboBox {{ border: 1px solid {Colors.BORDER}; border-radius: 6px; padding: 4px 8px; font-size: 13px; min-width: 80px; }}"
+        period_row = QHBoxLayout()
+        period_row.setContentsMargins(0, 0, 0, 0)
+        period_row.addStretch()
+
+        self.year_combo = QComboBox()
+        self.year_combo.setStyleSheet(combo_style)
+        for y in range(2024, 2031):
+            self.year_combo.addItem(f"{y}년", str(y))
+        self.year_combo.setCurrentText(self.current_period.split('-')[0] + '년')
+        period_row.addWidget(self.year_combo)
+
+        self.month_combo = QComboBox()
+        self.month_combo.setStyleSheet(combo_style.replace("80px", "60px"))
+        for m in range(1, 13):
+            self.month_combo.addItem(f"{m}월", f"{m:02d}")
+        self.month_combo.setCurrentIndex(int(self.current_period.split('-')[1]) - 1)
+        period_row.addWidget(self.month_combo)
+
+        layout.addLayout(period_row)
+
         # ── 정산 테이블 패널 ──
         self.panel = Panel('간이지급명세서 미리보기')
 
-        # 헤더 버튼
         btn_recalc = QPushButton('정산 재계산')
         btn_recalc.setStyleSheet(BTN_SECONDARY)
         btn_recalc.setCursor(Qt.PointingHandCursor)
@@ -69,18 +90,28 @@ class SettlementTab(QWidget):
         btn_upload.clicked.connect(self._auto_upload)
         self.panel.add_header_widget(btn_upload)
 
-        # 테이블 (홈택스 간이지급명세서 11컬럼 + 관리)
+        # 시그널 연결은 모든 초기화 후에
+        self.year_combo.currentIndexChanged.connect(self._on_period_changed)
+        self.month_combo.currentIndexChanged.connect(self._on_period_changed)
+
+        # 테이블 (홈택스 간이지급명세서 11칸럼 + 관리)
         self.table = QTableWidget()
         self.table.setColumnCount(13)
         self.table.setHorizontalHeaderLabels([
             '번호', '귀속연도', '귀속월', '업종코드', '소득자성명',
             '주민등록번호', '내외국인', '지급액', '세율(%)',
-            '소득세', '지방소득세', '상태', '관리'
+            '소득세', '지방소득세', '실지급액', '관리'
         ])
-        for i in range(self.table.columnCount()):
-            self.table.horizontalHeader().setSectionResizeMode(i, QHeaderView.ResizeToContents)
-        self.table.horizontalHeader().setSectionResizeMode(4, QHeaderView.Stretch)
+        header = self.table.horizontalHeader()
+        header.setSectionResizeMode(QHeaderView.Stretch)
+        header.setSectionResizeMode(0, QHeaderView.Fixed)            # 번호
+        header.setSectionResizeMode(12, QHeaderView.Fixed)           # 관리
+        self.table.setColumnWidth(0, 35)
+        self.table.setColumnWidth(12, 110)
         self.table.verticalHeader().setVisible(False)
+        self.table.verticalHeader().setDefaultSectionSize(44)
+        self.table.verticalHeader().setDefaultSectionSize(44)
+
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table.setAlternatingRowColors(True)
@@ -94,18 +125,30 @@ class SettlementTab(QWidget):
                 font-weight: 500; font-size: 12px; padding: 8px 10px;
                 border: none; border-bottom: 2px solid {Colors.BORDER};
             }}
+            QTableWidget::item:selected {{
+                background-color: #E0E7FF;
+                color: #1E293B;
+                font-weight: bold;
+            }}
             QTableWidget::item:alternate {{ background: #FAFCFE; }}
+            QTableWidget::item:hover {{ background-color: transparent; }}
         """)
-
         self.panel.body_layout.addWidget(self.table)
         layout.addWidget(self.panel)
+
+    def _on_period_changed(self):
+        year = self.year_combo.currentData()
+        month = self.month_combo.currentData()
+        self.current_period = f"{year}-{month}"
+        self.refresh_data()
 
     def set_period(self, period: str):
         self.current_period = period
         self.refresh_data()
 
     def refresh_data(self):
-        """DB의 settlements를 읽어 테이블 갱신"""
+        """강의 내역 → 정산 재계산 후 테이블 갱신 (항상 최신 상태 유지)"""
+        self._sync_settlements_from_lectures()
         settlements = self.repo.get_settlements_by_period(self.current_period)
         self.table.setRowCount(len(settlements))
 
@@ -146,31 +189,31 @@ class SettlementTab(QWidget):
             # 지급액
             pay_item = QTableWidgetItem(format_money(s['total_payment']))
             pay_item.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
+            pay_item.setForeground(QColor("#DC2626")) # Red
             self.table.setItem(row, 7, pay_item)
 
             # 세율
-            self.table.setItem(row, 8, QTableWidgetItem(str(s['tax_rate'])))
+            rate_item = QTableWidgetItem(str(s['tax_rate']))
+            rate_item.setForeground(Qt.black)
+            self.table.setItem(row, 8, rate_item)
 
             # 소득세
             tax_item = QTableWidgetItem(format_money(s['final_income_tax']))
             tax_item.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
-            tax_item.setForeground(QColor(Colors.ERROR))
+            tax_item.setForeground(Qt.black)
             self.table.setItem(row, 9, tax_item)
 
             # 지방소득세
             local_item = QTableWidgetItem(format_money(s['final_local_tax']))
             local_item.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
-            local_item.setForeground(QColor(Colors.ERROR))
+            local_item.setForeground(Qt.black)
             self.table.setItem(row, 10, local_item)
 
-            # 상태 뱃지
-            if s.get('ovr_income_tax') is not None:
-                badge = StatusBadge('수동수정')
-            elif s.get('is_submitted'):
-                badge = StatusBadge('제출완료')
-            else:
-                badge = StatusBadge('정산완료')
-            self.table.setCellWidget(row, 11, badge)
+            # 실지급액
+            net_item = QTableWidgetItem(format_money(s['final_net_payment']))
+            net_item.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
+            net_item.setForeground(QColor("#DC2626")) # Red
+            self.table.setItem(row, 11, net_item)
 
             # 관리 버튼
             btn_widget = QWidget()
@@ -179,14 +222,34 @@ class SettlementTab(QWidget):
             btn_layout.setSpacing(4)
 
             btn_ovr = QPushButton('수정')
-            btn_ovr.setStyleSheet(BTN_SECONDARY + "QPushButton { padding: 3px 10px; font-size: 11px; }")
+            btn_ovr.setStyleSheet("""
+                QPushButton { 
+                    color: #2563EB; 
+                    background: transparent;
+                    border: 1px solid #BFDBFE;
+                    border-radius: 4px;
+                    padding: 4px 8px; 
+                    font-size: 12px; 
+                }
+                QPushButton:hover { background: #EFF6FF; }
+            """)
             btn_ovr.setCursor(Qt.PointingHandCursor)
             btn_ovr.clicked.connect(lambda _, sid=s['id']: self._open_override(sid))
             btn_layout.addWidget(btn_ovr)
 
             if s.get('ovr_income_tax') is not None:
                 btn_revert = QPushButton('되돌리기')
-                btn_revert.setStyleSheet(BTN_GHOST_DANGER + "QPushButton { font-size: 11px; }")
+                btn_revert.setStyleSheet("""
+                    QPushButton { 
+                        color: #DC2626; 
+                        background: transparent;
+                        border: 1px solid #FECACA;
+                        border-radius: 4px;
+                        padding: 4px 8px; 
+                        font-size: 12px; 
+                    }
+                    QPushButton:hover { background: #FEF2F2; }
+                """)
                 btn_revert.setCursor(Qt.PointingHandCursor)
                 btn_revert.clicked.connect(lambda _, sid=s['id']: self._revert_override(sid))
                 btn_layout.addWidget(btn_revert)
@@ -199,15 +262,14 @@ class SettlementTab(QWidget):
         self.kpi_tax.set_value(f'{format_money(sum_tax + sum_local)}원')
         self.kpi_net.set_value(f'{format_money(sum_net)}원')
 
-    def recalculate_settlements(self):
-        """강의 내역 → 정산 재계산 (plan.md §4.1 파이프라인)"""
+    def _sync_settlements_from_lectures(self):
+        """강의 데이터 기반으로 정산 동기화 (기존 정산 삭제 후 재생성)"""
         lectures = self.repo.get_lectures_by_period(self.current_period)
+        # 기존 정산 데이터 전부 삭제
+        self.repo.delete_settlements_by_period(self.current_period)
         if not lectures:
-            QMessageBox.information(self, '정산', f'{self.current_period} 기간의 강의 내역이 없습니다.')
             return
-
         aggregated = aggregate_lectures_to_settlements(lectures)
-
         for entry in aggregated:
             calc_data = {
                 'total_payment': entry['total_payment'],
@@ -222,7 +284,15 @@ class SettlementTab(QWidget):
                 entry['instructor_id'], self.current_period, calc_data
             )
 
+    def recalculate_settlements(self):
+        """강의 내역 → 정산 재계산 (plan.md §4.1 파이프라인)"""
+        lectures = self.repo.get_lectures_by_period(self.current_period)
+        if not lectures:
+            QMessageBox.information(self, '정산', f'{self.current_period} 기간의 강의 내역이 없습니다.')
+            return
+        self._sync_settlements_from_lectures()
         self.refresh_data()
+        aggregated = aggregate_lectures_to_settlements(lectures)
         QMessageBox.information(
             self, '정산 완료',
             f'{len(aggregated)}명의 강사 정산이 완료되었습니다.'

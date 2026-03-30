@@ -13,7 +13,8 @@ from PySide6.QtGui import QFont
 
 from gui.widgets import (
     KPICard, Panel, StatusBadge, Colors, format_money,
-    BTN_PRIMARY, BTN_SECONDARY, BTN_DANGER, BTN_GHOST_DANGER, BTN_SUCCESS
+    BTN_PRIMARY, BTN_SECONDARY, BTN_DANGER, BTN_GHOST_DANGER, BTN_SUCCESS,
+    CheckBoxDelegate
 )
 from db.repository import Repository
 from db.schema import initialize_database
@@ -72,25 +73,58 @@ class InstructorTab(QWidget):
         self.search_input.textChanged.connect(self._filter_table)
         self.panel.add_header_widget(self.search_input)
 
+        btn_download = QPushButton('양식 다운로드')
+        btn_download.setStyleSheet(BTN_SECONDARY)
+        btn_download.setCursor(Qt.PointingHandCursor)
+        btn_download.clicked.connect(self._download_template)
+        self.panel.add_header_widget(btn_download)
+
+        btn_upload = QPushButton('엑셀 일괄 등록')
+        btn_upload.setStyleSheet(BTN_SUCCESS)
+        btn_upload.setCursor(Qt.PointingHandCursor)
+        btn_upload.clicked.connect(self._batch_register)
+        self.panel.add_header_widget(btn_upload)
+
         btn_add = QPushButton('+ 강사 등록')
         btn_add.setStyleSheet(BTN_PRIMARY)
         btn_add.setCursor(Qt.PointingHandCursor)
         btn_add.clicked.connect(self._open_add_dialog)
         self.panel.add_header_widget(btn_add)
 
+        btn_all_select = QPushButton('전체 선택')
+        btn_all_select.setStyleSheet(BTN_SECONDARY)
+        btn_all_select.setCursor(Qt.PointingHandCursor)
+        btn_all_select.clicked.connect(self._toggle_all_selection)
+        self.panel.add_header_widget(btn_all_select)
+
+        btn_delete_selected = QPushButton('선택 삭제')
+        btn_delete_selected.setStyleSheet(BTN_DANGER)
+        btn_delete_selected.setCursor(Qt.PointingHandCursor)
+        btn_delete_selected.clicked.connect(self._delete_selected_instructors)
+        self.panel.add_header_widget(btn_delete_selected)
+
         # 테이블
         self.table = QTableWidget()
-        self.table.setColumnCount(6)
+        self.table.setColumnCount(7)
         self.table.setHorizontalHeaderLabels([
-            '강사명', '업종코드', '할당 프로그램', '연락처', '상태', '관리'
+            '선택', '강사명', '업종코드', '할당 프로그램', '연락처', '주민번호', '관리'
         ])
-        self.table.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
-        self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
-        self.table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeToContents)
-        self.table.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeToContents)
-        self.table.horizontalHeader().setSectionResizeMode(4, QHeaderView.ResizeToContents)
-        self.table.horizontalHeader().setSectionResizeMode(5, QHeaderView.ResizeToContents)
+        header = self.table.horizontalHeader()
+        header.setStretchLastSection(False)
+        header.setSectionResizeMode(0, QHeaderView.Fixed)            # 선택
+        header.setSectionResizeMode(1, QHeaderView.Interactive)      # 강사명
+        header.setSectionResizeMode(2, QHeaderView.Interactive)      # 업종코드
+        header.setSectionResizeMode(3, QHeaderView.Interactive)      # 할당 프로그램
+        header.setSectionResizeMode(4, QHeaderView.Interactive)      # 연락처
+        header.setSectionResizeMode(5, QHeaderView.Interactive)      # 주민번호
+        header.setSectionResizeMode(6, QHeaderView.Fixed)            # 관리
+        self.table.setColumnWidth(0, 40)
+        self.table.setColumnWidth(6, 110)
+        # 비율 기반 초기 너비 (resizeEvent에서 재분배)
+        self._col_ratios = [0, 0.12, 0.10, 0.28, 0.18, 0.22, 0]
         self.table.verticalHeader().setVisible(False)
+        self.table.verticalHeader().setDefaultSectionSize(44)
+
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table.setAlternatingRowColors(True)
@@ -112,17 +146,44 @@ class InstructorTab(QWidget):
                 border: none;
                 border-bottom: 2px solid {Colors.BORDER};
             }}
+            QTableWidget::item:selected {{
+                background-color: #E0E7FF;
+                color: #1E293B;
+                font-weight: bold;
+            }}
             QTableWidget::item:alternate {{
                 background: #FAFCFE;
             }}
+            QTableWidget::item:hover {{
+                background-color: transparent;
+            }}
         """)
+        # 체크박스 커스텀 렌더러 적용 (검정 테두리 + 빨간 V 표시)
+        self.table.setItemDelegateForColumn(0, CheckBoxDelegate(self.table))
         self.table.setSortingEnabled(True)
 
         self.panel.body_layout.addWidget(self.table)
         layout.addWidget(self.panel)
+        self._apply_proportional_widths()
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self._apply_proportional_widths()
+
+    def _apply_proportional_widths(self):
+        """비율 기반 컬럼 너비 분배"""
+        total = self.table.viewport().width()
+        fixed = self.table.columnWidth(0) + self.table.columnWidth(6)  # 선택 + 관리
+        avail = total - fixed
+        if avail <= 0:
+            return
+        for i, ratio in enumerate(self._col_ratios):
+            if ratio > 0:
+                self.table.setColumnWidth(i, int(avail * ratio))
 
     def refresh_data(self):
         """DB에서 강사 목록 새로고침"""
+        self._apply_proportional_widths()
         instructors = self.repo.get_all_instructors()
         total_programs = 0
 
@@ -133,46 +194,89 @@ class InstructorTab(QWidget):
             programs = self.repo.get_programs_by_instructor(inst['id'])
             total_programs += len(programs)
 
+            # 체크박스 연결
+            cb_item = QTableWidgetItem()
+            cb_item.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
+            cb_item.setCheckState(Qt.Unchecked)
+            self.table.setItem(row, 0, cb_item)
+
             # 강사명
             name_item = QTableWidgetItem(inst['name'])
             name_item.setFont(QFont('Pretendard', 10, QFont.DemiBold))
             name_item.setData(Qt.UserRole, inst['id'])  # ID 저장
-            self.table.setItem(row, 0, name_item)
+            self.table.setItem(row, 1, name_item)
 
             # 업종코드
-            self.table.setItem(row, 1, QTableWidgetItem(inst['industry_code']))
+            self.table.setItem(row, 2, QTableWidgetItem(inst['industry_code']))
 
             # 프로그램 목록 (뱃지 형태로 텍스트)
-            prog_texts = [f"[{p['category']}] {p['program_name']}" for p in programs]
-            prog_text = ', '.join(prog_texts) if prog_texts else '(미등록)'
-            self.table.setItem(row, 2, QTableWidgetItem(prog_text))
+            prog_texts = [f"• [{p['category']}] {p['program_name']}" for p in programs]
+            prog_text = '\n'.join(prog_texts) if prog_texts else '(미등록)'
+            
+            prog_item = QTableWidgetItem(prog_text)
+            prog_item.setForeground(Qt.darkGray)  # 글씨 색상 변경
+            self.table.setItem(row, 3, prog_item)
 
             # 연락처
-            self.table.setItem(row, 3, QTableWidgetItem(inst.get('phone', '') or '-'))
+            self.table.setItem(row, 4, QTableWidgetItem(inst.get('phone', '') or '-'))
 
-            # 상태 뱃지 (위젯)
-            badge = StatusBadge('등록됨')
-            self.table.setCellWidget(row, 4, badge)
+            # 주민번호 마스킹 강화 (예: YYMMDD-*******)
+            try:
+                decrypted_rid = self.crypto.decrypt(inst['resident_id'])
+            except Exception:
+                decrypted_rid = inst['resident_id']
+                
+            if '-' in decrypted_rid:
+                parts = decrypted_rid.split('-')
+                masked_rid = f"{parts[0]}-*******"
+            elif len(decrypted_rid) >= 13:
+                masked_rid = decrypted_rid[:6] + '-*******'
+            else:
+                masked_rid = decrypted_rid
+            
+            rid_item = QTableWidgetItem(masked_rid)
+            rid_item.setTextAlignment(Qt.AlignCenter)
+            self.table.setItem(row, 5, rid_item)
 
             # 관리 버튼
             btn_widget = QWidget()
             btn_layout = QHBoxLayout(btn_widget)
-            btn_layout.setContentsMargins(4, 2, 4, 2)
+            btn_layout.setContentsMargins(2, 2, 2, 2)
             btn_layout.setSpacing(4)
 
             btn_edit = QPushButton('수정')
-            btn_edit.setStyleSheet(BTN_SECONDARY + "QPushButton { padding: 4px 12px; font-size: 12px; }")
+            btn_edit.setStyleSheet("""
+                QPushButton { 
+                    color: #2563EB; 
+                    background: transparent;
+                    border: 1px solid #BFDBFE;
+                    border-radius: 4px;
+                    padding: 4px 8px; 
+                    font-size: 12px; 
+                }
+                QPushButton:hover { background: #EFF6FF; }
+            """)
             btn_edit.setCursor(Qt.PointingHandCursor)
             btn_edit.clicked.connect(lambda checked, iid=inst['id']: self._open_edit_dialog(iid))
 
             btn_del = QPushButton('삭제')
-            btn_del.setStyleSheet(BTN_GHOST_DANGER)
+            btn_del.setStyleSheet("""
+                QPushButton { 
+                    color: #DC2626; 
+                    background: transparent;
+                    border: 1px solid #FECACA;
+                    border-radius: 4px;
+                    padding: 4px 8px; 
+                    font-size: 12px; 
+                }
+                QPushButton:hover { background: #FEF2F2; }
+            """)
             btn_del.setCursor(Qt.PointingHandCursor)
             btn_del.clicked.connect(lambda checked, iid=inst['id']: self._delete_instructor(iid))
 
             btn_layout.addWidget(btn_edit)
             btn_layout.addWidget(btn_del)
-            self.table.setCellWidget(row, 5, btn_widget)
+            self.table.setCellWidget(row, 6, btn_widget)
 
         # KPI 업데이트
         self.kpi_total.set_value(str(len(instructors)))
@@ -220,6 +324,135 @@ class InstructorTab(QWidget):
         if reply == QMessageBox.Yes:
             self.repo.delete_instructor(instructor_id)
             self.refresh_data()
+
+    def _toggle_all_selection(self):
+        """전체 선택/해제 토글"""
+        any_unchecked = False
+        for row in range(self.table.rowCount()):
+            item = self.table.item(row, 0)
+            if item and item.checkState() != Qt.Checked:
+                any_unchecked = True
+                break
+        
+        target_state = Qt.Checked if any_unchecked else Qt.Unchecked
+        for row in range(self.table.rowCount()):
+            item = self.table.item(row, 0)
+            if item:
+                item.setCheckState(target_state)
+        self.table.viewport().update()
+
+    def _delete_selected_instructors(self):
+        """선택 항목 삭제 로직"""
+        selected_ids = []
+        for row in range(self.table.rowCount()):
+            cb_item = self.table.item(row, 0)
+            if cb_item and cb_item.checkState() == Qt.Checked:
+                name_item = self.table.item(row, 1)
+                selected_ids.append((name_item.data(Qt.UserRole), name_item.text()))
+                
+        if not selected_ids:
+            QMessageBox.warning(self, '선택 오류', '삭제할 강사를 먼저 체크박스에 선택하세요.')
+            return
+            
+        names = ", ".join([n for i, n in selected_ids])
+        reply = QMessageBox.question(
+            self, '일괄 삭제 확인',
+            f"다음 {len(selected_ids)}명의 강사를 삭제하시겠습니까?\n({names})\n\n연결된 프로그램과 강의 내역도 삭제될 수 있습니다.",
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No
+        )
+        
+        if reply == QMessageBox.Yes:
+            for iid, _ in selected_ids:
+                self.repo.delete_instructor(iid)
+            self.refresh_data()
+
+    def _download_template(self):
+        """강사 등록 엑셀 양식 다운로드"""
+        from PySide6.QtWidgets import QFileDialog
+        from core.excel_generator import generate_instructor_template
+        
+        path, _ = QFileDialog.getSaveFileName(
+            self, "양식 저장", "강사등록양식.xlsx", "Excel Files (*.xlsx)"
+        )
+        if path:
+            try:
+                generate_instructor_template(path)
+                QMessageBox.information(self, "완료", f"엑셀 양식이 저장되었습니다.\n{path}")
+            except Exception as e:
+                QMessageBox.critical(self, "오류", f"파일 저장 중 오류가 발생했습니다: {str(e)}")
+
+    def _batch_register(self):
+        """엑셀 파일을 통한 강사 일괄 등록"""
+        from PySide6.QtWidgets import QFileDialog
+        from core.excel_generator import parse_instructor_excel
+        from core.validator import validate_resident_id, normalize_resident_id
+        
+        path, _ = QFileDialog.getOpenFileName(
+            self, "엑셀 파일 선택", "", "Excel Files (*.xlsx)"
+        )
+        if not path:
+            return
+            
+        try:
+            items = parse_instructor_excel(path)
+            if not items:
+                QMessageBox.warning(self, "알림", "등록할 데이터가 없습니다.")
+                return
+            
+            # 주민번호 기반으로 강사 그룹화 (중복 방지 및 프로그램 병합)
+            instructor_map = {}
+            for item in items:
+                rid = normalize_resident_id(item['resident_id'])
+                ok, _ = validate_resident_id(rid)
+                if not ok: continue # 유효하지 않은 주민번호 건너뜀
+                
+                if rid not in instructor_map:
+                    instructor_map[rid] = {
+                        'info': {
+                            'name': item['name'],
+                            'resident_id': rid,
+                            'industry_code': item['industry_code'],
+                            'phone': item['phone'],
+                            'email': item['email'],
+                            'address': item['address'],
+                            'bank_name': item['bank_name'],
+                            'account_number': item['account_number'],
+                            'memo': item['memo'],
+                            'is_foreigner': '1' # 기본 내국인
+                        },
+                        'programs': []
+                    }
+                
+                if item['program_name']:
+                    instructor_map[rid]['programs'].append({
+                        'category': item['category'],
+                        'program_name': item['program_name'],
+                        'fee_per_session': item['fee_per_session']
+                    })
+
+            # DB 저장
+            count = 0
+            for rid, data in instructor_map.items():
+                encrypted_rid = self.crypto.encrypt(rid)
+                data['info']['resident_id'] = encrypted_rid
+                
+                # 강사 추가 (신규 등록만 지원하며, 주민번호 중복 체크 로직은 Repository 내부에 있음을 가정)
+                iid = self.repo.create_instructor(data['info'])
+                if iid:
+                    for prog in data['programs']:
+                        self.repo.create_program({
+                            'instructor_id': iid,
+                            **prog
+                        })
+                    count += 1
+                
+            self.refresh_data()
+            QMessageBox.information(self, "완료", f"{count}명의 강사가 등록되었습니다.")
+            
+        except Exception as e:
+            QMessageBox.critical(self, "오류", f"엑셀 등록 중 오류가 발생했습니다: {str(e)}")
+
 
 
 # ═══════════════════════════════════════════════

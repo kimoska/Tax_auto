@@ -256,25 +256,51 @@ def generate_custom_excel(
         top=Side(style='thin'), bottom=Side(style='thin')
     )
 
-    for col, header in enumerate(CUSTOM_HEADERS, 1):
-        cell = ws.cell(row=4, column=col, value=header)
-        cell.font = header_font
-        cell.fill = header_fill
-        cell.border = thin_border
-        cell.alignment = Alignment(horizontal='center', wrap_text=True)
+    # 헤더 1행 (Row 4)
+    h1_values = {
+        1: '연번', 2: '프로그램', 3: '강사', 4: '산출근거', 
+        6: '강사료', 7: '세액', 10: '실지급액', 11: '계좌번호'
+    }
+    # 헤더 2행 (Row 5)
+    h2_values = {
+        4: '1회강사료', 5: '강의횟수', 7: '소득세', 8: '주민세', 9: '합계'
+    }
+
+    for r in [4, 5]:
+        for c in range(1, 12):
+            cell = ws.cell(row=r, column=c)
+            cell.font = header_font
+            cell.fill = header_fill
+            cell.border = thin_border
+            cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+            
+            if r == 4 and c in h1_values:
+                cell.value = h1_values[c]
+            elif r == 5 and c in h2_values:
+                cell.value = h2_values[c]
+
+    # 셀 병합 (헤더)
+    ws.merge_cells(start_row=4, start_column=1, end_row=5, end_column=1)   # 연번
+    ws.merge_cells(start_row=4, start_column=2, end_row=5, end_column=2)   # 프로그램
+    ws.merge_cells(start_row=4, start_column=3, end_row=5, end_column=3)   # 강사
+    ws.merge_cells(start_row=4, start_column=4, end_row=4, end_column=5)   # 산출근거
+    ws.merge_cells(start_row=4, start_column=6, end_row=5, end_column=6)   # 강사료
+    ws.merge_cells(start_row=4, start_column=7, end_row=4, end_column=9)   # 세액
+    ws.merge_cells(start_row=4, start_column=10, end_row=5, end_column=10) # 실지급액
+    ws.merge_cells(start_row=4, start_column=11, end_row=5, end_column=11) # 계좌번호
 
     # 데이터
-    data_row = 5
+    data_row = 6
     for idx, lec in enumerate(lectures, 1):
         total = lec['payment_amount']
         rate = get_tax_rate(lec['industry_code'])
         taxes = calculate_taxes(total, rate)
         total_tax = taxes['income_tax'] + taxes['local_tax']
 
-        # 계좌정보
+        # 계좌정보 (줄바꿈 처리)
         bank = lec.get('bank_name', '') or ''
         account = lec.get('account_number', '') or ''
-        bank_info = f'{bank} {account}'.strip() if bank or account else ''
+        bank_info = f'{bank}\n{account}'.strip() if bank or account else ''
 
         values = [
             idx,
@@ -294,10 +320,13 @@ def generate_custom_excel(
             cell = ws.cell(row=data_row, column=col, value=val)
             cell.border = thin_border
             if isinstance(val, (int, float)) and col > 1:
-                cell.alignment = Alignment(horizontal='right')
+                cell.alignment = Alignment(horizontal='right', vertical='center')
                 cell.number_format = '#,##0'
             elif col == 1:
-                cell.alignment = Alignment(horizontal='center')
+                cell.alignment = Alignment(horizontal='center', vertical='center')
+            else:
+                # 계좌번호 등 텍스트
+                cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
 
         data_row += 1
 
@@ -306,7 +335,8 @@ def generate_custom_excel(
     for i, w in enumerate(col_widths, 1):
         ws.column_dimensions[get_column_letter(i)].width = w
 
-    filename = f'강사료_지급내역_{period}.xlsx'
+    prefix = f"{category_filter} " if category_filter else ""
+    filename = f'{prefix}강사료 지급내역_{period}.xlsx'
     filepath = os.path.join(output_dir, filename)
     wb.save(filepath)
     return filepath
@@ -403,3 +433,67 @@ def generate_annual_excel(
     filepath = os.path.join(output_dir, filename)
     wb.save(filepath)
     return filepath
+
+# ─────────────────────────────────────────────
+# 강사 일괄 등록용 (Instructor Batch Register)
+# ─────────────────────────────────────────────
+
+INSTRUCTOR_TEMPLATE_HEADERS = [
+    '강사명*', '주민번호*', '업종코드*', '연락처', '이메일', '주소',
+    '은행', '계좌번호', '과목구분*', '프로그램명*', '회당강사료*', '비고'
+]
+
+def generate_instructor_template(output_path: str) -> str:
+    """강사 등록용 엑셀 양식 생성"""
+    wb = Workbook()
+    ws = wb.active
+    ws.title = '강사등록양식'
+
+    header_font = Font(bold=True, color='FFFFFF')
+    header_fill = PatternFill(start_color='4472C4', end_color='4472C4', fill_type='solid')
+    
+    for col, h in enumerate(INSTRUCTOR_TEMPLATE_HEADERS, 1):
+        cell = ws.cell(row=1, column=col, value=h)
+        cell.font = header_font
+        cell.fill = header_fill
+        cell.alignment = Alignment(horizontal='center')
+    
+    # 예시 데이터 (한 행)
+    ws.append(['홍길동', '800101-1234567', '940909', '010-1234-5678', 'test@test.com', '서울시...', '신한은행', '110-123-456789', '인문학', '시낭송', 50000, '비고'])
+    
+    col_widths = [12, 18, 10, 15, 20, 30, 12, 20, 15, 20, 15, 20]
+    for i, w in enumerate(col_widths, 1):
+        ws.column_dimensions[get_column_letter(i)].width = w
+        
+    wb.save(output_path)
+    return output_path
+
+def parse_instructor_excel(file_path: str) -> list[dict]:
+    """강사 등록 엑셀 파일 파싱"""
+    from openpyxl import load_workbook
+    wb = load_workbook(file_path, data_only=True)
+    ws = wb.active
+    
+    instructors = []
+    # 2번 행부터 데이터
+    for row in range(2, ws.max_row + 1):
+        name = ws.cell(row=row, column=1).value
+        if not name: continue
+        
+        data = {
+            'name': str(name).strip(),
+            'resident_id': str(ws.cell(row=row, column=2).value or '').strip(),
+            'industry_code': str(ws.cell(row=row, column=3).value or '940909').strip(),
+            'phone': str(ws.cell(row=row, column=4).value or '').strip(),
+            'email': str(ws.cell(row=row, column=5).value or '').strip(),
+            'address': str(ws.cell(row=row, column=6).value or '').strip(),
+            'bank_name': str(ws.cell(row=row, column=7).value or '').strip(),
+            'account_number': str(ws.cell(row=row, column=8).value or '').strip(),
+            'category': str(ws.cell(row=row, column=9).value or '').strip(),
+            'program_name': str(ws.cell(row=row, column=10).value or '').strip(),
+            'fee_per_session': int(ws.cell(row=row, column=11).value or 0),
+            'memo': str(ws.cell(row=row, column=12).value or '').strip(),
+        }
+        instructors.append(data)
+        
+    return instructors

@@ -12,7 +12,8 @@ from PySide6.QtGui import QFont
 
 from gui.widgets import (
     Panel, Colors, format_money,
-    BTN_PRIMARY, BTN_SECONDARY, BTN_DANGER, BTN_GHOST_DANGER, BTN_SUCCESS
+    BTN_PRIMARY, BTN_SECONDARY, BTN_DANGER, BTN_GHOST_DANGER, BTN_SUCCESS,
+    CheckBoxDelegate
 )
 from db.repository import Repository
 from core.tax_calculator import calculate_taxes, get_tax_rate
@@ -20,6 +21,7 @@ from core.tax_calculator import calculate_taxes, get_tax_rate
 
 class LectureTab(QWidget):
     """강의 내역 탭 — 강의 CRUD + 세액 자동계산"""
+    data_changed = Signal()  # 데이터 변경 시그널 (삭제/추가/수정 후 다른 탭 갱신용)
 
     def __init__(self, repo: Repository, parent=None):
         super().__init__(parent)
@@ -31,14 +33,36 @@ class LectureTab(QWidget):
     def _setup_ui(self):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(24, 24, 24, 24)
-        layout.setSpacing(20)
+        layout.setSpacing(12)
+
+        # ── 년/월 선택 영역 (패널 위 별도 행, 오른쪽 정렬) ──
+        combo_style = f"QComboBox {{ border: 1px solid {Colors.BORDER}; border-radius: 6px; padding: 4px 8px; font-size: 13px; min-width: 80px; }}"
+        period_row = QHBoxLayout()
+        period_row.setContentsMargins(0, 0, 0, 0)
+        period_row.addStretch()
+
+        self.year_combo = QComboBox()
+        self.year_combo.setStyleSheet(combo_style)
+        for y in range(2024, 2031):
+            self.year_combo.addItem(f"{y}년", str(y))
+        self.year_combo.setCurrentText(self.current_period.split('-')[0] + '년')
+        period_row.addWidget(self.year_combo)
+
+        self.month_combo = QComboBox()
+        self.month_combo.setStyleSheet(combo_style.replace("80px", "60px"))
+        for m in range(1, 13):
+            self.month_combo.addItem(f"{m}월", f"{m:02d}")
+        self.month_combo.setCurrentIndex(int(self.current_period.split('-')[1]) - 1)
+        period_row.addWidget(self.month_combo)
+
+        layout.addLayout(period_row)
 
         # ── 강의 내역 패널 ──
         self.panel = Panel('강의 내역')
 
         # 헤더 위젯들
         input_style = f"""
-            QLineEdit, QComboBox {{
+            QLineEdit {{
                 border: 1px solid {Colors.BORDER};
                 border-radius: 6px;
                 padding: 6px 12px;
@@ -47,15 +71,15 @@ class LectureTab(QWidget):
         """
 
         self.filter_category = QLineEdit()
-        self.filter_category.setPlaceholderText('과목구분 필터')
-        self.filter_category.setFixedWidth(120)
+        self.filter_category.setPlaceholderText('과목 필터')
+        self.filter_category.setFixedWidth(90)
         self.filter_category.setStyleSheet(input_style)
         self.filter_category.textChanged.connect(self._apply_filter)
         self.panel.add_header_widget(self.filter_category)
 
         self.search_input = QLineEdit()
-        self.search_input.setPlaceholderText('강사/프로그램 검색')
-        self.search_input.setFixedWidth(150)
+        self.search_input.setPlaceholderText('검색')
+        self.search_input.setFixedWidth(90)
         self.search_input.setStyleSheet(input_style)
         self.search_input.textChanged.connect(self._apply_filter)
         self.panel.add_header_widget(self.search_input)
@@ -66,11 +90,23 @@ class LectureTab(QWidget):
         btn_excel.clicked.connect(self._export_custom_excel)
         self.panel.add_header_widget(btn_excel)
 
-        btn_prev = QPushButton('전월 데이터 불러오기')
+        btn_prev = QPushButton('데이터 불러오기')
         btn_prev.setStyleSheet(BTN_SECONDARY)
         btn_prev.setCursor(Qt.PointingHandCursor)
         btn_prev.clicked.connect(self._load_previous_month)
         self.panel.add_header_widget(btn_prev)
+
+        btn_all_select = QPushButton('전체 선택')
+        btn_all_select.setStyleSheet(BTN_SECONDARY)
+        btn_all_select.setCursor(Qt.PointingHandCursor)
+        btn_all_select.clicked.connect(self._toggle_all_selection)
+        self.panel.add_header_widget(btn_all_select)
+
+        btn_delete_selected = QPushButton('선택 삭제')
+        btn_delete_selected.setStyleSheet(BTN_DANGER)
+        btn_delete_selected.setCursor(Qt.PointingHandCursor)
+        btn_delete_selected.clicked.connect(self._delete_selected_lectures)
+        self.panel.add_header_widget(btn_delete_selected)
 
         btn_add = QPushButton('+ 강의 추가')
         btn_add.setStyleSheet(BTN_PRIMARY)
@@ -78,17 +114,27 @@ class LectureTab(QWidget):
         btn_add.clicked.connect(self._open_add_dialog)
         self.panel.add_header_widget(btn_add)
 
+        # 시그널 연결은 모든 초기화 후에
+        self.year_combo.currentIndexChanged.connect(self._on_period_changed)
+        self.month_combo.currentIndexChanged.connect(self._on_period_changed)
+
         # 테이블
         self.table = QTableWidget()
-        self.table.setColumnCount(10)
+        self.table.setColumnCount(11)
         self.table.setHorizontalHeaderLabels([
-            '강사명', '과목구분', '프로그램', '회당 강사료',
+            '선택', '강사명', '과목구분', '프로그램', '회당 강사료',
             '횟수', '총 강사료', '소득세', '지방소득세', '실지급액', '관리'
         ])
-        for i in [3, 4, 5, 6, 7, 8]:
-            self.table.horizontalHeader().setSectionResizeMode(i, QHeaderView.ResizeToContents)
-        self.table.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
+        header = self.table.horizontalHeader()
+        # 모든 칸럼 균등 배분 (Stretch) 후 특정 칸럼만 Fixed
+        header.setSectionResizeMode(QHeaderView.Stretch)
+        header.setSectionResizeMode(0, QHeaderView.Fixed)            # 선택
+        header.setSectionResizeMode(10, QHeaderView.Fixed)           # 관리
+        self.table.setColumnWidth(0, 40)
+        self.table.setColumnWidth(10, 110)
         self.table.verticalHeader().setVisible(False)
+        self.table.verticalHeader().setDefaultSectionSize(44)
+
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table.setAlternatingRowColors(True)
@@ -102,11 +148,26 @@ class LectureTab(QWidget):
                 font-weight: 500; font-size: 13px; padding: 10px 12px;
                 border: none; border-bottom: 2px solid {Colors.BORDER};
             }}
-            QTableWidget::item:alternate {{ background: #FAFCFE; }}
+            QTableWidget::item:selected {{
+                background-color: #E0E7FF;
+                color: #1E293B;
+                font-weight: bold;
+            }}
+            QTableWidget::item:alternate {{
+                background: #FAFCFE;
+            }}
         """)
+        # 체크박스 커스텀 렌더러 적용 (검정 테두리 + 빨간 V 표시)
+        self.table.setItemDelegateForColumn(0, CheckBoxDelegate(self.table))
         self.table.setSortingEnabled(True)
         self.panel.body_layout.addWidget(self.table)
         layout.addWidget(self.panel)
+
+    def _on_period_changed(self):
+        year = self.year_combo.currentData()
+        month = self.month_combo.currentData()
+        self.current_period = f"{year}-{month}"
+        self.refresh_data()
 
     def set_period(self, period: str):
         """외부에서 기간 설정"""
@@ -124,71 +185,107 @@ class LectureTab(QWidget):
             rate = get_tax_rate(lec['industry_code'])
             taxes = calculate_taxes(total, rate)
 
+            # 체크박스
+            cb_item = QTableWidgetItem()
+            cb_item.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
+            cb_item.setCheckState(Qt.Unchecked)
+            self.table.setItem(row, 0, cb_item)
+
             # 강사명
             name_item = QTableWidgetItem(lec.get('instructor_name', ''))
             name_item.setFont(QFont('Pretendard', 10, QFont.DemiBold))
             name_item.setData(Qt.UserRole, lec['id'])
-            self.table.setItem(row, 0, name_item)
+            name_item.setForeground(Qt.black)
+            self.table.setItem(row, 1, name_item)
 
             # 과목구분
-            self.table.setItem(row, 1, QTableWidgetItem(lec.get('program_category', '')))
+            cat_item = QTableWidgetItem(lec.get('program_category', ''))
+            cat_item.setForeground(Qt.black)
+            self.table.setItem(row, 2, cat_item)
 
             # 프로그램명
-            self.table.setItem(row, 2, QTableWidgetItem(lec.get('program_name', '')))
+            prog_item = QTableWidgetItem(lec.get('program_name', ''))
+            prog_item.setForeground(Qt.black)
+            self.table.setItem(row, 3, prog_item)
 
             # 회당 강사료
             fee_item = QTableWidgetItem(format_money(lec['fee_per_session']))
             fee_item.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
-            self.table.setItem(row, 3, fee_item)
+            fee_item.setForeground(Qt.black)
+            self.table.setItem(row, 4, fee_item)
 
             # 횟수
             cnt_item = QTableWidgetItem(f"{lec['session_count']}회")
             cnt_item.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
-            self.table.setItem(row, 4, cnt_item)
+            cnt_item.setForeground(Qt.red)
+            cnt_item.setFont(QFont('Pretendard', 10, QFont.DemiBold))
+            self.table.setItem(row, 5, cnt_item)
 
             # 총 강사료
             total_item = QTableWidgetItem(format_money(total))
             total_item.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
             total_item.setFont(QFont('Pretendard', 10, QFont.DemiBold))
-            self.table.setItem(row, 5, total_item)
+            total_item.setForeground(Qt.red)
+            self.table.setItem(row, 6, total_item)
 
             # 소득세
             tax_item = QTableWidgetItem(format_money(taxes['income_tax']))
             tax_item.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
-            tax_item.setForeground(Qt.red)
-            self.table.setItem(row, 6, tax_item)
+            tax_item.setForeground(Qt.black)
+            self.table.setItem(row, 7, tax_item)
 
             # 지방소득세
             local_item = QTableWidgetItem(format_money(taxes['local_tax']))
             local_item.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
-            local_item.setForeground(Qt.red)
-            self.table.setItem(row, 7, local_item)
+            local_item.setForeground(Qt.black)
+            self.table.setItem(row, 8, local_item)
 
             # 실지급액
             net_item = QTableWidgetItem(format_money(taxes['net_payment']))
             net_item.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
             net_item.setFont(QFont('Pretendard', 10, QFont.DemiBold))
-            self.table.setItem(row, 8, net_item)
+            net_item.setForeground(Qt.red)
+            self.table.setItem(row, 9, net_item)
 
             # 관리 버튼
             btn_widget = QWidget()
             btn_layout = QHBoxLayout(btn_widget)
-            btn_layout.setContentsMargins(4, 2, 4, 2)
+            btn_layout.setContentsMargins(2, 2, 2, 2)
             btn_layout.setSpacing(4)
 
             btn_edit = QPushButton('수정')
-            btn_edit.setStyleSheet(BTN_SECONDARY + "QPushButton { padding: 4px 12px; font-size: 12px; }")
+            btn_edit.setStyleSheet("""
+                QPushButton { 
+                    color: #2563EB; 
+                    background: transparent;
+                    border: 1px solid #BFDBFE;
+                    border-radius: 4px;
+                    padding: 4px 8px; 
+                    font-size: 12px; 
+                }
+                QPushButton:hover { background: #EFF6FF; }
+            """)
             btn_edit.setCursor(Qt.PointingHandCursor)
             btn_edit.clicked.connect(lambda _, lid=lec['id']: self._open_edit_dialog(lid))
 
             btn_del = QPushButton('삭제')
-            btn_del.setStyleSheet(BTN_GHOST_DANGER)
+            btn_del.setStyleSheet("""
+                QPushButton { 
+                    color: #DC2626; 
+                    background: transparent;
+                    border: 1px solid #FECACA;
+                    border-radius: 4px;
+                    padding: 4px 8px; 
+                    font-size: 12px; 
+                }
+                QPushButton:hover { background: #FEF2F2; }
+            """)
             btn_del.setCursor(Qt.PointingHandCursor)
             btn_del.clicked.connect(lambda _, lid=lec['id']: self._delete_lecture(lid))
 
             btn_layout.addWidget(btn_edit)
             btn_layout.addWidget(btn_del)
-            self.table.setCellWidget(row, 9, btn_widget)
+            self.table.setCellWidget(row, 10, btn_widget)
 
         self.table.setSortingEnabled(True)
         self._apply_filter()
@@ -200,9 +297,9 @@ class LectureTab(QWidget):
 
         for row in range(self.table.rowCount()):
             show = True
-            # 과목구분 필터 (열 1)
+            # 과목구분 필터 (열 2)
             if cat_filter:
-                cat_item = self.table.item(row, 1)
+                cat_item = self.table.item(row, 2)
                 if cat_item and cat_filter not in cat_item.text().lower():
                     show = False
             # 검색 필터 (전 열)
@@ -230,12 +327,57 @@ class LectureTab(QWidget):
 
     def _delete_lecture(self, lecture_id: int):
         reply = QMessageBox.question(
-            self, '강의 삭제', '이 강의 내역을 삭제하시겠습니까?',
+            self, '삭제 확인', '정말 삭제하시겠습니까?',
             QMessageBox.Yes | QMessageBox.No, QMessageBox.No
         )
+
         if reply == QMessageBox.Yes:
             self.repo.delete_lecture(lecture_id)
             self.refresh_data()
+            self.data_changed.emit()
+
+    def _toggle_all_selection(self):
+        """전체 선택/해제 토글"""
+        any_unchecked = False
+        for row in range(self.table.rowCount()):
+            item = self.table.item(row, 0)
+            if item and item.checkState() != Qt.Checked:
+                any_unchecked = True
+                break
+        
+        target_state = Qt.Checked if any_unchecked else Qt.Unchecked
+        for row in range(self.table.rowCount()):
+            item = self.table.item(row, 0)
+            if item:
+                item.setCheckState(target_state)
+        self.table.viewport().update()
+
+    def _delete_selected_lectures(self):
+        """선택 항목 삭제 로직"""
+        selected_ids = []
+        for row in range(self.table.rowCount()):
+            cb_item = self.table.item(row, 0)
+            if cb_item and cb_item.checkState() == Qt.Checked:
+                name_item = self.table.item(row, 1)
+                selected_ids.append((name_item.data(Qt.UserRole), name_item.text()))
+                
+        if not selected_ids:
+            QMessageBox.warning(self, '선택 오류', '삭제할 강의 내역을 먼저 체크박스에 선택하세요.')
+            return
+            
+        names = ", ".join([n for i, n in selected_ids])
+        reply = QMessageBox.question(
+            self, '일괄 삭제 확인',
+            f"선택한 {len(selected_ids)}건의 강의 내역을 삭제하시겠습니까?",
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No
+        )
+        
+        if reply == QMessageBox.Yes:
+            for lid, _ in selected_ids:
+                self.repo.delete_lecture(lid)
+            self.refresh_data()
+            self.data_changed.emit()
 
     def _load_previous_month(self):
         """전월 데이터 복사 (prototype.html 로직 이식)"""
@@ -276,10 +418,13 @@ class LectureTab(QWidget):
         """기안용 맞춤형 엑셀 출력"""
         from PySide6.QtWidgets import QFileDialog
         from core.excel_generator import generate_custom_excel
+        import os
 
         cat_filter = self.filter_category.text().strip() or None
-
-        default_name = f'강사료_지급내역_{self.current_period}.xlsx'
+        
+        prefix = f"{cat_filter} " if cat_filter else ""
+        default_name = f'{prefix}강사료 지급내역_{self.current_period}.xlsx'
+        
         filepath, _ = QFileDialog.getSaveFileName(
             self, '기안용 엑셀 저장', default_name,
             'Excel 파일 (*.xlsx);;모든 파일 (*.*)'
@@ -288,12 +433,18 @@ class LectureTab(QWidget):
             return
 
         try:
-            import os
             output_dir = os.path.dirname(filepath)
             result_path = generate_custom_excel(
                 self.repo, self.current_period, cat_filter, output_dir
             )
-            QMessageBox.information(self, '저장 완료', f'기안용 엑셀이 저장되었습니다:\n{result_path}')
+            
+            # 자동 열기 (Windows)
+            try:
+                os.startfile(result_path)
+            except Exception as e:
+                print(f"파일 자동 열기 실패: {e}")
+                
+            QMessageBox.information(self, '저장 완료', f'기안용 엑셀이 저장 및 실행되었습니다:\n{result_path}')
         except ValueError as e:
             QMessageBox.warning(self, '오류', str(e))
         except Exception as e:

@@ -86,6 +86,12 @@ class AnnualTab(QWidget):
         btn_excel.clicked.connect(self._download_excel)
         top_row.addWidget(btn_excel)
 
+        btn_upload_annual = QPushButton('홈택스 자동 업로드(연말정산용)')
+        btn_upload_annual.setStyleSheet(BTN_PRIMARY)
+        btn_upload_annual.setCursor(Qt.PointingHandCursor)
+        btn_upload_annual.clicked.connect(self._auto_upload_annual)
+        top_row.addWidget(btn_upload_annual)
+
         sel_layout.addLayout(top_row)
 
         # 월 체크박스 (plan.md §10.4)
@@ -122,10 +128,10 @@ class AnnualTab(QWidget):
         self.panel = Panel('연간 합산 데이터')
 
         self.table = QTableWidget()
-        self.table.setColumnCount(7)
+        self.table.setColumnCount(8)
         self.table.setHorizontalHeaderLabels([
             '주민번호', '강사명', '업종코드',
-            '연간 총지급액', '연간 총소득세', '연간 총지방소득세', '연간 총실지급액'
+            '연간 총지급액', '연간 소득세', '연간 지방소득세', '연간 소득세 총액', '연간 총실지급액'
         ])
         for i in range(self.table.columnCount()):
             self.table.horizontalHeader().setSectionResizeMode(i, QHeaderView.ResizeToContents)
@@ -145,6 +151,11 @@ class AnnualTab(QWidget):
                 font-weight: 500; font-size: 13px; padding: 10px 12px;
                 border: none; border-bottom: 2px solid {Colors.BORDER};
             }}
+            QTableWidget::item:selected {{
+                background-color: #E0E7FF;
+                color: #1E293B;
+                font-weight: bold;
+            }}
             QTableWidget::item:alternate {{ background: #FAFCFE; }}
         """)
 
@@ -158,6 +169,10 @@ class AnnualTab(QWidget):
             if cb.isChecked():
                 months.append(f'{i+1:02d}')
         return months
+
+    def refresh_data(self):
+        """외부에서 호출 가능한 데이터 새로고침"""
+        self._query()
 
     def _query(self):
         """선택 월 합산 조회"""
@@ -181,23 +196,41 @@ class AnnualTab(QWidget):
             except Exception:
                 masked = rid[:6] + '-*******' if len(rid) >= 6 else '***'
 
-            self.table.setItem(row, 0, QTableWidgetItem(masked))
+            rid_item = QTableWidgetItem(masked)
+            rid_item.setForeground(Qt.black)
+            self.table.setItem(row, 0, rid_item)
 
             name_item = QTableWidgetItem(d.get('name', ''))
             name_item.setFont(QFont('Pretendard', 10, QFont.DemiBold))
+            name_item.setForeground(Qt.black)
             self.table.setItem(row, 1, name_item)
 
-            self.table.setItem(row, 2, QTableWidgetItem(d.get('industry_code', '')))
+            ind_item = QTableWidgetItem(d.get('industry_code', ''))
+            ind_item.setForeground(Qt.black)
+            self.table.setItem(row, 2, ind_item)
 
-            for col, key in enumerate(['annual_total', 'annual_income_tax',
-                                        'annual_local_tax', 'annual_net_payment'], 3):
-                val = d.get(key, 0) or 0
+            total = d.get('annual_total', 0) or 0
+            income_tax = d.get('annual_income_tax', 0) or 0
+            local_tax = d.get('annual_local_tax', 0) or 0
+            total_tax = income_tax + local_tax
+            net = d.get('annual_net_payment', 0) or 0
+
+            vals = [total, income_tax, local_tax, total_tax, net]
+
+            for i, val in enumerate(vals):
+                col = i + 3
                 item = QTableWidgetItem(format_money(val))
                 item.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
+                
                 if col == 3:
                     item.setFont(QFont('Pretendard', 10, QFont.DemiBold))
-                if col in (4, 5):
+                elif col == 6:  # 연간 소득세 총액
                     item.setForeground(QColor(Colors.ERROR))
+                    item.setFont(QFont('Pretendard', 10, QFont.DemiBold))
+                elif col == 7:  # 연간 총실지급액
+                    item.setForeground(QColor(Colors.ERROR))
+                    item.setFont(QFont('Pretendard', 10, QFont.DemiBold))
+                
                 self.table.setItem(row, col, item)
 
         self.table.setSortingEnabled(True)
@@ -235,3 +268,10 @@ class AnnualTab(QWidget):
             QMessageBox.warning(self, '오류', str(e))
         except Exception as e:
             QMessageBox.critical(self, '오류', f'엑셀 생성 실패:\n{str(e)}')
+
+    def _auto_upload_annual(self):
+        """홈택스 자동 업로드 (연말정산용) - 추후 구현 예정"""
+        QMessageBox.information(
+            self, '안내',
+            '홈택스 자동 업로드(연말정산용) 기능은 추후 업데이트에서 구현될 예정입니다.'
+        )
