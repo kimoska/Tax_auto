@@ -162,8 +162,8 @@ class InstructorTab(QWidget):
         self.table.setItemDelegateForColumn(0, CheckBoxDelegate(self.table))
         self.table.setSortingEnabled(True)
 
-        # 체크박스 클릭 토글 지원 (NoEditTriggers 이므로 cellClicked 사용)
-        self.table.cellClicked.connect(self._on_cell_clicked)
+        # 체크박스 클릭 토글 지원 (더 빠른 반응을 위해 cellPressed 사용)
+        self.table.cellPressed.connect(self._on_cell_clicked)
 
         self.panel.body_layout.addWidget(self.table)
         layout.addWidget(self.panel)

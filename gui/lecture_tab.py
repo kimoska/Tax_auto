@@ -160,8 +160,8 @@ class LectureTab(QWidget):
         # 체크박스 커스텀 렌더러 적용 (검정 테두리 + 빨간 V 표시)
         self.table.setItemDelegateForColumn(0, CheckBoxDelegate(self.table))
         self.table.setSortingEnabled(True)
-        # 체크박스 단일 클릭 활성화
-        self.table.cellClicked.connect(self._on_cell_clicked)
+        # 체크박스 단일 클릭 활성화 (더 빠른 반응성을 위해 cellPressed 사용)
+        self.table.cellPressed.connect(self._on_cell_clicked)
         self.panel.body_layout.addWidget(self.table)
         layout.addWidget(self.panel)
 

@@ -290,21 +290,25 @@ class SettlementTab(QWidget):
             QMessageBox.information(self, '정산', f'{self.current_period} 기간의 강의 내역이 없습니다.')
             return
 
-        from gui.rpa_progress_dialog import RPAProgressDialog
-        from PySide6.QtWidgets import QApplication
+        from PySide6.QtWidgets import QApplication, QProgressDialog
+        from PySide6.QtCore import Qt
         
         # 안내 모달창 표시
-        dialog = RPAProgressDialog(self, title="정산 데이터 동기화", message=f"클라우드 통신 중입니다. 잠시만 기다려주세요...")
+        dialog = QProgressDialog("클라우드 통신 중입니다. 잠시만 기다려주세요...", None, 0, 0, self)
+        dialog.setWindowTitle("정산 데이터 동기화")
+        dialog.setWindowModality(Qt.WindowModal)
+        dialog.setCancelButton(None)
+        dialog.setMinimumDuration(0)
         dialog.show()
         QApplication.processEvents()
 
         try:
-            dialog.append_log("기존 정산 기록을 정리하고 있습니다...")
+            dialog.setLabelText("기존 정산 기록을 정리하고 있습니다...")
             QApplication.processEvents()
             
             self._sync_settlements_from_lectures()
             
-            dialog.append_log("화면에 데이터를 불러오는 중입니다...")
+            dialog.setLabelText("화면에 데이터를 불러오는 중입니다...")
             QApplication.processEvents()
             
             self.refresh_data()
