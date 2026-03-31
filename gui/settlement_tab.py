@@ -147,8 +147,7 @@ class SettlementTab(QWidget):
         self.refresh_data()
 
     def refresh_data(self):
-        """강의 내역 → 정산 재계산 후 테이블 갱신 (항상 최신 상태 유지)"""
-        self._sync_settlements_from_lectures()
+        """정산 테이블 갱신 (캐시된 데이터만 로드, DB 쓰기 없음)"""
         settlements = self.repo.get_settlements_by_period(self.current_period)
         self.table.setRowCount(len(settlements))
 
@@ -285,18 +284,44 @@ class SettlementTab(QWidget):
             )
 
     def recalculate_settlements(self):
-        """강의 내역 → 정산 재계산 (plan.md §4.1 파이프라인)"""
+        """강의 내역 → 정산 재계산 (plan.md §4.1 파이프라인) - 수동 트리거"""
         lectures = self.repo.get_lectures_by_period(self.current_period)
         if not lectures:
             QMessageBox.information(self, '정산', f'{self.current_period} 기간의 강의 내역이 없습니다.')
             return
-        self._sync_settlements_from_lectures()
-        self.refresh_data()
-        aggregated = aggregate_lectures_to_settlements(lectures)
-        QMessageBox.information(
-            self, '정산 완료',
-            f'{len(aggregated)}명의 강사 정산이 완료되었습니다.'
-        )
+
+        from gui.rpa_progress_dialog import RPAProgressDialog
+        from PySide6.QtWidgets import QApplication
+        
+        # 안내 모달창 표시
+        dialog = RPAProgressDialog(self, title="정산 데이터 동기화", message=f"클라우드 통신 중입니다. 잠시만 기다려주세요...")
+        dialog.show()
+        QApplication.processEvents()
+
+        try:
+            dialog.append_log("기존 정산 기록을 정리하고 있습니다...")
+            QApplication.processEvents()
+            
+            self._sync_settlements_from_lectures()
+            
+            dialog.append_log("화면에 데이터를 불러오는 중입니다...")
+            QApplication.processEvents()
+            
+            self.refresh_data()
+            aggregated = aggregate_lectures_to_settlements(lectures)
+            
+            dialog.append_log(f"[{self.current_period}] 정산이 성공적으로 완료되었습니다.")
+            QApplication.processEvents()
+
+            # 잠깐 대기 후 닫기
+            import time
+            time.sleep(0.5)
+
+        except Exception as e:
+            dialog.append_log(f"오류가 발생했습니다: {e}")
+            QMessageBox.critical(self, "오류", f"정산 처리 중 통신 오류가 발생했습니다:\n{e}")
+        finally:
+            dialog.close()
 
     def _open_override(self, settlement_id: int):
         dialog = OverrideDialog(self.repo, settlement_id, parent=self)
@@ -333,9 +358,8 @@ class SettlementTab(QWidget):
 
         try:
             import os
-            crypto = CryptoManager()
             output_dir = os.path.dirname(filepath)
-            result_path = generate_hometax_excel(self.repo, crypto, self.current_period, output_dir)
+            result_path = generate_hometax_excel(self.repo, self.current_period, output_dir)
             QMessageBox.information(self, '다운로드 완료', f'홈택스 엑셀이 저장되었습니다:\n{result_path}')
         except Exception as e:
             QMessageBox.critical(self, '오류', f'엑셀 생성 실패:\n{str(e)}')
@@ -363,9 +387,11 @@ class SettlementTab(QWidget):
         
         # [수정 사항] 홈택스 업로드 시작 전 로그인/인증서 선택 창 표시
         from gui.login_window import LoginWindow
+        from core.crypto import CryptoManager
         from PySide6.QtWidgets import QDialog
         
-        login_dialog = LoginWindow(repo=self.repo, crypto=crypto, parent=self)
+        crypto_mgr = CryptoManager()
+        login_dialog = LoginWindow(repo=self.repo, crypto=crypto_mgr, parent=self)
         if login_dialog.exec() != QDialog.Accepted:
             # 사용자가 로그인 창을 닫거나 취소한 경우 중단
             return

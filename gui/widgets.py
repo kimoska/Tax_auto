@@ -277,7 +277,8 @@ class CheckBoxDelegate(QStyledItemDelegate):
 
         # 체크 상태이면 빨간색 V 그리기
         check_state = index.data(Qt.CheckStateRole)
-        if check_state == Qt.Checked:
+        # PySide6에서 enum이 넘어오거나 int(2)가 넘어올 수 있음
+        if check_state in (Qt.Checked, 2, Qt.CheckState.Checked):
             pen = QPen(QColor('#EF4444'))
             pen.setWidth(3)
             pen.setCapStyle(Qt.RoundCap)

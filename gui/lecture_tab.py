@@ -160,6 +160,8 @@ class LectureTab(QWidget):
         # 체크박스 커스텀 렌더러 적용 (검정 테두리 + 빨간 V 표시)
         self.table.setItemDelegateForColumn(0, CheckBoxDelegate(self.table))
         self.table.setSortingEnabled(True)
+        # 체크박스 단일 클릭 활성화
+        self.table.cellClicked.connect(self._on_cell_clicked)
         self.panel.body_layout.addWidget(self.table)
         layout.addWidget(self.panel)
 
@@ -173,6 +175,16 @@ class LectureTab(QWidget):
         """외부에서 기간 설정"""
         self.current_period = period
         self.refresh_data()
+
+    def _on_cell_clicked(self, row, col):
+        """NoEditTriggers 상태에서 체크박스 단일 클릭 처리"""
+        if col == 0:
+            item = self.table.item(row, 0)
+            if item:
+                # 상태 확인 (버전 간 호환성 위해 여러 방법 사용)
+                is_checked = item.checkState() == Qt.Checked or item.checkState() == 2 or str(item.checkState()) == "CheckState.Checked"
+                new_state = Qt.Unchecked if is_checked else Qt.Checked
+                item.setCheckState(new_state)
 
     def refresh_data(self):
         """DB에서 강의 내역 새로고침"""

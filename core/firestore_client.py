@@ -281,15 +281,23 @@ class FirestoreClient:
     # ─────────────────────────────────────────
 
     def _request(self, method: str, url: str, **kwargs) -> requests.Response:
-        """인증 헤더 포함 HTTP 요청"""
+        """인증 헤더 포함 HTTP 요청 (재시도 로직 포함)"""
         kwargs.setdefault('headers', {}).update(self._headers())
         kwargs.setdefault('timeout', 15)
-        try:
-            return requests.request(method, url, **kwargs)
-        except requests.ConnectionError:
-            raise FirestoreError('인터넷 연결을 확인해주세요.')
-        except requests.Timeout:
-            raise FirestoreError('서버 응답 시간이 초과되었습니다.')
+        
+        import time
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                return requests.request(method, url, **kwargs)
+            except (requests.ConnectionError, requests.Timeout) as e:
+                if attempt < max_retries - 1:
+                    time.sleep(1) # 1초 후 재시도
+                    continue
+                if isinstance(e, requests.ConnectionError):
+                    raise FirestoreError('인터넷 연결을 확인해주세요.')
+                else:
+                    raise FirestoreError('서버 응답 시간이 초과되었습니다.')
 
     def _check_error(self, resp: requests.Response):
         """HTTP 응답 에러 체크"""

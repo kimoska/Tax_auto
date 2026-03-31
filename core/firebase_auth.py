@@ -130,13 +130,20 @@ class FirebaseAuth:
         self._token_expires_at = time.time() + expires_in
 
     def _post(self, url: str, payload: dict) -> dict:
-        """HTTP POST 요청 (에러 핸들링 포함)"""
-        try:
-            resp = requests.post(url, json=payload, timeout=15)
-        except requests.ConnectionError:
-            raise AuthError('NETWORK_ERROR', '인터넷 연결을 확인해주세요.')
-        except requests.Timeout:
-            raise AuthError('TIMEOUT', '서버 응답 시간이 초과되었습니다.')
+        """HTTP POST 요청 (에러 핸들링 및 재시도 로직 포함)"""
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                resp = requests.post(url, json=payload, timeout=15)
+                break  # 성공 시 루프 탈출
+            except (requests.ConnectionError, requests.Timeout) as e:
+                if attempt < max_retries - 1:
+                    time.sleep(1) # 1초 후 재시도
+                    continue
+                if isinstance(e, requests.ConnectionError):
+                    raise AuthError('NETWORK_ERROR', '인터넷 연결을 확인해주세요.')
+                else:
+                    raise AuthError('TIMEOUT', '서버 응답 시간이 초과되었습니다.')
 
         data = resp.json()
 

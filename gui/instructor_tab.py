@@ -162,6 +162,9 @@ class InstructorTab(QWidget):
         self.table.setItemDelegateForColumn(0, CheckBoxDelegate(self.table))
         self.table.setSortingEnabled(True)
 
+        # 체크박스 클릭 토글 지원 (NoEditTriggers 이므로 cellClicked 사용)
+        self.table.cellClicked.connect(self._on_cell_clicked)
+
         self.panel.body_layout.addWidget(self.table)
         layout.addWidget(self.panel)
         self._apply_proportional_widths()
@@ -279,6 +282,14 @@ class InstructorTab(QWidget):
         self.kpi_active.set_value(str(len(instructors)))
         self.kpi_programs.set_value(str(total_programs))
 
+    def _on_cell_clicked(self, row: int, col: int):
+        """체크박스 열(0번) 클릭 시 강제로 체크 상태 토글"""
+        if col == 0:
+            item = self.table.item(row, 0)
+            if item:
+                new_state = Qt.Checked if item.checkState() == Qt.Unchecked else Qt.Unchecked
+                item.setCheckState(new_state)
+
     def _filter_table(self, text: str):
         """검색어로 테이블 필터링"""
         text = text.lower()
@@ -326,7 +337,7 @@ class InstructorTab(QWidget):
         any_unchecked = False
         for row in range(self.table.rowCount()):
             item = self.table.item(row, 0)
-            if item and item.checkState() != Qt.Checked:
+            if item and item.checkState() != Qt.Checked and item.checkState() != 2:
                 any_unchecked = True
                 break
         
@@ -701,8 +712,14 @@ class InstructorDialog(QDialog):
 
         self.name_input.setText(inst['name'])
 
-        # 주민번호 (평문 직접 표시)
-        self.rid_input.setText(inst.get('resident_id', ''))
+        # 주민번호 (과거 암호화된 데이터인 경우 복호화하여 표시)
+        rid = inst.get('resident_id', '')
+        if rid.startswith('gAAAAA'):
+            try:
+                rid = self.crypto.decrypt(rid)
+            except Exception:
+                pass
+        self.rid_input.setText(rid)
 
         # 업종코드
         idx = self.code_combo.findData(inst['industry_code'])
