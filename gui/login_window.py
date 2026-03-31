@@ -51,13 +51,15 @@ class LoginWindow(QDialog):
         from gui.onboarding_dialog import OnboardingDialog
         if OnboardingDialog.check_should_show("login_guide"):
             content = """
-            AutoTax에 오신 것을 환영합니다!<br><br>
-            <b>1. 아이디 만들기:</b><br>
-            프로그램 하단의 '회원가입' 버튼을 눌러 소속 기관의 코드를 입력하고 아이디를 만드세요.<br><br>
-            <b>2. 로그인 방법:</b><br>
-            생성한 아이디로 로그인한 후, 홈택스 작업에 필요한 <b>공동인증서</b>를 선택하여 접속하세요.
+            홈택스 자동 업로드 주의사항<br><br>
+            <b>1. 공인인증서 로그인</b><br>
+            - 공인인증서를 선택하고 비밀번호를 입력한 후 로그인을 진행합니다.<br>
+            - 로그인이 완료되면 "실행"버튼을 눌러 실행해주세요.<br><br>
+            <b>2. 오류 발생 시</b><br>
+            - 처음 자동 업로드를 실행하는 경우 웹페이지가 열리지 않을 수 있습니다.<br>
+            - 웹페이지 창을 닫고 재시도를 눌러주세요.
             """
-            self.guide = OnboardingDialog("login_guide", "AutoTax 시작하기", content, self)
+            self.guide = OnboardingDialog("login_guide", "주의사항", content, self)
             self.guide.show()
 
     def _load_certificates(self):
