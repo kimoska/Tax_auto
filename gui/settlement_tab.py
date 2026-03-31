@@ -7,7 +7,7 @@ from PySide6.QtWidgets import (
     QPushButton, QLineEdit, QLabel, QComboBox, QDialog,
     QHeaderView, QAbstractItemView, QMessageBox, QFrame
 )
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QFont, QColor
 
 from gui.widgets import (
@@ -103,13 +103,19 @@ class SettlementTab(QWidget):
             '소득세', '지방소득세', '실지급액', '관리'
         ])
         header = self.table.horizontalHeader()
-        header.setSectionResizeMode(QHeaderView.Stretch)
+        header.setStretchLastSection(False)
+        header.setMinimumSectionSize(60)
+        header.setSectionResizeMode(QHeaderView.Interactive)
+        
         header.setSectionResizeMode(0, QHeaderView.Fixed)            # 번호
         header.setSectionResizeMode(12, QHeaderView.Fixed)           # 관리
-        self.table.setColumnWidth(0, 35)
+        self.table.setColumnWidth(0, 40)
         self.table.setColumnWidth(12, 110)
+        
+        # 비율 기반 초기 너비
+        self._col_ratios = [0, 0.07, 0.05, 0.08, 0.10, 0.15, 0.05, 0.11, 0.05, 0.08, 0.08, 0.18, 0]
+        
         self.table.verticalHeader().setVisible(False)
-        self.table.verticalHeader().setDefaultSectionSize(44)
         self.table.verticalHeader().setDefaultSectionSize(44)
 
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
@@ -135,6 +141,31 @@ class SettlementTab(QWidget):
         """)
         self.panel.body_layout.addWidget(self.table)
         layout.addWidget(self.panel)
+        self._apply_proportional_widths()
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        QTimer.singleShot(10, self._apply_proportional_widths)
+
+    def _apply_proportional_widths(self):
+        """비율 기반 컬럼 너비 분배"""
+        total = self.table.viewport().width()
+        fixed = self.table.columnWidth(0) + self.table.columnWidth(12)
+        avail = total - fixed
+        if avail <= 0:
+            return
+            
+        used = 0
+        last_interactive = 11
+        
+        for i, ratio in enumerate(self._col_ratios):
+            if ratio > 0:
+                w = int(avail * ratio)
+                self.table.setColumnWidth(i, w)
+                used += w
+                
+        if avail > used:
+            self.table.setColumnWidth(last_interactive, self.table.columnWidth(last_interactive) + (avail - used))
 
     def _on_period_changed(self):
         year = self.year_combo.currentData()
@@ -266,32 +297,10 @@ class SettlementTab(QWidget):
         lectures = self.repo.get_lectures_by_period(self.current_period)
         # 기존 정산 데이터 전부 삭제
         self.repo.delete_settlements_by_period(self.current_period)
-        if not lectures:
-            return
-        aggregated = aggregate_lectures_to_settlements(lectures)
-        for entry in aggregated:
-            calc_data = {
-                'total_payment': entry['total_payment'],
-                'industry_code': entry['industry_code'],
-                'is_foreigner': entry['is_foreigner'],
-                'tax_rate': entry['tax_rate'],
-                'income_tax': entry['income_tax'],
-                'local_tax': entry['local_tax'],
-                'net_payment': entry['net_payment'],
-            }
-            self.repo.upsert_settlement(
-                entry['instructor_id'], self.current_period, calc_data
-            )
 
     def recalculate_settlements(self):
         """강의 내역 → 정산 재계산 (plan.md §4.1 파이프라인) - 수동 트리거"""
-        lectures = self.repo.get_lectures_by_period(self.current_period)
-        if not lectures:
-            QMessageBox.information(self, '정산', f'{self.current_period} 기간의 강의 내역이 없습니다.')
-            return
-
         from PySide6.QtWidgets import QApplication, QProgressDialog
-        from PySide6.QtCore import Qt
         
         # 안내 모달창 표시
         dialog = QProgressDialog("클라우드 통신 중입니다. 잠시만 기다려주세요...", None, 0, 0, self)
@@ -303,10 +312,11 @@ class SettlementTab(QWidget):
         QApplication.processEvents()
 
         try:
-            dialog.setLabelText("기존 정산 기록을 정리하고 있습니다...")
+            dialog.setLabelText("정산 기록을 동기화하고 있습니다...")
             QApplication.processEvents()
             
-            self._sync_settlements_from_lectures()
+            # 레포지토리의 동기화 메서드 호출 (강의 없으면 정산 삭제 처리됨)
+            self.repo.sync_settlements_for_period(self.current_period)
             
             dialog.setLabelText("화면에 데이터를 불러오는 중입니다...")
             QApplication.processEvents()

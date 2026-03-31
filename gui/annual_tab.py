@@ -7,7 +7,7 @@ from PySide6.QtWidgets import (
     QPushButton, QLabel, QComboBox, QCheckBox, QHeaderView,
     QAbstractItemView, QMessageBox, QFrame, QFileDialog
 )
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QFont, QColor
 
 from gui.widgets import (
@@ -132,9 +132,16 @@ class AnnualTab(QWidget):
             '주민번호', '강사명', '업종코드',
             '연간 총지급액', '연간 소득세', '연간 지방소득세', '연간 소득세 총액', '연간 총실지급액'
         ])
-        for i in range(self.table.columnCount()):
-            self.table.horizontalHeader().setSectionResizeMode(i, QHeaderView.ResizeToContents)
-        self.table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+        header = self.table.horizontalHeader()
+        header.setStretchLastSection(False)
+        header.setMinimumSectionSize(60)
+        header.setSectionResizeMode(QHeaderView.Interactive)
+        header.setSectionResizeMode(0, QHeaderView.Fixed)            # 번호
+        self.table.setColumnWidth(0, 160)
+        
+        # 비율 기반 초기 너비 (더 세밀하게 조정: 연간 지방소득세, 소득세 총액 너비 확대)
+        self._col_ratios = [0, 0.11, 0.10, 0.14, 0.13, 0.16, 0.18, 0.18]
+        
         self.table.verticalHeader().setVisible(False)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
@@ -160,6 +167,31 @@ class AnnualTab(QWidget):
 
         self.panel.body_layout.addWidget(self.table)
         layout.addWidget(self.panel)
+        self._apply_proportional_widths()
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        QTimer.singleShot(10, self._apply_proportional_widths)
+
+    def _apply_proportional_widths(self):
+        """비율 기반 컬럼 너비 분배"""
+        total = self.table.viewport().width()
+        fixed = self.table.columnWidth(0)
+        avail = total - fixed
+        if avail <= 0:
+            return
+            
+        used = 0
+        last_interactive = 7
+        
+        for i, ratio in enumerate(self._col_ratios):
+            if ratio > 0:
+                w = int(avail * ratio)
+                self.table.setColumnWidth(i, w)
+                used += w
+                
+        if avail > used:
+            self.table.setColumnWidth(last_interactive, self.table.columnWidth(last_interactive) + (avail - used))
 
     def _get_selected_months(self) -> list[str]:
         """선택된 월 리스트 반환"""
@@ -184,7 +216,13 @@ class AnnualTab(QWidget):
 
         data = self.repo.get_annual_summary(year, months)
         self.table.setSortingEnabled(False)
-        self.table.setRowCount(len(data))
+        self.table.setRowCount(len(data) + 1 if data else 0)
+
+        sum_total = 0
+        sum_income = 0
+        sum_local = 0
+        sum_total_tax = 0
+        sum_net = 0
 
         for row, d in enumerate(data):
             # 주민번호 마스킹 (평문 저장된 값에서 마스킹 처리)
@@ -210,6 +248,12 @@ class AnnualTab(QWidget):
             total_tax = income_tax + local_tax
             net = d.get('annual_net_payment', 0) or 0
 
+            sum_total += total
+            sum_income += income_tax
+            sum_local += local_tax
+            sum_total_tax += total_tax
+            sum_net += net
+
             vals = [total, income_tax, local_tax, total_tax, net]
 
             for i, val in enumerate(vals):
@@ -228,13 +272,36 @@ class AnnualTab(QWidget):
                 
                 self.table.setItem(row, col, item)
 
-        self.table.setSortingEnabled(True)
+        if data:
+            last_row = len(data)
+            
+            sum_label = QTableWidgetItem("합계")
+            sum_label.setFont(QFont('Pretendard', 10, QFont.Bold))
+            sum_label.setTextAlignment(Qt.AlignCenter)
+            sum_label.setBackground(QColor('#F8FAFC'))
+            self.table.setItem(last_row, 0, sum_label)
+            
+            for c in [1, 2]:
+                empty_item = QTableWidgetItem("")
+                empty_item.setBackground(QColor('#F8FAFC'))
+                self.table.setItem(last_row, c, empty_item)
 
-        if not data:
-            QMessageBox.information(
-                self, '조회 결과',
-                f'{year}년 선택 월({", ".join(months)})에 해당하는 데이터가 없습니다.'
-            )
+            sum_vals = [sum_total, sum_income, sum_local, sum_total_tax, sum_net]
+            for i, val in enumerate(sum_vals):
+                col = i + 3
+                item = QTableWidgetItem(format_money(val))
+                item.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
+                item.setBackground(QColor('#F8FAFC'))
+                item.setFont(QFont('Pretendard', 10, QFont.Bold))
+                
+                if col in [6, 7]:
+                    item.setForeground(QColor(Colors.ERROR))
+                else:
+                    item.setForeground(Qt.black)
+                    
+                self.table.setItem(last_row, col, item)
+
+        self.table.setSortingEnabled(True)
 
     def _download_excel(self):
         """연간 엑셀 다운로드"""
@@ -255,7 +322,7 @@ class AnnualTab(QWidget):
             return
 
         try:
-            generate_annual_excel(self.repo, year, months, output_dir)
+            generate_annual_excel(self.repo, year, months, filepath)
             QMessageBox.information(self, '다운로드 완료', f'파일이 저장되었습니다:\n{filepath}')
         except ValueError as e:
             QMessageBox.warning(self, '오류', str(e))

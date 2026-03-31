@@ -115,11 +115,20 @@ class HomeTab(QWidget):
         lbl_update_title.setStyleSheet("color: #1E293B; border: none;")
         updates_layout.addWidget(lbl_update_title)
 
+        from PySide6.QtWidgets import QScrollArea
+        
         self.lbl_updates_content = QLabel("인터넷에서 최신 공지사항을 불러오는 중입니다...")
         self.lbl_updates_content.setFont(QFont('Pretendard', 11))
         self.lbl_updates_content.setStyleSheet("color: #475569; border: none; line-height: 1.5;")
         self.lbl_updates_content.setWordWrap(True)
-        updates_layout.addWidget(self.lbl_updates_content)
+        self.lbl_updates_content.setAlignment(Qt.AlignTop | Qt.AlignLeft)
+        
+        scroll_area = QScrollArea()
+        scroll_area.setWidgetResizable(True)
+        scroll_area.setStyleSheet("QScrollArea { border: none; background: transparent; } QScrollBar:vertical { width: 10px; }")
+        scroll_area.setWidget(self.lbl_updates_content)
+
+        updates_layout.addWidget(scroll_area)
 
         main_layout.addWidget(updates_frame)
         main_layout.addStretch()

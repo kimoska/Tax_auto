@@ -8,7 +8,7 @@ from PySide6.QtWidgets import (
     QRadioButton, QButtonGroup, QHeaderView, QAbstractItemView,
     QMessageBox, QScrollArea, QFrame, QSizePolicy, QSpacerItem
 )
-from PySide6.QtCore import Qt, Signal
+from PySide6.QtCore import Qt, Signal, QTimer
 from PySide6.QtGui import QFont
 
 from gui.widgets import (
@@ -105,23 +105,25 @@ class InstructorTab(QWidget):
 
         # 테이블
         self.table = QTableWidget()
-        self.table.setColumnCount(7)
+        self.table.setColumnCount(8)
         self.table.setHorizontalHeaderLabels([
-            '선택', '강사명', '업종코드', '할당 프로그램', '연락처', '주민번호', '관리'
+            '선택', '강사명', '업종코드', '과목구분', '프로그램명', '연락처', '주민번호', '관리'
         ])
         header = self.table.horizontalHeader()
         header.setStretchLastSection(False)
+        header.setMinimumSectionSize(60)
         header.setSectionResizeMode(0, QHeaderView.Fixed)            # 선택
         header.setSectionResizeMode(1, QHeaderView.Interactive)      # 강사명
         header.setSectionResizeMode(2, QHeaderView.Interactive)      # 업종코드
-        header.setSectionResizeMode(3, QHeaderView.Interactive)      # 할당 프로그램
-        header.setSectionResizeMode(4, QHeaderView.Interactive)      # 연락처
-        header.setSectionResizeMode(5, QHeaderView.Interactive)      # 주민번호
-        header.setSectionResizeMode(6, QHeaderView.Fixed)            # 관리
+        header.setSectionResizeMode(3, QHeaderView.Interactive)      # 과목구분
+        header.setSectionResizeMode(4, QHeaderView.Interactive)      # 프로그램명
+        header.setSectionResizeMode(5, QHeaderView.Interactive)      # 연락처
+        header.setSectionResizeMode(6, QHeaderView.Interactive)      # 주민번호
+        header.setSectionResizeMode(7, QHeaderView.Fixed)            # 관리
         self.table.setColumnWidth(0, 40)
-        self.table.setColumnWidth(6, 110)
-        # 비율 기반 초기 너비 (resizeEvent에서 재분배)
-        self._col_ratios = [0, 0.12, 0.10, 0.28, 0.18, 0.22, 0]
+        self.table.setColumnWidth(7, 110)
+        # 비율 기반 초기 너비 (합이 정확히 1.0이 되도록 조정)
+        self._col_ratios = [0, 0.13, 0.08, 0.12, 0.25, 0.17, 0.25, 0]
         self.table.verticalHeader().setVisible(False)
         self.table.verticalHeader().setDefaultSectionSize(44)
 
@@ -171,18 +173,27 @@ class InstructorTab(QWidget):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        self._apply_proportional_widths()
+        QTimer.singleShot(10, self._apply_proportional_widths)
 
     def _apply_proportional_widths(self):
         """비율 기반 컬럼 너비 분배"""
         total = self.table.viewport().width()
-        fixed = self.table.columnWidth(0) + self.table.columnWidth(6)  # 선택 + 관리
+        fixed = self.table.columnWidth(0) + self.table.columnWidth(7)  # 선택 + 관리
         avail = total - fixed
         if avail <= 0:
             return
+            
+        used = 0
+        last_interactive = 6  # 주민번호가 마지막 유동 컬럼
+        
         for i, ratio in enumerate(self._col_ratios):
             if ratio > 0:
-                self.table.setColumnWidth(i, int(avail * ratio))
+                w = int(avail * ratio)
+                self.table.setColumnWidth(i, w)
+                used += w
+                
+        if avail > used:
+            self.table.setColumnWidth(last_interactive, self.table.columnWidth(last_interactive) + (avail - used))
 
     def refresh_data(self):
         """DB에서 강사 목록 새로고침"""
@@ -212,16 +223,22 @@ class InstructorTab(QWidget):
             # 업종코드
             self.table.setItem(row, 2, QTableWidgetItem(inst['industry_code']))
 
-            # 프로그램 목록 (뱃지 형태로 텍스트)
-            prog_texts = [f"• [{p['category']}] {p['program_name']}" for p in programs]
+            # 과목구분
+            category_texts = [p['category'] for p in programs]
+            cat_text = '\n'.join(category_texts) if category_texts else '-'
+            cat_item = QTableWidgetItem(cat_text)
+            cat_item.setForeground(Qt.darkGray)
+            self.table.setItem(row, 3, cat_item)
+
+            # 프로그램명
+            prog_texts = [p['program_name'] for p in programs]
             prog_text = '\n'.join(prog_texts) if prog_texts else '(미등록)'
-            
             prog_item = QTableWidgetItem(prog_text)
-            prog_item.setForeground(Qt.darkGray)  # 글씨 색상 변경
-            self.table.setItem(row, 3, prog_item)
+            prog_item.setForeground(Qt.darkGray)
+            self.table.setItem(row, 4, prog_item)
 
             # 연락처
-            self.table.setItem(row, 4, QTableWidgetItem(inst.get('phone', '') or '-'))
+            self.table.setItem(row, 5, QTableWidgetItem(inst.get('phone', '') or '-'))
 
             # 주민번호 마스킹 (평문에서 앞 6자리만 표시)
             raw_rid = inst.get('resident_id', '')
@@ -235,7 +252,7 @@ class InstructorTab(QWidget):
             
             rid_item = QTableWidgetItem(masked_rid)
             rid_item.setTextAlignment(Qt.AlignCenter)
-            self.table.setItem(row, 5, rid_item)
+            self.table.setItem(row, 6, rid_item)
 
             # 관리 버튼
             btn_widget = QWidget()
@@ -275,7 +292,7 @@ class InstructorTab(QWidget):
 
             btn_layout.addWidget(btn_edit)
             btn_layout.addWidget(btn_del)
-            self.table.setCellWidget(row, 6, btn_widget)
+            self.table.setCellWidget(row, 7, btn_widget)
 
         # KPI 업데이트
         self.kpi_total.set_value(str(len(instructors)))
@@ -370,8 +387,20 @@ class InstructorTab(QWidget):
         )
         
         if reply == QMessageBox.Yes:
-            for iid, _ in selected_ids:
+            from PySide6.QtWidgets import QProgressDialog, QApplication
+            progress = QProgressDialog("강사 데이터를 삭제 중입니다...", "중단", 0, len(selected_ids), self)
+            progress.setWindowModality(Qt.WindowModal)
+            progress.setValue(0)
+            progress.show()
+
+            for idx, (iid, _) in enumerate(selected_ids):
+                if progress.wasCanceled():
+                    break
                 self.repo.delete_instructor(iid)
+                progress.setValue(idx + 1)
+                QApplication.processEvents()
+
+            progress.close()
             self.refresh_data()
 
     def _download_template(self):
@@ -439,11 +468,20 @@ class InstructorTab(QWidget):
                     })
 
             # DB 저장
+            from PySide6.QtWidgets import QProgressDialog, QApplication
+            progress = QProgressDialog("데이터를 클라우드에 저장 중입니다...", "중단", 0, len(instructor_map), self)
+            progress.setWindowModality(Qt.WindowModal)
+            progress.setValue(0)
+            progress.show()
+
             count = 0
-            for rid, data in instructor_map.items():
+            for idx, (rid, data) in enumerate(instructor_map.items()):
+                if progress.wasCanceled():
+                    break
+                
                 data['info']['resident_id'] = rid
                 
-                # 강사 추가 (신규 등록만 지원하며, 주민번호 중복 체크 로직은 Repository 내부에 있음을 가정)
+                # 강사 추가
                 iid = self.repo.create_instructor(data['info'])
                 if iid:
                     for prog in data['programs']:
@@ -452,6 +490,11 @@ class InstructorTab(QWidget):
                             **prog
                         })
                     count += 1
+                
+                progress.setValue(idx + 1)
+                QApplication.processEvents()
+
+            progress.close()
                 
             self.refresh_data()
             QMessageBox.information(self, "완료", f"{count}명의 강사가 등록되었습니다.")

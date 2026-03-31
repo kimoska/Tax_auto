@@ -7,6 +7,7 @@ import json
 from datetime import datetime, timezone
 from core.firestore_client import FirestoreClient
 import time
+from core.aggregator import aggregate_lectures_to_settlements
 
 class CloudRepository:
     """Firestore 기반 전 테이블 CRUD 함수 모음"""
@@ -108,14 +109,33 @@ class CloudRepository:
         self.client.update_document(self._org(f'instructors/{instructor_id}'), doc_data)
 
     def delete_instructor(self, instructor_id):
-        """강사 삭제 (연관 프로그램도 삭제)"""
+        """강사 삭제 (연결된 모든 데이터: 프로그램, 강의내역, 정산내역 연쇄 삭제)"""
         self._invalidate_cache('instructors')
         self._invalidate_cache('programs')
-        # 연관 프로그램 삭제
+        self._invalidate_cache('lectures')
+        self._invalidate_cache('settlements')
+        
+        # 1. 연관 프로그램 삭제
         programs = self.get_programs_by_instructor(instructor_id)
         for prog in programs:
             self.client.delete_document(self._org(f'instructor_programs/{prog["id"]}'))
-        # 강사 삭제
+            
+        # 2. 연관 강의내역 삭제
+        lectures = self.get_all_lectures()
+        for lec in lectures:
+            if str(lec.get('instructor_id')) == str(instructor_id):
+                self.client.delete_document(self._org(f'lectures/{lec["id"]}'))
+                
+        # 3. 연관 정산내역 삭제
+        # settlements는 양이 많을 수 있으므로 필터링 조회 후 삭제
+        settlements = self.client.list_documents(
+            self._org('settlements'),
+            filters=[('instructor_id', 'EQUAL', str(instructor_id))]
+        )
+        for stl in settlements:
+            self.client.delete_document(self._org(f'settlements/{stl["id"]}'))
+            
+        # 4. 강사 본체 삭제
         self.client.delete_document(self._org(f'instructors/{instructor_id}'))
 
     # ═══════════════════════════════════════════
@@ -186,6 +206,15 @@ class CloudRepository:
     # ═══════════════════════════════════════════
     # 강의 (lectures)
     # ═══════════════════════════════════════════
+
+    def get_all_lectures(self) -> list[dict]:
+        """모든 강의 목록 (무기한 캐싱)"""
+        if 'lectures' in self._cache:
+            return self._cache['lectures']
+            
+        docs = self.client.list_documents(self._org('lectures'))
+        self._cache['lectures'] = docs
+        return docs
 
     def get_lectures_by_period(self, period: str) -> list[dict]:
         """
@@ -276,10 +305,32 @@ class CloudRepository:
         self._invalidate_cache('settlements')
 
     def delete_lecture(self, lecture_id):
-        """강의 내역 삭제"""
+        """강의 내역 삭제 및 관련 정산 자동 동기화"""
+        lec = self.get_lecture(lecture_id)
+        if not lec:
+            return
+            
+        period = lec.get('period')
         self.client.delete_document(self._org(f'lectures/{lecture_id}'))
-        self._invalidate_cache('lectures')
-        self._invalidate_cache('settlements')
+        
+        # 관련 정보 캐시 무효화 및 정산 동기화
+        if period:
+            self.sync_settlements_for_period(period)
+        else:
+            self._invalidate_cache('lectures')
+            self._invalidate_cache('settlements')
+
+    def delete_lectures(self, lecture_ids: list[str], period: str):
+        """여러 강의 내역 일괄 삭제 및 정산 1회 동기화"""
+        for lid in lecture_ids:
+            self.client.delete_document(self._org(f'lectures/{lid}'))
+        
+        # 모든 삭제 후 정산 1회 동기화
+        if period:
+            self.sync_settlements_for_period(period)
+        else:
+            self._invalidate_cache('lectures')
+            self._invalidate_cache('settlements')
 
     # ═══════════════════════════════════════════
     # 정산 (settlements) — COALESCE 로직 유지
@@ -304,13 +355,46 @@ class CloudRepository:
         result = []
         for stl in settlements:
             inst_id = stl.get('instructor_id', '')
-            inst = instructors_map.get(inst_id, {})
+            inst = instructors_map.get(inst_id)
+            if not inst:
+                continue # 삭제된 강사의 데이터 스킵
+                
             merged = {**stl}
             merged['name'] = inst.get('name', '')
             merged['resident_id'] = inst.get('resident_id', '')
             result.append(merged)
-
+        
         return sorted(result, key=lambda x: x.get('name', ''))
+
+    def sync_settlements_for_period(self, period: str):
+        """강의 데이터를 기반으로 특정 기간의 정산 데이터를 완전 동기화 (삭제 후 재생성)"""
+        # 1. 캐시 무효화
+        self._invalidate_cache('lectures')
+        self._invalidate_cache('settlements')
+        
+        # 2. 현재 강의 내역 가져오기
+        lectures = self.get_lectures_by_period(period)
+        
+        # 3. 기존 정산 내역 삭제
+        self.delete_settlements_by_period(period)
+        
+        # 4. 강의가 없으면 종료 (삭제 상태 유지)
+        if not lectures:
+            return
+            
+        # 5. 합산 및 저장
+        aggregated = aggregate_lectures_to_settlements(lectures)
+        for entry in aggregated:
+            calc_data = {
+                'total_payment': entry['total_payment'],
+                'industry_code': entry['industry_code'],
+                'is_foreigner': entry['is_foreigner'],
+                'tax_rate': entry['tax_rate'],
+                'income_tax': entry['income_tax'],
+                'local_tax': entry['local_tax'],
+                'net_payment': entry['net_payment'],
+            }
+            self.upsert_settlement(entry['instructor_id'], period, calc_data)
 
     def get_settlement(self, settlement_id) -> dict | None:
         """정산 단건 조회"""
@@ -583,8 +667,11 @@ class CloudRepository:
         summary = {}
         for stl in all_settlements:
             inst_id = stl.get('instructor_id', '')
+            inst = instructors_map.get(inst_id)
+            if not inst:
+                continue # 삭제된 강사의 데이터는 합산에서 제외
+                
             if inst_id not in summary:
-                inst = instructors_map.get(inst_id, {})
                 summary[inst_id] = {
                     'instructor_id': inst_id,
                     'name': inst.get('name', ''),

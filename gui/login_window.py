@@ -46,6 +46,19 @@ class LoginWindow(QDialog):
         self._load_certificates()
         self._setup_ui()
         self._load_saved_credentials()
+        
+        # 온보딩 가이드 (시작 시)
+        from gui.onboarding_dialog import OnboardingDialog
+        if OnboardingDialog.check_should_show("login_guide"):
+            content = """
+            AutoTax에 오신 것을 환영합니다!<br><br>
+            <b>1. 아이디 만들기:</b><br>
+            프로그램 하단의 '회원가입' 버튼을 눌러 소속 기관의 코드를 입력하고 아이디를 만드세요.<br><br>
+            <b>2. 로그인 방법:</b><br>
+            생성한 아이디로 로그인한 후, 홈택스 작업에 필요한 <b>공동인증서</b>를 선택하여 접속하세요.
+            """
+            self.guide = OnboardingDialog("login_guide", "AutoTax 시작하기", content, self)
+            self.guide.show()
 
     def _load_certificates(self):
         """PC의 인증서를 읽어옵니다."""

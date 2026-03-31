@@ -150,6 +150,29 @@ class CloudLoginWindow(QDialog):
 
         self._setup_ui()
 
+    def _show_onboarding(self):
+        from gui.onboarding_dialog import OnboardingDialog
+        # 키 이름을 변경하여 기존 캐시 무시 (강제 노출 테스트)
+        if OnboardingDialog.check_should_show("login_guide_new"):
+            content = """
+            AutoTax에 오신 것을 환영합니다!<br><br>
+            <b>1. 아이디 만들기:</b><br>
+            처음 로그인을 하는 경우 프로그램 상단의 '기관 등록' 통해 아이디와 비밀번화, 기관 코드를 등록하세요.<br><br>
+            <b>2. 로그인 방법:</b><br>
+            소속 기관의 <b>기관코드</b>와 생성한 아이디로 로그인하세요.<br><br>
+            <b>3. 새로운 아이디 만들기(기관코드 발행 후)</b><br>
+           기관코드를 만든 기관에서 새로운 아이디를 생성할 경우 상단의 "직원 로그인"을 누르고 새로운 아이디와 비밀번호, 등록한 기관코드를 넣고 아래의 "회원가입" 버튼을 눌러 가입하세요.
+            """
+            self.guide = OnboardingDialog("login_guide_new", "AutoTax 시작하기", content, self)
+            self.guide.show()
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        if not hasattr(self, '_onboarding_shown'):
+            from PySide6.QtCore import QTimer
+            self._onboarding_shown = True
+            QTimer.singleShot(300, self._show_onboarding)
+
     def _setup_ui(self):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(40, 28, 40, 20)

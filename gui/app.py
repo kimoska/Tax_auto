@@ -97,8 +97,8 @@ class AutoTaxWindow(QMainWindow):
         self.current_month = f'{now.month:02d}'
 
         self.setWindowTitle('AutoTax — 강사료 원천세 자동화')
-        self.resize(1280, 800)
-        self.setMinimumSize(1024, 700)
+        self.resize(1600, 950)
+        self.setMinimumSize(1200, 800)
 
         # 중앙 위젯
         central = QWidget()
@@ -138,6 +138,24 @@ class AutoTaxWindow(QMainWindow):
 
         # ── 업데이트 확인 ──
         self._check_for_updates()
+        
+        # ── 온보딩 가이드 ──
+        from gui.onboarding_dialog import OnboardingDialog
+        if OnboardingDialog.check_should_show("feature_guide"):
+            content = """
+            우선 강사 정보를 등록해보세요!<br><br>
+            <b>1. 엑셀 일괄 등록</b><br>
+            강사관리 탭에서 "엑셀 일괄 등록" 버튼을 누르고 
+            압축을 해제한 폴더에서 "강사 등록 양식" 엑셀 파일을 찾아 업로드합니다.<br><br>
+            <b>2. 강의 내역 등록</b><br>
+            강의 내역 탭에서 "강의 추가"버튼을 눌러 강사별 강의를 등록하고 강의횟수를 작성하세요.<br><br>
+            <b>3. 월별 정산 계산</b><br>
+            강의를 등록한 "월"을 선택하고 "정산 재계산" 버튼을 눌러 실제 지급액을 확인해 보세요.<br><br>
+
+            <small style='color: #64748B;'>* 샘플 엑셀파일에 등록된 정보는 가상의 정보입니다..</small>
+            """
+            self.guide = OnboardingDialog("feature_guide", "프로그램 테스트 방법", content, self)
+            self.guide.show()
 
     def _check_for_updates(self):
         self.updater = UpdateChecker(current_version="v1.1.0")

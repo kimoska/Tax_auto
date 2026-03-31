@@ -20,14 +20,33 @@ class UpdateChecker(QThread):
 
     def run(self):
         try:
-            req = urllib.request.Request(REPO_API_URL, headers={'User-Agent': 'TaxAuto-Updater'})
+            # 여러 릴리스를 가져오기 위해 /latest 제거
+            repo_api_list_url = REPO_API_URL.replace("/latest", "")
+            req = urllib.request.Request(repo_api_list_url, headers={'User-Agent': 'TaxAuto-Updater'})
             ctx = ssl._create_unverified_context()
             with urllib.request.urlopen(req, timeout=10, context=ctx) as response:
-                data = json.loads(response.read().decode('utf-8'))
+                releases = json.loads(response.read().decode('utf-8'))
                 
-                latest_version = data.get("tag_name", "")
-                description = data.get("body", "최신 업데이트 내역이 없습니다.")
-                assets = data.get("assets", [])
+                if not releases or not isinstance(releases, list):
+                    self.update_available.emit(self.current_version, "업데이트 정보를 불러올 수 없습니다.", "")
+                    return
+                
+                latest_release = releases[0]
+                latest_version = latest_release.get("tag_name", "")
+                
+                # 전체 릴리스 내역 포맷팅 (최대 10개)
+                all_desc = []
+                for idx, r in enumerate(releases[:10]):
+                    v = r.get("tag_name", "")
+                    date = r.get("published_at", "")[:10]  # YYYY-MM-DD
+                    body = r.get("body", "내용 없음")
+                    # 최신 버전에는 [New] 표시
+                    prefix = "🆕 " if idx == 0 else "✓ "
+                    all_desc.append(f"<b>{prefix}[{v}] 업데이트 ({date})</b><br><br>{body}")
+                
+                full_description = "<hr>".join(all_desc)
+                
+                assets = latest_release.get("assets", [])
                 
                 if latest_version and latest_version != self.current_version:
                     download_url = None
@@ -37,10 +56,11 @@ class UpdateChecker(QThread):
                             break
                     
                     if download_url:
-                        self.update_available.emit(latest_version, description, download_url)
+                        self.update_available.emit(latest_version, full_description, download_url)
+                    else:
+                        self.update_available.emit(latest_version, full_description, "")
                 else:
-                    # No update, but we can emit the description anyway to update Home screen
-                    self.update_available.emit(self.current_version, description, "")
+                    self.update_available.emit(self.current_version, full_description, "")
         except Exception as e:
             self.error_occurred.emit(str(e))
 

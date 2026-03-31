@@ -483,3 +483,54 @@ def parse_instructor_excel(file_path: str) -> list[dict]:
         instructors.append(data)
         
     return instructors
+def generate_sample_instructor_excel(output_path: str) -> str:
+    """강사 등록용 샘플 엑셀 파일 생성 (더미 데이터 포함)"""
+    from openpyxl import Workbook
+    from openpyxl.styles import Font, Alignment, Border, Side, PatternFill
+    
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "강사등록_양식"
+    
+    headers = [
+        "강사명", "주민등록번호", "업종코드", "연락처", "이메일", "주소", 
+        "은행명", "계좌번호", "과목구분", "프로그램명", "회당 강사료", "메모"
+    ]
+    
+    # 헤더 스타일
+    header_font = Font(bold=True, color="FFFFFF")
+    header_fill = PatternFill(start_color="4472C4", end_color="4472C4", fill_type="solid")
+    center_align = Alignment(horizontal="center", vertical="center")
+    thin_border = Border(left=Side(style='thin'), right=Side(style='thin'), 
+                         top=Side(style='thin'), bottom=Side(style='thin'))
+    
+    for col, h in enumerate(headers, 1):
+        cell = ws.cell(row=1, column=col, value=h)
+        cell.font = header_font
+        cell.fill = header_fill
+        cell.alignment = center_align
+        cell.border = thin_border
+        
+    # 샘플 데이터 1
+    sample_data = [
+        ["홍길동", "800101-1234567", "940909", "010-1234-5678", "hong@example.com", 
+         "서울시 강남구 테헤란로", "국민은행", "123-45-67890", "인문학", "조선 역사 산책", 50000, "본관 수업"],
+        ["성춘향", "850505-2345678", "940909", "010-9876-5432", "sung@example.com", 
+         "서울시 서초구 반포동", "신한은행", "987-65-43210", "음악", "전통 민요 교실", 45000, "금요일 오후"]
+    ]
+    
+    for r_idx, row_data in enumerate(sample_data, 2):
+        for c_idx, value in enumerate(row_data, 1):
+            cell = ws.cell(row=r_idx, column=c_idx, value=value)
+            cell.border = thin_border
+            if c_idx == 11: # 강사료 숫자 포맷
+                cell.number_format = '#,##0'
+                
+    # 컬럼 너비 조정
+    from openpyxl.utils import get_column_letter
+    col_widths = [12, 18, 10, 15, 25, 35, 12, 20, 15, 20, 15, 20]
+    for i, w in enumerate(col_widths, 1):
+        ws.column_dimensions[get_column_letter(i)].width = w
+        
+    wb.save(output_path)
+    return output_path

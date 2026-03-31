@@ -7,7 +7,7 @@ from PySide6.QtWidgets import (
     QPushButton, QLineEdit, QLabel, QComboBox, QDialog,
     QHeaderView, QAbstractItemView, QMessageBox, QFrame, QScrollArea
 )
-from PySide6.QtCore import Qt, Signal
+from PySide6.QtCore import Qt, Signal, QTimer
 from PySide6.QtGui import QFont
 
 from gui.widgets import (
@@ -126,15 +126,28 @@ class LectureTab(QWidget):
             '횟수', '총 강사료', '소득세', '지방소득세', '실지급액', '관리'
         ])
         header = self.table.horizontalHeader()
-        # 모든 칸럼 균등 배분 (Stretch) 후 특정 칸럼만 Fixed
-        header.setSectionResizeMode(QHeaderView.Stretch)
+        header.setStretchLastSection(False)
+        header.setMinimumSectionSize(60)
         header.setSectionResizeMode(0, QHeaderView.Fixed)            # 선택
+        header.setSectionResizeMode(1, QHeaderView.Interactive)      # 귀속연월
+        header.setSectionResizeMode(2, QHeaderView.Interactive)      # 강사명
+        header.setSectionResizeMode(3, QHeaderView.Interactive)      # 과목명(프로그램명)
+        header.setSectionResizeMode(4, QHeaderView.Interactive)      # 단가
+        header.setSectionResizeMode(5, QHeaderView.Interactive)      # 횟수
+        header.setSectionResizeMode(6, QHeaderView.Interactive)      # 총 강사료
+        header.setSectionResizeMode(7, QHeaderView.Interactive)      # 소득세
+        header.setSectionResizeMode(8, QHeaderView.Interactive)      # 지방소득세
+        header.setSectionResizeMode(9, QHeaderView.Interactive)      # 실지급액
         header.setSectionResizeMode(10, QHeaderView.Fixed)           # 관리
         self.table.setColumnWidth(0, 40)
         self.table.setColumnWidth(10, 110)
+        
+        # 비율 기반 초기 너비
+        self._col_ratios = [0, 0.12, 0.10, 0.22, 0.10, 0.05, 0.10, 0.08, 0.08, 0.15, 0]
+        
         self.table.verticalHeader().setVisible(False)
         self.table.verticalHeader().setDefaultSectionSize(44)
-
+        
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table.setAlternatingRowColors(True)
@@ -164,6 +177,31 @@ class LectureTab(QWidget):
         self.table.cellPressed.connect(self._on_cell_clicked)
         self.panel.body_layout.addWidget(self.table)
         layout.addWidget(self.panel)
+        self._apply_proportional_widths()
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        QTimer.singleShot(10, self._apply_proportional_widths)
+
+    def _apply_proportional_widths(self):
+        """비율 기반 컬럼 너비 분배"""
+        total = self.table.viewport().width()
+        fixed = self.table.columnWidth(0) + self.table.columnWidth(10)
+        avail = total - fixed
+        if avail <= 0:
+            return
+            
+        used = 0
+        last_interactive = 9
+        
+        for i, ratio in enumerate(self._col_ratios):
+            if ratio > 0:
+                w = int(avail * ratio)
+                self.table.setColumnWidth(i, w)
+                used += w
+                
+        if avail > used:
+            self.table.setColumnWidth(last_interactive, self.table.columnWidth(last_interactive) + (avail - used))
 
     def _on_period_changed(self):
         year = self.year_combo.currentData()
@@ -344,6 +382,7 @@ class LectureTab(QWidget):
         )
 
         if reply == QMessageBox.Yes:
+            # 삭제 후 리포지토리에서 자동 정산 동기화함
             self.repo.delete_lecture(lecture_id)
             self.refresh_data()
             self.data_changed.emit()
@@ -386,8 +425,11 @@ class LectureTab(QWidget):
         )
         
         if reply == QMessageBox.Yes:
-            for lid, _ in selected_ids:
-                self.repo.delete_lecture(lid)
+            # ID만 추출
+            lids = [str(lid) for lid, _ in selected_ids]
+            # 일괄 삭제 및 정산 1회 동기화
+            self.repo.delete_lectures(lids, self.current_period)
+            
             self.refresh_data()
             self.data_changed.emit()
 
