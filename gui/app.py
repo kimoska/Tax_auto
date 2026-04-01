@@ -23,6 +23,7 @@ from core.updater import UpdateChecker
 
 import datetime
 
+APP_VERSION = "v1.1.1"
 
 class SidebarButton(QPushButton):
     """사이드바 네비게이션 버튼"""
@@ -175,7 +176,7 @@ class AutoTaxWindow(QMainWindow):
             self.guide.show()
 
     def _check_for_updates(self):
-        self.updater = UpdateChecker(current_version="v1.1.1")
+        self.updater = UpdateChecker(current_version=APP_VERSION)
         self.updater.update_available.connect(self._on_update_available)
         self.updater.error_occurred.connect(self._on_update_error)
         self.updater.start()
@@ -248,7 +249,7 @@ class AutoTaxWindow(QMainWindow):
 
         logo = QLabel('AutoTax')
         logo.setStyleSheet("color: white; font-size: 18px; font-weight: 700; border: none;")
-        version = QLabel('Enterprise Edition v1.1.1')
+        version = QLabel(f'Enterprise Edition {APP_VERSION}')
         version.setStyleSheet("color: #8D8D8D; font-size: 11px; border: none;")
 
         header_layout.addWidget(logo)
