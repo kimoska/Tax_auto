@@ -198,6 +198,7 @@ class InstructorTab(QWidget):
     def refresh_data(self):
         """DB에서 강사 목록 새로고침"""
         self._apply_proportional_widths()
+        self.table.setSortingEnabled(False)  # 데이터 삽입 중 정렬 비활성화 (행 뒤섞임 방지)
         instructors = self.repo.get_all_instructors()
         total_programs = 0
 
@@ -293,6 +294,8 @@ class InstructorTab(QWidget):
             btn_layout.addWidget(btn_edit)
             btn_layout.addWidget(btn_del)
             self.table.setCellWidget(row, 7, btn_widget)
+
+        self.table.setSortingEnabled(True)  # 데이터 삽입 완료 후 정렬 다시 활성화
 
         # KPI 업데이트
         self.kpi_total.set_value(str(len(instructors)))
