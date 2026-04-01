@@ -30,10 +30,6 @@ class LectureTab(QWidget):
         self.setObjectName('lectureTab')
         self._setup_ui()
 
-        # F5 새로고침 단축키 연동
-        self.shortcut_refresh = QShortcut(QKeySequence("F5"), self)
-        self.shortcut_refresh.activated.connect(self._on_period_changed)
-
     def _setup_ui(self):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(24, 24, 24, 24)

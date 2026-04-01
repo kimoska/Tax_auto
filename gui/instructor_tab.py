@@ -36,10 +36,6 @@ class InstructorTab(QWidget):
         self._setup_ui()
         self.refresh_data()
 
-        # F5 새로고침 단축키 추가
-        self.shortcut_refresh = QShortcut(QKeySequence("F5"), self)
-        self.shortcut_refresh.activated.connect(self.refresh_data)
-
     def _setup_ui(self):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(24, 24, 24, 24)

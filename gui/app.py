@@ -139,6 +139,23 @@ class AutoTaxWindow(QMainWindow):
         # ── 업데이트 확인 ──
         self._check_for_updates()
         
+        # ── 전역 단축키 (F5 새로고침) ──
+        from PySide6.QtGui import QShortcut, QKeySequence
+        self.shortcut_refresh = QShortcut(QKeySequence("F5"), self)
+        self.shortcut_refresh.activated.connect(self._refresh_current_tab)
+
+    def _refresh_current_tab(self):
+        """현재 활성화된 탭에 맞춰 새로고침 명령 하달"""
+        current_widget = self.stack.currentWidget()
+        if hasattr(self, 'instructor_tab') and current_widget == self.instructor_tab:
+            self.instructor_tab.refresh_data()
+        elif hasattr(self, 'lecture_tab') and current_widget == self.lecture_tab:
+            self.lecture_tab._on_period_changed()
+        elif hasattr(self, 'settlement_tab') and current_widget == self.settlement_tab:
+            self.settlement_tab._on_period_changed()
+        elif hasattr(self, 'annual_tab') and current_widget == self.annual_tab:
+            self.annual_tab._query()
+            
         # ── 온보딩 가이드 ──
         from gui.onboarding_dialog import OnboardingDialog
         if OnboardingDialog.check_should_show("feature_guide"):
@@ -231,7 +248,7 @@ class AutoTaxWindow(QMainWindow):
 
         logo = QLabel('AutoTax')
         logo.setStyleSheet("color: white; font-size: 18px; font-weight: 700; border: none;")
-        version = QLabel('Enterprise Edition v1.1.0')
+        version = QLabel('Enterprise Edition v1.1.1')
         version.setStyleSheet("color: #8D8D8D; font-size: 11px; border: none;")
 
         header_layout.addWidget(logo)
