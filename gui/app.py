@@ -158,7 +158,7 @@ class AutoTaxWindow(QMainWindow):
             self.guide.show()
 
     def _check_for_updates(self):
-        self.updater = UpdateChecker(current_version="v1.1.0")
+        self.updater = UpdateChecker(current_version="v1.1.1")
         self.updater.update_available.connect(self._on_update_available)
         self.updater.error_occurred.connect(self._on_update_error)
         self.updater.start()
@@ -167,6 +167,46 @@ class AutoTaxWindow(QMainWindow):
         notes = f"<b>[{version}] 업데이트 안내</b><br><br>{desc}"
         notes = notes.replace('\n', '<br>')
         self.home_tab.update_release_notes(notes)
+        
+        if url:
+            from PySide6.QtWidgets import QMessageBox
+            reply = QMessageBox.question(
+                self, '업데이트 알림',
+                f"새로운 버전({version})이 출시되었습니다.\n\n"
+                f"지금 바로 업데이트하시겠습니까?\n(예를 누르시면 자동으로 다운로드 후 재시작됩니다)",
+                QMessageBox.Yes | QMessageBox.No
+            )
+            if reply == QMessageBox.Yes:
+                self._start_update(url)
+
+    def _start_update(self, url):
+        from PySide6.QtWidgets import QProgressDialog, QMessageBox
+        from core.updater import UpdateDownloader, apply_update_and_restart
+        
+        self.dl_progress = QProgressDialog("업데이트 다운로드 중...", "취소", 0, 100, self)
+        self.dl_progress.setWindowTitle("업데이트")
+        self.dl_progress.setWindowModality(Qt.WindowModal)
+        self.dl_progress.setAutoClose(True)
+        self.dl_progress.show()
+
+        self.downloader = UpdateDownloader(url)
+        self.downloader.progress.connect(self.dl_progress.setValue)
+        
+        def on_finished(extracted_dir):
+            self.dl_progress.close()
+            apply_update_and_restart(extracted_dir)
+            
+        def on_error(err):
+            self.dl_progress.close()
+            QMessageBox.critical(self, "오류", f"업데이트 실패:\n{err}")
+
+        self.downloader.finished.connect(on_finished)
+        self.downloader.error.connect(on_error)
+        
+        # 다운로드 취소 시 쓰레드 중단 로직 (옵션)
+        self.dl_progress.canceled.connect(self.downloader.terminate)
+        
+        self.downloader.start()
 
     def _on_update_error(self, err_msg):
         # 업데이트 실패 시에도 기존 문구가 남지 않도록 안내
