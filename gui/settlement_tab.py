@@ -8,7 +8,7 @@ from PySide6.QtWidgets import (
     QHeaderView, QAbstractItemView, QMessageBox, QFrame
 )
 from PySide6.QtCore import Qt, QTimer
-from PySide6.QtGui import QFont, QColor
+from PySide6.QtGui import QFont, QColor, QShortcut, QKeySequence
 
 from gui.widgets import (
     KPICard, Panel, StatusBadge, Colors, format_money,
@@ -28,6 +28,10 @@ class SettlementTab(QWidget):
         self.current_period = '2026-03'
         self.setObjectName('settlementTab')
         self._setup_ui()
+
+        # F5 새로고침 단축키 연동
+        self.shortcut_refresh = QShortcut(QKeySequence("F5"), self)
+        self.shortcut_refresh.activated.connect(self._on_period_changed)
 
     def _setup_ui(self):
         layout = QVBoxLayout(self)

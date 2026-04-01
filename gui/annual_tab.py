@@ -8,7 +8,7 @@ from PySide6.QtWidgets import (
     QAbstractItemView, QMessageBox, QFrame, QFileDialog
 )
 from PySide6.QtCore import Qt, QTimer
-from PySide6.QtGui import QFont, QColor
+from PySide6.QtGui import QFont, QColor, QShortcut, QKeySequence
 
 from gui.widgets import (
     Panel, Colors, format_money,
@@ -27,6 +27,10 @@ class AnnualTab(QWidget):
         self.repo = repo
         self.setObjectName('annualTab')
         self._setup_ui()
+
+        # F5 연간 데이터 조회(새로고침) 단축키
+        self.shortcut_refresh = QShortcut(QKeySequence("F5"), self)
+        self.shortcut_refresh.activated.connect(self._query)
 
     def _setup_ui(self):
         layout = QVBoxLayout(self)

@@ -8,7 +8,7 @@ from PySide6.QtWidgets import (
     QHeaderView, QAbstractItemView, QMessageBox, QFrame, QScrollArea
 )
 from PySide6.QtCore import Qt, Signal, QTimer
-from PySide6.QtGui import QFont
+from PySide6.QtGui import QFont, QShortcut, QKeySequence
 
 from gui.widgets import (
     Panel, Colors, format_money,
@@ -29,6 +29,10 @@ class LectureTab(QWidget):
         self.current_period = '2026-03'
         self.setObjectName('lectureTab')
         self._setup_ui()
+
+        # F5 새로고침 단축키 연동
+        self.shortcut_refresh = QShortcut(QKeySequence("F5"), self)
+        self.shortcut_refresh.activated.connect(self._on_period_changed)
 
     def _setup_ui(self):
         layout = QVBoxLayout(self)

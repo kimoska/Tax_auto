@@ -9,7 +9,7 @@ from PySide6.QtWidgets import (
     QMessageBox, QScrollArea, QFrame, QSizePolicy, QSpacerItem
 )
 from PySide6.QtCore import Qt, Signal, QTimer
-from PySide6.QtGui import QFont
+from PySide6.QtGui import QFont, QShortcut, QKeySequence
 
 from gui.widgets import (
     KPICard, Panel, StatusBadge, Colors, format_money,
@@ -35,6 +35,10 @@ class InstructorTab(QWidget):
         self.setObjectName('instructorTab')
         self._setup_ui()
         self.refresh_data()
+
+        # F5 새로고침 단축키 추가
+        self.shortcut_refresh = QShortcut(QKeySequence("F5"), self)
+        self.shortcut_refresh.activated.connect(self.refresh_data)
 
     def _setup_ui(self):
         layout = QVBoxLayout(self)
@@ -439,58 +443,49 @@ class InstructorTab(QWidget):
                 QMessageBox.warning(self, "알림", "등록할 데이터가 없습니다.")
                 return
             
-            # 주민번호 기반으로 강사 그룹화 (중복 방지 및 프로그램 병합)
-            instructor_map = {}
-            for item in items:
-                rid = normalize_resident_id(item['resident_id'])
-                ok, _ = validate_resident_id(rid)
-                if not ok: continue # 유효하지 않은 주민번호 건너뜀
-                
-                if rid not in instructor_map:
-                    instructor_map[rid] = {
-                        'info': {
-                            'name': item['name'],
-                            'resident_id': rid,
-                            'industry_code': item['industry_code'],
-                            'phone': item['phone'],
-                            'email': item['email'],
-                            'address': item['address'],
-                            'bank_name': item['bank_name'],
-                            'account_number': item['account_number'],
-                            'memo': item['memo'],
-                            'is_foreigner': '1' # 기본 내국인
-                        },
-                        'programs': []
-                    }
-                
-                if item['program_name']:
-                    instructor_map[rid]['programs'].append({
-                        'category': item['category'],
-                        'program_name': item['program_name'],
-                        'fee_per_session': item['fee_per_session']
-                    })
-
-            # DB 저장
+            # 1줄 = 1명의 강사로 독립적으로 추가 (중복 병합 로직 제거)
             from PySide6.QtWidgets import QProgressDialog, QApplication
-            progress = QProgressDialog("데이터를 클라우드에 저장 중입니다...", "중단", 0, len(instructor_map), self)
+            import time
+
+            progress = QProgressDialog("데이터를 클라우드에 저장 중입니다...", "중단", 0, len(items), self)
             progress.setWindowModality(Qt.WindowModal)
             progress.setValue(0)
             progress.show()
 
             count = 0
-            for idx, (rid, data) in enumerate(instructor_map.items()):
+            for idx, item in enumerate(items):
                 if progress.wasCanceled():
                     break
                 
-                data['info']['resident_id'] = rid
+                rid = normalize_resident_id(item['resident_id'])
+                ok, _ = validate_resident_id(rid)
+                if not ok:
+                    progress.setValue(idx + 1)
+                    QApplication.processEvents()
+                    continue
+
+                info_data = {
+                    'name': item['name'],
+                    'resident_id': rid,
+                    'industry_code': item['industry_code'],
+                    'phone': item['phone'],
+                    'email': item['email'],
+                    'address': item['address'],
+                    'bank_name': item['bank_name'],
+                    'account_number': item['account_number'],
+                    'memo': item['memo'],
+                    'is_foreigner': '1'
+                }
                 
-                # 강사 추가
-                iid = self.repo.create_instructor(data['info'])
+                # 강사 추가 (독립적으로 등록)
+                iid = self.repo.create_instructor(info_data)
                 if iid:
-                    for prog in data['programs']:
+                    if item['program_name']:
                         self.repo.create_program({
                             'instructor_id': iid,
-                            **prog
+                            'category': item['category'],
+                            'program_name': item['program_name'],
+                            'fee_per_session': item['fee_per_session']
                         })
                     count += 1
                 
@@ -498,7 +493,9 @@ class InstructorTab(QWidget):
                 QApplication.processEvents()
 
             progress.close()
-                
+            
+            # 구글 Firestore 인덱싱 업데이트를 위한 1초 여유 대기 후 새로고침 (화면 안 보이는 증상 방지)
+            time.sleep(1.0)
             self.refresh_data()
             QMessageBox.information(self, "완료", f"{count}명의 강사가 등록되었습니다.")
             
