@@ -48,7 +48,11 @@ class UpdateChecker(QThread):
                 
                 assets = latest_release.get("assets", [])
                 
-                if latest_version and latest_version != self.current_version:
+                # 태그명에 온점(.)이 잘못 찍힌 경우(v.1.1.1 등)를 대비해 숫자/문자만 추출비교
+                clean_latest = latest_version.replace(".", "")
+                clean_current = self.current_version.replace(".", "")
+                
+                if latest_version and clean_latest != clean_current:
                     download_url = None
                     for asset in assets:
                         if asset['name'].endswith('.zip'):
@@ -75,7 +79,11 @@ class UpdateDownloader(QThread):
 
     def run(self):
         try:
-            temp_dir = tempfile.mkdtemp()
+            # ALYac 백신(ESTsoft)의 임시 폴더(CreatorTemp) 간섭을 피하기 위해 
+            # 사용자 홈 디렉토리 밑에 전용 업데이트 폴더를 생성합니다.
+            user_home = os.path.expanduser('~')
+            temp_dir = os.path.join(user_home, ".autotax_update_temp")
+            os.makedirs(temp_dir, exist_ok=True)
             zip_path = os.path.join(temp_dir, "update.zip")
             
             req = urllib.request.Request(self.download_url, headers={'User-Agent': 'TaxAuto-Updater'})
@@ -135,6 +143,7 @@ del /f /q "{current_exe}" 2>NUL
 if exist "{current_exe}" goto wait_loop
 
 xcopy /s /e /y "{source_dir}\\*" "{current_dir}\\"
+rmdir /s /q "%USERPROFILE%\\.autotax_update_temp" 2>NUL
 start "" "{current_exe}"
 del "%~f0"
 """
